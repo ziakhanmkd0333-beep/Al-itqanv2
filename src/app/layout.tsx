@@ -5,7 +5,7 @@ import { LanguageProvider } from "@/context/language-context";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://alnooronlineacademy.netlify.app"),
+  metadataBase: new URL("https://alnooronlineacademy.com"),
   title: "World's First Complete Islamic Knowledge Web App",
   description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
   keywords: [
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Al-NOOR Academy" }],
   openGraph: {
     type: "website",
-    url: "https://alnooronlineacademy.netlify.app/",
+    url: "https://alnooronlineacademy.com/",
     title: "World's First Complete Islamic Knowledge Web App",
     description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
     locale: "en_US",
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     follow: true
   },
   alternates: {
-    canonical: "https://alnooronlineacademy.netlify.app/"
+    canonical: "https://alnooronlineacademy.com/"
   }
 };
 
@@ -65,7 +65,7 @@ export default function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://alnooronlineacademy.netlify.app/" />
+        <link rel="canonical" href="https://alnooronlineacademy.com/" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico" sizes="any" />
@@ -78,7 +78,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "Al-NOOR Online Quran & Hadees Academy",
-              "url": "https://alnooronlineacademy.netlify.app",
+              "url": "https://alnooronlineacademy.com",
               "description": "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
               "applicationCategory": "EducationalApplication",
               "operatingSystem": "Web",
@@ -89,9 +89,9 @@ export default function RootLayout({
               "publisher": {
                 "@type": "Organization",
                 "name": "Alnoor-academy",
-                "url": "https://alnooronlineacademy.netlify.app"
+                "url": "https://alnooronlineacademy.com"
               },
-              "logo": "https://alnooronlineacademy.netlify.app/logo.png",
+              "logo": "https://alnooronlineacademy.com/logo.png",
               "offers": {
                 "@type": "Offer",
                 "price": "0",
