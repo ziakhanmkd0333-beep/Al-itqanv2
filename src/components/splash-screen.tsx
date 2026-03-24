@@ -171,7 +171,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
               transition={{ duration: 0.8, delay: 0.7, ease: "easeOut" }}
               className="text-[#A8C9B5] text-sm md:text-base text-center max-w-md px-4"
             >
-              World's First Complete Islamic Knowledge Web App
+              Complete Islamic Knowledge Web App
             </motion.p>
 
             {/* Loading Dots */}

@@ -395,7 +395,7 @@ export const translations = {
     about: {
       title: "About Al-NOOR Academy",
       subtitle: "About Us",
-      description: "World's First Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
+      description: "Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
       heroAlt: "About Us",
       logoAlt: "Al-NOOR Academy Logo",
       missionVision: {
@@ -503,7 +503,7 @@ export const translations = {
     },
     // Footer
     footer: {
-      tagline: "World's First Complete Islamic Knowledge Web App. From Noorani Qaida to Takhassus fil Hadees — a complete, structured Islamic education journey.",
+      tagline: "Complete Islamic Knowledge Web App. From Noorani Qaida to Takhassus fil Hadees — a complete, structured Islamic education journey.",
       quickLinks: "Quick Links",
       contact: "Contact Us",
       followUs: "Follow Us",
