@@ -1,0 +1,4 @@
+project_id: 210acaa0-e262-434c-9c0f-63f93d04adb9
+project_name: alnooronlineacademy
+framework: nextjs
+deploy_provider: netlify

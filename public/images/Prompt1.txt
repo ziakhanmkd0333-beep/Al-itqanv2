@@ -1,0 +1,21 @@
+Prompt 
+
+**Alnoor Online Academy** should have a well-structured, fully integrated page system covering the public website and all role-based dashboards. The public site includes Home, About Us, Courses (with detailed course pages for Qur’an Nazra, Hifz, Tajweed, Qira’at, Tafseer, Dars-e-Nizami, Hadith, Fiqh, Arabic language programs), Admissions, Fee Structure, Why Choose Us, Testimonials, FAQ, Contact Us, Login/Register, Privacy Policy, and Terms & Conditions. The Student Panel consists of a Student Dashboard, My Courses, Live Classes, Recorded Lessons, Assignments & Exams, Attendance, Certificates, Messages, Profile Settings, and Payments & Invoices. The Teacher Panel includes a Teacher Dashboard, My Classes, Live Class Management, Lesson Uploads, Assignments & Grading, Attendance, Student Performance, Messaging, and Profile & Availability. The Admin Panel contains an Admin Dashboard, User Management, Course & Dars-e-Nizami Structure Management, Class & Batch Management, Teacher Assignments, Content Management, Admissions & Approvals, Payments & Finance, Certificates, Multilanguage Content Control (English, Arabic, Urdu), System Settings, Notifications, Reports, and Logs, along with essential system pages such as authentication, error pages, and maintenance, all designed to be fully responsive, secure, and driven by backend APIs and database records.
+
+
+
+**SEO Content for Alnoor Online Academy:**
+
+
+Alnoor Online Academy is a trusted online Islamic learning platform offering high-quality Qur’an education and advanced Islamic studies for students worldwide. We provide online Qur’an Nazra, Hifz, Tajweed, and Qira’at classes, along with Tarjuma, Tafseer, Balaghat, complete Dars-e-Nizami (Ula to Daurah-e-Hadith), Hadith and Takhassus fil Hadith, Fiqh, Usul-ul-Fiqh, Ilm-us-Sarf, Ilm-un-Nahw, and Spoken Arabic courses for beginners, intermediate, and advanced learners. Our academy delivers one-to-one live classes, recorded lessons, qualified scholars, flexible schedules, and multilingual support in English, Arabic, and Urdu. With a secure, fully responsive student, teacher, and admin portal powered by modern technology, Alnoor Online Academy ensures an authentic, accessible, and professional Islamic education experience for children and adults across the globe.
+
+
+
+### **H1 Tag**
+
+**Alnoor Online Academy – Online Quran & Islamic Studies Academy**
+
+### **Paragraph 1**
+
+
+Alnoor Online Academy is a professional and trusted online Quran and Islamic education platform dedicated to providing authentic knowledge through qualified scholars. We offer comprehensive online Quran Nazra, Hifz, Tajweed, and Qira’at classes along with advanced Islamic studies including Tafseer, Dars-e-Nizami, Hadith, Fiqh, and Arabic language courses. With one-to-one live classes, recorded lessons, flexible timings, and multilingual support in English, Arabic, and Urdu, Alnoor Online Academy delivers a secure, modern, and globally accessible learning experience for students of all ages.

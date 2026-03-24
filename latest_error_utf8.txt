@@ -1,0 +1,72 @@
+﻿
+Γó░Γí╛Γó╢ΓúñΓíÇΓáÇΓáÇΓúÇΓú┤Γá╛Γó╢ΓíéΓáÇΓáÇΓóáΓúñΓúñΓúñΓúñΓúñΓáäΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓúÇΓíÇΓáÇΓóÇΓúáΓúñΓúñΓúäΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓóáΓúñΓáÇΓóÇΓíÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇ
+Γó╜ΓíâΓáÇΓóêΓú¢Γí╖Γú╛ΓúÖΓáüΓáÇΓó╝ΓíÅΓáÇΓáÇΓáêΓáêΓó╕Γí┐ΓáüΓóíΓú╡Γó┤ΓúñΓíäΓóÇΓí┤Γá┤ΓúñΓíäΓúªΓú┐Γú╖ΓíäΓó╛ΓúÅΓúÇΓíêΓá¢ΓáúΓúªΓúäΓú┤Γú┤ΓúñΓíÇΓú┤ΓúäΓúñΓíªΓú░Γí╡Γó░Γú╜Γú┐ΓíäΓóÇΓú┤Γí┤ΓúñΓíä
+Γó╣ΓúçΓú╢ΓáƒΓáïΓáüΓáêΓá¢Γá╖ΓóåΓúÿΓáâΓáÇΓáÇΓáÇΓáÇΓó╜ΓíçΓóáΓú┐ΓóªΓóªΓá╛ΓíùΓá╣Γó┐Γú╢Γú¼ΓíüΓó¿Γú┐ΓáÇΓáÇΓíêΓáÖΓá¢Γá╗Γú┐ΓíäΓú║ΓíÅΓáÇΓáÇΓó╜ΓíçΓó╕Γú┐ΓáÇΓáÇΓú╗ΓíçΓáÇΓú┐ΓáàΓóáΓú┐ΓóºΓáªΓí╛Γá┐
+ΓáÇΓáëΓá▓Γó╢ΓúñΓúÇΓúäΓú┤Γá╛Γá¢ΓáüΓáÇΓáÇΓáÇΓáÇΓááΓó┐ΓáâΓáêΓá┐ΓíªΓíªΓá╢ΓáéΓá╖ΓíªΓíªΓá┐ΓáüΓá╝Γó╖Γó┤ΓáÿΓá┐Γí╢Γí┤Γí┤ΓáƒΓáÇΓú╛Γí┐ΓóªΓá╛ΓáƒΓáüΓó╕ΓáƒΓáÇΓáÇΓí┐ΓáâΓáÉΓí┐Γó╡ΓáêΓá┐ΓíªΓíªΓá╢Γáâ
+ΓáÇΓáÇΓáÇΓáÇΓáêΓáëΓáëΓáêΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓóÉΓú┐ΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇΓáÇ
+
+Starting test execution...
+Proxy port: 51250
+
+[1m[32mRunning tests...[0m [32mThis process may take anywhere from several minutes up to 15 minutes to complete.[0m
+
+[1mPlease ensure:[0m
+ΓÇó Your local servers are running and reachable
+ΓÇó Your internet connection remains stable throughout the process
+
+Tunnel started successfully! Proxy URL: http://d03d30f9-cb88-49f5-9f68-8d115de9b6f6:nmrkzOTXY5AdWO0MAvg6bxsTDPUh4I84@tun.testsprite.com:8080
+node : 
+[2026-03-13T12:38:05.859Z] 
+[ERROR] Γ¥î [202] Connection a17c
+ad1d-b984-4f00-bb44-5bb716d237ed 
+failed: Timeout waiting for 
+message
+At line:1 char:1
++ node C:\Users\Waqas\AppData\Loc
+al\npm-cache\_npx\8ddf6bea01b2519
+d\nod ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo          : No 
+   tSpecified: ([2026-03-13T12:  
+  ...ing for message:String) [   
+ ], RemoteException
+    + FullyQualifiedErrorId : Na 
+   tiveCommandError
+ 
+[2026-03-13T12:38:21.949Z] 
+[ERROR] checkPortListening tcp 
+timeout: 3006 localhost
+[2026-03-13T12:38:35.602Z] 
+[ERROR] Γ¥î [288] Connection a456
+3235-2a13-4e86-8c21-58336cab8356 
+failed: Timeout waiting for 
+message
+[2026-03-13T12:38:35.633Z] 
+[ERROR] Γ¥î [287] Connection 9686
+5e34-bfb4-4222-b158-1c72e7531a0b 
+failed: Timeout waiting for 
+message
+[2026-03-13T12:38:35.660Z] 
+[ERROR] Γ¥î [289] Connection 4f0c
+0618-67de-4fb6-b821-ddbd41aa7cb1 
+failed: Timeout waiting for 
+message
+[2026-03-13T12:38:42.054Z] 
+[ERROR] Γ¥î [302] Connection 4b24
+832f-0e42-443d-a84b-44d957a9d31d 
+failed: Timeout waiting for 
+message
+[2026-03-13T12:39:27.991Z] 
+[ERROR] Γ¥î [431] Connection 2109
+91e4-dfca-47bb-9f64-b1ea7a83ec2d 
+failed: Timeout waiting for 
+message
+Test execution completed.
+Execution lock released.
+
+Server will remain active for 1 hour. Press Ctrl+C to exit early.
+[2026-03-13T12:41:20.292Z] 
+[ERROR] HTTP proxy close timed 
+out, forcing resolve
