@@ -5,6 +5,7 @@ build/
 .cache/
 *.log
 .env
+.env.local
 deploy/
 hostinger-deploy/
 
