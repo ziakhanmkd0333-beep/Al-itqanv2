@@ -48,7 +48,7 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: t("contact.emailUs"),
-      details: ["info@alnooracademy.com", "support@alnooracademy.com"],
+      details: ["waqas@alnooronlineacademy.com", "support@alnooronlineacademy.com"],
       color: "#1A7A4A"
     },
     {
