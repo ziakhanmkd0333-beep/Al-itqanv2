@@ -6,8 +6,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alnooronlineacademy.com"),
-  title: "Al-NOOR Online Quran & Hadees Academy | Complete Islamic Knowledge Web App",
-  description: "Learn complete Islamic knowledge online with Al-NOOR Online Quran & Hadees Academy—from Noorani Qaida, Hifz-ul-Qur'an, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
+  title: "Alnoor Online Quran & Hadees Academy",
+  description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida, Quran reading, Tajweed, Hifz, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
   keywords: [
     "Online Quran Academy",
     "Online Hadees Academy",
@@ -39,11 +39,11 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://alnooronlineacademy.com/",
-    title: "Al-NOOR Online Quran & Hadees Academy | Complete Islamic Knowledge Web App",
-    description: "Learn complete Islamic knowledge online with Al-NOOR Online Quran & Hadees Academy—from Noorani Qaida, Hifz-ul-Qur'an, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
+    title: "Alnoor Online Quran & Hadees Academy",
+    description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida, Quran reading, Tajweed, Hifz, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
     locale: "en_US",
     alternateLocale: ["ar_SA", "ur_PK"],
-    siteName: "Al-NOOR Online Quran & Hadees Academy",
+    siteName: "Alnoor Online Quran & Hadees Academy",
     images: [
       {
         url: "/logo.png",
@@ -55,8 +55,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Al-NOOR Online Quran & Hadees Academy | Complete Islamic Knowledge Web App",
-    description: "Learn complete Islamic knowledge online with Al-NOOR Online Quran & Hadees Academy—from Noorani Qaida to Takhassus fil Hadees under qualified scholars.",
+    title: "Alnoor Online Quran & Hadees Academy",
+    description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida to Takhassus fil Hadees under qualified scholars.",
     images: ["/logo.png"],
     creator: "@alnooracademy",
     site: "@alnooracademy"
