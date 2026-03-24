@@ -1,32 +1,36 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// Lazy-initialized browser client to avoid build-time errors
+let _supabaseBrowser: SupabaseClient | null = null;
 
-// Validate environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('[supabase-browser] Missing required environment variables:');
-  if (!supabaseUrl) console.error('- NEXT_PUBLIC_SUPABASE_URL is not set');
-  if (!supabaseAnonKey) console.error('- NEXT_PUBLIC_SUPABASE_ANON_KEY is not set');
+function getSupabaseBrowser(): SupabaseClient {
+  if (!_supabaseBrowser) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('[supabase-browser] Missing required environment variables');
+      // Return a dummy client to prevent build errors
+      return createClient('https://placeholder.supabase.co', 'placeholder-key', {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+        realtime: { params: { eventsPerSecond: 10 } }
+      });
+    }
+
+    _supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
+      realtime: { params: { eventsPerSecond: 10 } }
+    });
+  }
+  return _supabaseBrowser;
 }
 
-// Browser-side Supabase client with real-time support
-export const supabaseBrowser = createClient(
-  supabaseUrl || '',
-  supabaseAnonKey || '',
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    },
-    realtime: {
-      params: {
-        eventsPerSecond: 10
-      }
-    }
+// Export a proxy that delegates to the lazy-initialized client
+export const supabaseBrowser = new Proxy({} as SupabaseClient, {
+  get(_, prop) {
+    return getSupabaseBrowser()[prop as keyof SupabaseClient];
   }
-);
+});
 
 // Helper to get current user from localStorage (for demo purposes)
 export const getCurrentUser = () => {
