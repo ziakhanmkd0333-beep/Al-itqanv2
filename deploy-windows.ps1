@@ -145,7 +145,7 @@ if ($Deploy -or $Full) {
         
         if ($LASTEXITCODE -eq 0) {
             Write-Status "Deployment successful!" $Green
-            Write-Status "Site URL: https://alnoor-academy.netlify.app" $Cyan
+            Write-Status "Site URL: https://alnooronlineacademy.com" $Cyan
         } else {
             Write-Status "WARNING: Deployment may have issues. Check deploy-output.log" $Yellow
         }
