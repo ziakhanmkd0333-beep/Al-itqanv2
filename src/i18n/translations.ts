@@ -17,8 +17,8 @@ export const translations = {
     // Hero Section
     hero: {
       bismillah: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
-      title: "World's First Complete Islamic Knowledge Web App",
-      subtitle: "From Al-NOORani Qaida to Takhassus fil Hadees — All in One Platform",
+      title: "Complete Islamic Knowledge Web App",
+      subtitle: "From Noorani Qaida to Takhassus fil Hadees — All in One Platform",
       description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
       exploreCourses: "Explore Courses",
       applyNow: "Apply Now",

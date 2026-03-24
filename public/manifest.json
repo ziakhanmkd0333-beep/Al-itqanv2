@@ -1,0 +1,43 @@
+{
+  "name": "Al-NOOR Online Quran & Hadees Academy",
+  "short_name": "Al-NOOR Academy",
+  "description": "Complete Islamic Knowledge Web App - From Noorani Qaida to Takhassus fil Hadees",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0D4D2F",
+  "theme_color": "#0D4D2F",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["education", "books"],
+  "screenshots": [
+    {
+      "src": "/logo.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}
