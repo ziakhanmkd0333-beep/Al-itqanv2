@@ -795,7 +795,7 @@ export const translations = {
       placeholders: {
         fullName: "Enter your full name",
         email: "your@email.com",
-        phone: "+92-XXX-XXXXXXX",
+        phone: "+923434487450",
         age: "Enter age",
         message: "Tell us about your learning goals or any special requirements...",
       },
@@ -1585,7 +1585,7 @@ export const translations = {
       placeholders: {
         fullName: "أدخل اسمك الكامل",
         email: "your@email.com",
-        phone: "+92-XXX-XXXXXXX",
+        phone: "+923434487450",
         age: "أدخل العمر",
         message: "أخبرنا عن أهدافك التعليمية أو أي متطلبات خاصة...",
       },
@@ -2610,7 +2610,7 @@ export const translations = {
       placeholders: {
         fullName: "اپنا پورا نام درج کریں",
         email: "your@email.com",
-        phone: "+92-XXX-XXXXXXX",
+        phone: "+923434487450",
         age: "عمر درج کریں",
         message: "ہمیں اپنے تعلیمی اہداف یا کسی خاص ضرورت کے بارے میں بتائیں...",
       },

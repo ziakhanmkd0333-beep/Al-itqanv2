@@ -203,8 +203,8 @@ export function Footer() {
                     </div>
                     <div>
                       <p className="text-white/40 text-xs mb-0.5">{t("footer.contactLabels.phone")}</p>
-                      <a href="tel:+92XXXXXXXXXX" className="text-white/80 hover:text-[var(--gold)] transition-colors text-sm">
-                        +92-XXX-XXXXXXX
+                      <a href="tel:+923434487450" className="text-white/80 hover:text-[var(--gold)] transition-colors text-sm">
+                        +923434487450
                       </a>
                     </div>
                   </li>

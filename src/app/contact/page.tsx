@@ -54,7 +54,7 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: t("contact.callWhatsApp"),
-      details: ["+92-XXX-XXXXXXX", "+92-XXX-XXXXXXX"],
+      details: ["+923434487450", "+923434487450"],
       color: "#C9A84C"
     },
     {
