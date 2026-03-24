@@ -7,6 +7,12 @@ export const dynamic = 'force-dynamic';
 // GET /api/teacher/dashboard - Get teacher dashboard data
 export async function GET(request: Request) {
   try {
+    // Check environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Missing Supabase environment variables');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
     const { searchParams } = new URL(request.url);
     const teacherId = searchParams.get('teacherId');
 

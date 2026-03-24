@@ -7,6 +7,12 @@ export const dynamic = 'force-dynamic';
 // GET /api/admin/dashboard - Get dashboard stats
 export async function GET() {
   try {
+    // Check environment variables
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('Missing Supabase environment variables');
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
     // Get counts from all tables with individual error handling using admin client to bypass RLS
     const studentsResult = await supabaseAdmin.from('students').select('*', { count: 'exact', head: true });
     const teachersResult = await supabaseAdmin.from('teachers').select('*', { count: 'exact', head: true });
