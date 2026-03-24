@@ -26,7 +26,7 @@ export async function GET(request: Request) {
           *,
           teachers:teacher_id (
             full_name,
-            avatar_url,
+            photo_url,
             specialization
           )
         )

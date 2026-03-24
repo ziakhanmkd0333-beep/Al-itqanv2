@@ -55,7 +55,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const { full_name, phone, specialization, bio, credentials, avatar_url, whatsapp } = body;
+    const { full_name, phone, specialization, bio, credentials, photo_url, whatsapp } = body;
 
     const { data: updatedTeacher, error } = await supabaseAdmin
       .from('teachers')
@@ -65,7 +65,7 @@ export async function PUT(request: Request) {
         specialization,
         bio,
         credentials,
-        avatar_url,
+        photo_url,
         whatsapp,
         updated_at: new Date().toISOString()
       })
