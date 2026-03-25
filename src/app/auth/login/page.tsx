@@ -47,6 +47,21 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // Read error from URL query params on mount
+  useEffect(() => {
+    const urlError = searchParams.get('error');
+    if (urlError) {
+      // Map error codes to user-friendly messages
+      const errorMessages: Record<string, string> = {
+        'unauthorized': 'Please log in to access this page',
+        'invalid_credentials': 'Invalid email or password',
+        'session_expired': 'Your session has expired. Please log in again',
+        'access_denied': 'You do not have permission to access this page'
+      };
+      setError(errorMessages[urlError] || urlError);
+    }
+  }, [searchParams]);
+
   // Redirect if already logged in - use useEffect to avoid setState during render
   useEffect(() => {
     if (isAuthenticated && user) {
