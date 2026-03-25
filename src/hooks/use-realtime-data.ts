@@ -88,13 +88,27 @@ export function useAdminDashboard() {
   const fetchDashboardData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/dashboard');
+      
+      // Get user from storage for authorization
+      const storedUser = typeof window !== 'undefined' 
+        ? localStorage.getItem('user') || sessionStorage.getItem('user') 
+        : null;
+      
+      const response = await fetch('/api/admin/dashboard', {
+        headers: {
+          ...(storedUser && { 'Authorization': `Bearer ${storedUser}` })
+        }
+      });
+      
       if (response.ok) {
         const result = await response.json();
         setStats(result.stats || {});
         setRecentAdmissions(result.recentAdmissions || []);
         setRecentPayments(result.recentPayments || []);
         setUpcomingSessions(result.upcomingSessions || []);
+      } else if (response.status === 401) {
+        console.error('Admin dashboard: Unauthorized - not an admin user');
+        // Don't update state on 401, let the ProtectedRoute handle redirect
       }
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);

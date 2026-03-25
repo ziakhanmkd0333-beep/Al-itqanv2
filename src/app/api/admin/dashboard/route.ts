@@ -3,14 +3,62 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
 
-
-// GET /api/admin/dashboard - Get dashboard stats
-export async function GET() {
+// GET /api/admin/dashboard - Get dashboard stats (admin only)
+export async function GET(request: Request) {
   try {
     // Check environment variables
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.error('Missing Supabase environment variables');
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    // Get auth header
+    const authHeader = request.headers.get('authorization');
+    let userId: string | null = null;
+    let userRole: string | null = null;
+
+    // Try to verify user from auth header (Bearer token or stored user data)
+    if (authHeader) {
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        // Try to parse as stored user JSON (legacy format)
+        const storedUser = JSON.parse(token);
+        if (storedUser?.id && storedUser?.role) {
+          userId = storedUser.id;
+          userRole = storedUser.role;
+        }
+      } catch {
+        // Not JSON, could be JWT - skip verification for now
+        // In production, verify JWT properly
+      }
+    }
+
+    // Also check cookies for session
+    if (!userId) {
+      const cookieHeader = request.headers.get('cookie');
+      if (cookieHeader) {
+        const userCookie = cookieHeader.split(';').find(c => c.trim().startsWith('user='));
+        if (userCookie) {
+          try {
+            const cookieValue = decodeURIComponent(userCookie.split('=')[1]);
+            const cookieUser = JSON.parse(cookieValue);
+            if (cookieUser?.id && cookieUser?.role) {
+              userId = cookieUser.id;
+              userRole = cookieUser.role;
+            }
+          } catch {
+            // Invalid cookie
+          }
+        }
+      }
+    }
+
+    // Verify admin role
+    if (!userId || userRole !== 'admin') {
+      return NextResponse.json(
+        { error: 'Unauthorized. Admin access required.' },
+        { status: 401 }
+      );
     }
 
     // Get counts from all tables with individual error handling using admin client to bypass RLS
