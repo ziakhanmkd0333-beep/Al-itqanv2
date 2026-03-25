@@ -21,12 +21,17 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
-  // Redirect if already logged in as admin
+  // Redirect if already logged in
   useEffect(() => {
-    if (isAuthenticated && user?.role === 'admin') {
-      router.push('/dashboard/admin');
+    if (!isLoading && isAuthenticated && user) {
+      if (user.role === 'admin') {
+        router.push('/dashboard/admin');
+      } else {
+        // Non-admin users should see access denied, not be redirected to regular login
+        setError(`Access denied. You are logged in as ${user.role}, but admin privileges are required.`);
+      }
     }
-  }, [isAuthenticated, user, router]);
+  }, [isLoading, isAuthenticated, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
