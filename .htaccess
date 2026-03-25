@@ -6,14 +6,28 @@ RewriteBase /
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
+# Handle Next.js RSC streaming requests - disable output buffering
+<IfModule mod_rewrite.c>
+  RewriteCond %{QUERY_STRING} _rsc=
+  RewriteRule ^ - [E=no-buffers:1]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Disable buffering for RSC streaming requests
+  Header unset Connection
+  RequestHeader unset Expect early
+</IfModule>
+
 # Handle Next.js dynamic routes - must come before other rules
 RewriteRule ^index\.html$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /index.html [L]
 
-# Enable compression
+# Enable compression (exclude streaming responses)
 <IfModule mod_deflate.c>
+  SetEnvIfNoCase Request_URI _rsc= no-gzip dont-vary
+  SetEnvIfNoCase Request_URI \.rsc$ no-gzip dont-vary
   AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
 </IfModule>
 
@@ -56,8 +70,3 @@ ErrorDocument 500 /index.html
 
 # Set default charset
 AddDefaultCharset UTF-8
-
-# Enable keep-alive
-<IfModule mod_headers.c>
-  Header set Connection keep-alive
-</IfModule>

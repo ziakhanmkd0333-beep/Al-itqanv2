@@ -70,7 +70,7 @@ export function useRealtimeData<T>(
   return { data, loading, error, refetch: fetchData };
 }
 
-// Admin Dashboard Hook
+// Admin Dashboard Hook with deferred real-time connection
 export function useAdminDashboard() {
   const [stats, setStats] = useState<any>({
     totalStudents: 0,
@@ -106,26 +106,31 @@ export function useAdminDashboard() {
   useEffect(() => {
     fetchDashboardData();
 
-    // Set up real-time subscriptions
-    const channels = [
-      { name: 'admissions', table: 'admissions' },
-      { name: 'payments', table: 'payments' },
-      { name: 'students', table: 'students' },
-      { name: 'teachers', table: 'teachers' },
-      { name: 'courses', table: 'courses' },
-      { name: 'sessions', table: 'sessions' }
-    ].map(config => {
-      return supabaseBrowser
-        .channel(`admin-${config.name}`)
-        .on('postgres_changes', { event: '*', schema: 'public', table: config.table }, () => {
-          fetchDashboardData();
-        })
-        .subscribe();
-    });
+    // Defer real-time subscriptions by 2 seconds to allow initial render
+    const timeoutId = setTimeout(() => {
+      // Set up real-time subscriptions
+      const channels = [
+        { name: 'admissions', table: 'admissions' },
+        { name: 'payments', table: 'payments' },
+        { name: 'students', table: 'students' },
+        { name: 'teachers', table: 'teachers' },
+        { name: 'courses', table: 'courses' },
+        { name: 'sessions', table: 'sessions' }
+      ].map(config => {
+        return supabaseBrowser
+          .channel(`admin-${config.name}`)
+          .on('postgres_changes', { event: '*', schema: 'public', table: config.table }, () => {
+            fetchDashboardData();
+          })
+          .subscribe();
+      });
 
-    return () => {
-      channels.forEach(channel => supabaseBrowser.removeChannel(channel));
-    };
+      return () => {
+        channels.forEach(channel => supabaseBrowser.removeChannel(channel));
+      };
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
   }, [fetchDashboardData]);
 
   return { stats, recentAdmissions, recentPayments, upcomingSessions, loading, refetch: fetchDashboardData };
@@ -222,7 +227,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
   };
 }
 
-// Teacher Dashboard Hook
+// Teacher Dashboard Hook with deferred real-time
 export function useTeacherDashboard(teacherId: string | null) {
   const [stats, setStats] = useState({
     totalStudents: 0,
@@ -259,28 +264,33 @@ export function useTeacherDashboard(teacherId: string | null) {
 
     if (!teacherId) return;
 
-    const enrollmentsChannel = supabaseBrowser
-      .channel('teacher-enrollments')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'enrollments', filter: `teacher_id=eq.${teacherId}` },
-        () => fetchData()
-      )
-      .subscribe();
+    // Defer real-time subscriptions
+    const timeoutId = setTimeout(() => {
+      const enrollmentsChannel = supabaseBrowser
+        .channel('teacher-enrollments')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'enrollments', filter: `teacher_id=eq.${teacherId}` },
+          () => fetchData()
+        )
+        .subscribe();
 
-    const sessionsChannel = supabaseBrowser
-      .channel('teacher-sessions')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'sessions', filter: `teacher_id=eq.${teacherId}` },
-        () => fetchData()
-      )
-      .subscribe();
+      const sessionsChannel = supabaseBrowser
+        .channel('teacher-sessions')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'sessions', filter: `teacher_id=eq.${teacherId}` },
+          () => fetchData()
+        )
+        .subscribe();
 
-    return () => {
-      supabaseBrowser.removeChannel(enrollmentsChannel);
-      supabaseBrowser.removeChannel(sessionsChannel);
-    };
+      return () => {
+        supabaseBrowser.removeChannel(enrollmentsChannel);
+        supabaseBrowser.removeChannel(sessionsChannel);
+      };
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
   }, [teacherId, fetchData]);
 
   return { stats, todaySchedule, students, loading, refetch: fetchData };
@@ -347,7 +357,7 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
   return { students, loading, error, refetch: fetchStudents, markAttendance };
 }
 
-// Student Dashboard Hook
+// Student Dashboard Hook with deferred real-time
 export function useStudentDashboard(studentId: string | null) {
   const [enrollments, setEnrollments] = useState<any[]>([]);
   const [upcomingSessions, setUpcomingSessions] = useState<any[]>([]);
@@ -381,38 +391,43 @@ export function useStudentDashboard(studentId: string | null) {
 
     if (!studentId) return;
 
-    const enrollmentsChannel = supabaseBrowser
-      .channel('student-enrollments')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'enrollments', filter: `student_id=eq.${studentId}` },
-        () => fetchData()
-      )
-      .subscribe();
+    // Defer real-time subscriptions
+    const timeoutId = setTimeout(() => {
+      const enrollmentsChannel = supabaseBrowser
+        .channel('student-enrollments')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'enrollments', filter: `student_id=eq.${studentId}` },
+          () => fetchData()
+        )
+        .subscribe();
 
-    const sessionsChannel = supabaseBrowser
-      .channel('student-sessions')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'sessions', filter: `student_id=eq.${studentId}` },
-        () => fetchData()
-      )
-      .subscribe();
+      const sessionsChannel = supabaseBrowser
+        .channel('student-sessions')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'sessions', filter: `student_id=eq.${studentId}` },
+          () => fetchData()
+        )
+        .subscribe();
 
-    const certificatesChannel = supabaseBrowser
-      .channel('student-certificates')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'certificates', filter: `student_id=eq.${studentId}` },
-        () => fetchData()
-      )
-      .subscribe();
+      const certificatesChannel = supabaseBrowser
+        .channel('student-certificates')
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'certificates', filter: `student_id=eq.${studentId}` },
+          () => fetchData()
+        )
+        .subscribe();
 
-    return () => {
-      supabaseBrowser.removeChannel(enrollmentsChannel);
-      supabaseBrowser.removeChannel(sessionsChannel);
-      supabaseBrowser.removeChannel(certificatesChannel);
-    };
+      return () => {
+        supabaseBrowser.removeChannel(enrollmentsChannel);
+        supabaseBrowser.removeChannel(sessionsChannel);
+        supabaseBrowser.removeChannel(certificatesChannel);
+      };
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
   }, [studentId, fetchData]);
 
   return { enrollments, upcomingSessions, certificates, attendanceRate, loading, refetch: fetchData };
