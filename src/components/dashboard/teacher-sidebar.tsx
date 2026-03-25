@@ -20,7 +20,7 @@ import {
   GraduationCap
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
-import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TeacherSidebarProps {
   children: React.ReactNode;
@@ -40,57 +40,27 @@ export function TeacherSidebar({ children }: TeacherSidebarProps) {
   const { t, isRTL } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
+  const { user, isLoading, logout, hasRole } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [teacher, setTeacher] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
+  // Redirect if not authenticated or not teacher/admin
   useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
+    if (!isLoading) {
+      if (!user) {
         router.push('/auth/login');
         return;
       }
-
-      // Verify teacher role
-      const response = await fetch('/api/teacher/profile', {
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`
-        }
-      });
-
-      if (!response.ok) {
-        router.push('/auth/login');
+      if (!hasRole(['teacher', 'admin'])) {
+        router.push('/auth/login?error=access_denied');
         return;
       }
-
-      const data = await response.json();
-      setTeacher(data.teacher);
-      setLoading(false);
-    } catch (error) {
-      console.error('Auth check error:', error);
-      router.push('/auth/login');
     }
-  };
+  }, [isLoading, user, hasRole, router]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/auth/login');
+    await logout();
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="animate-spin w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

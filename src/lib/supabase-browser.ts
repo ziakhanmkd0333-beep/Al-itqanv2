@@ -1,16 +1,22 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Lazy-initialized browser client to avoid build-time errors
+// Singleton browser client to prevent multiple GoTrueClient instances
 let _supabaseBrowser: SupabaseClient | null = null;
 
-function getSupabaseBrowser(): SupabaseClient {
+export function getSupabaseBrowser(): SupabaseClient {
+  if (typeof window === 'undefined') {
+    // Server-side - return a dummy client
+    return createClient('https://placeholder.supabase.co', 'placeholder-key', {
+      auth: { persistSession: false },
+    });
+  }
+
   if (!_supabaseBrowser) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
       console.error('[supabase-browser] Missing required environment variables');
-      // Return a dummy client to prevent build errors
       return createClient('https://placeholder.supabase.co', 'placeholder-key', {
         auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
         realtime: { params: { eventsPerSecond: 10 } }
@@ -25,12 +31,8 @@ function getSupabaseBrowser(): SupabaseClient {
   return _supabaseBrowser;
 }
 
-// Export a proxy that delegates to the lazy-initialized client
-export const supabaseBrowser = new Proxy({} as SupabaseClient, {
-  get(_, prop) {
-    return getSupabaseBrowser()[prop as keyof SupabaseClient];
-  }
-});
+// Export singleton instance directly (not a proxy)
+export const supabaseBrowser = getSupabaseBrowser();
 
 // Helper to get current user from localStorage (for demo purposes)
 export const getCurrentUser = () => {

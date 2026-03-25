@@ -64,10 +64,38 @@ export async function GET(request: Request) {
     const presentCount = attendance?.filter(a => a.status === 'present').length || 0;
     const attendanceRate = totalSessions > 0 ? Math.round((presentCount / totalSessions) * 100) : 0;
 
+    // Get today's schedule
+    const today = new Date().toISOString().split('T')[0];
+    const { data: todaySessions, error: todayError } = await supabaseAdmin
+      .from('sessions')
+      .select('*, students(full_name), courses(title)')
+      .eq('teacher_id', teacherId)
+      .eq('scheduled_date', today)
+      .order('scheduled_time', { ascending: true });
+
+    if (todayError) console.error('Today sessions error:', todayError);
+
+    // Calculate hours this week
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+    const { data: weekSessions } = await supabaseAdmin
+      .from('sessions')
+      .select('duration')
+      .eq('teacher_id', teacherId)
+      .gte('scheduled_date', weekStart.toISOString().split('T')[0]);
+
+    const hoursThisWeek = weekSessions?.reduce((acc, s) => acc + (s.duration || 60), 0) || 0;
+
     return NextResponse.json({
-      courses: courses || [],
-      totalStudents: enrollments?.length || 0,
+      stats: {
+        totalStudents: enrollments?.length || 0,
+        todaysClasses: todaySessions?.length || 0,
+        totalCourses: courses?.length || 0,
+        hoursThisWeek: Math.round(hoursThisWeek / 60)
+      },
+      todaySchedule: todaySessions || [],
       students: enrollments || [],
+      courses: courses || [],
       upcomingSessions: sessions || [],
       attendanceRate,
       totalSessions

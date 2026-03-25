@@ -63,10 +63,10 @@ function LoginForm() {
 
     const result = await login(formData.email, formData.password, formData.rememberMe);
 
-    if (result.success) {
+    if (result.success && result.user) {
       setSuccess(true);
-      // Get the redirect path from URL or default to role-based dashboard
-      const redirectPath = searchParams.get('redirect') || `/dashboard/${user?.role || 'student'}`;
+      // Get the redirect path from URL or default to role-based dashboard using returned user data
+      const redirectPath = searchParams.get('redirect') || `/dashboard/${result.user.role}`;
       
       setTimeout(() => {
         router.push(redirectPath);

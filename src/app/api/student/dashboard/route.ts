@@ -12,30 +12,44 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const { searchParams } = new URL(request.url);
+    const studentId = searchParams.get('studentId');
+
+    // If studentId is provided via query param, use it (for client-side calls)
+    // Otherwise try Bearer token auth (for API-to-API calls)
+    let targetStudentId = studentId;
+
+    if (!targetStudentId) {
+      const authHeader = request.headers.get('authorization');
+      if (!authHeader?.startsWith('Bearer ')) {
+        return NextResponse.json({ error: 'Student ID or authorization token required' }, { status: 401 });
+      }
+
+      const token = authHeader.split(' ')[1];
+      const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+      
+      if (authError || !user) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      }
+      targetStudentId = user.id;
     }
 
-    const token = authHeader.split(' ')[1];
-    const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-    
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    // Get enrolled courses count
-    const { count: coursesCount } = await supabaseAdmin
+    // Get enrolled courses with details
+    const { data: enrollments, error: enrollmentsError } = await supabaseAdmin
       .from('enrollments')
-      .select('*', { count: 'exact', head: true })
-      .eq('student_id', user.id)
+      .select('*, courses(title, id), teachers(full_name)')
+      .eq('student_id', targetStudentId)
       .eq('status', 'active');
+
+    if (enrollmentsError) {
+      console.error('Enrollments fetch error:', enrollmentsError);
+    }
 
     // Get attendance stats
     const { data: attendance } = await supabaseAdmin
       .from('attendance')
       .select('status')
-      .eq('student_id', user.id);
+      .eq('student_id', targetStudentId);
 
     const totalAttendance = attendance?.length || 0;
     const presentCount = attendance?.filter(a => a.status === 'present').length || 0;
@@ -45,27 +59,22 @@ export async function GET(request: Request) {
     const { data: sessions } = await supabaseAdmin
       .from('sessions')
       .select('*, courses(title), teachers(full_name)')
-      .eq('student_id', user.id)
+      .eq('student_id', targetStudentId)
       .gte('scheduled_date', new Date().toISOString().split('T')[0])
       .order('scheduled_date', { ascending: true })
       .limit(5);
 
-    // Get recent attendance
-    const { data: recentAttendance } = await supabaseAdmin
-      .from('attendance')
-      .select('*, courses(title)')
-      .eq('student_id', user.id)
-      .order('date', { ascending: false })
-      .limit(5);
+    // Get certificates
+    const { data: certificates } = await supabaseAdmin
+      .from('certificates')
+      .select('*')
+      .eq('student_id', targetStudentId);
 
     return NextResponse.json({
-      stats: {
-        enrolledCourses: coursesCount || 0,
-        attendanceRate: attendanceRate,
-        totalSessions: totalAttendance
-      },
+      enrollments: enrollments || [],
       upcomingSessions: sessions || [],
-      recentAttendance: recentAttendance || []
+      certificates: certificates || [],
+      attendanceRate: attendanceRate
     });
 
   } catch (error: any) {

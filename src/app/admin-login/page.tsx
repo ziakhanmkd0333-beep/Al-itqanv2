@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Shield, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminLoginPage() {
   const { t, isRTL } = useTranslation();
   const router = useRouter();
+  const { login, isAuthenticated, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -19,6 +21,13 @@ export default function AdminLoginPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  // Redirect if already logged in as admin
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'admin') {
+      router.push('/dashboard/admin');
+    }
+  }, [isAuthenticated, user, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -26,41 +35,19 @@ export default function AdminLoginPage() {
     setSuccess(false);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const result = await login(formData.email, formData.password, formData.rememberMe);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (!result.success || !result.user) {
+        throw new Error(result.error || 'Login failed');
       }
 
       // Check if user is admin
-      if (data.user.role !== 'admin') {
+      if (result.user.role !== 'admin') {
         throw new Error('Access denied. Admin privileges required.');
       }
 
       setSuccess(true);
       
-      // Store user data in localStorage/sessionStorage AND cookie for middleware
-      const userData = JSON.stringify(data.user);
-      
-      if (formData.rememberMe) {
-        localStorage.setItem('user', userData);
-        document.cookie = `user=${encodeURIComponent(userData)}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-      } else {
-        sessionStorage.setItem('user', userData);
-        document.cookie = `user=${encodeURIComponent(userData)}; path=/; SameSite=Lax`;
-      }
-
       // Redirect to admin dashboard
       setTimeout(() => {
         router.push('/dashboard/admin');

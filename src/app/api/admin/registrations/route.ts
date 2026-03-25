@@ -39,3 +39,87 @@ export async function GET(request: Request) {
     );
   }
 }
+
+// POST /api/admin/registrations - Create a new registration
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const { data, error } = await supabaseAdmin
+      .from('registrations')
+      .insert(body)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json({ success: true, registration: data });
+  } catch (error: any) {
+    console.error('Registration creation error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to create registration' },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT /api/admin/registrations - Update a registration
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, ...updates } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Registration ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const { data, error } = await supabaseAdmin
+      .from('registrations')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json({ success: true, registration: data });
+  } catch (error: any) {
+    console.error('Registration update error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to update registration' },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE /api/admin/registrations - Delete a registration
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Registration ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const { error } = await supabaseAdmin
+      .from('registrations')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
+
+    return NextResponse.json({ success: true, message: 'Registration deleted' });
+  } catch (error: any) {
+    console.error('Registration deletion error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to delete registration' },
+      { status: 500 }
+    );
+  }
+}

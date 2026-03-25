@@ -27,7 +27,7 @@ import {
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslation } from "@/hooks/use-translation";
-import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/contexts/AuthContext";
 
 const adminNavItems = [
   { href: "/dashboard/admin/", labelKey: "sidebar.dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -68,12 +68,18 @@ export function DashboardSidebar({ userType }: { userType: "admin" | "student" |
   const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL } = useTranslation();
+  const { logout } = useAuth();
 
   const navItems = userType === "admin" ? adminNavItems : userType === "student" ? studentNavItems : teacherNavItems;
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/auth/login");
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Force redirect even if logout fails
+      window.location.href = '/auth/login';
+    }
   };
 
   return (
