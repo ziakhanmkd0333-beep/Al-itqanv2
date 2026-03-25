@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import bcrypt from 'bcryptjs';
 
 const getSupabaseAdmin = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -37,6 +38,27 @@ export async function POST(request: Request) {
 
     const userId = authData.user.id;
 
+    // Hash password for users table (fallback login)
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Create user record in users table for fallback login
+    const { error: userError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        id: userId,
+        email,
+        full_name: fullName,
+        role: 'student',
+        password_hash: passwordHash,
+        is_active: true,
+        created_at: new Date().toISOString(),
+      });
+
+    if (userError) {
+      await supabaseAdmin.auth.admin.deleteUser(userId);
+      return NextResponse.json({ error: userError.message || 'Failed to create user record' }, { status: 500 });
+    }
+
     const { data: student, error: studentError } = await supabaseAdmin
       .from('students')
       .insert({
@@ -51,6 +73,7 @@ export async function POST(request: Request) {
 
     if (studentError) {
       await supabaseAdmin.auth.admin.deleteUser(userId);
+      await supabaseAdmin.from('users').delete().eq('id', userId);
       return NextResponse.json({ error: studentError.message || 'Failed to create student record' }, { status: 500 });
     }
 

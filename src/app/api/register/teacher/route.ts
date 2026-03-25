@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import bcrypt from 'bcryptjs';
 
 const getSupabaseAdmin = () => {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -51,6 +52,27 @@ export async function POST(request: Request) {
 
     const userId = authData.user.id;
 
+    // Hash password for users table (fallback login)
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Create user record in users table for fallback login
+    const { error: userError } = await supabaseAdmin
+      .from('users')
+      .insert({
+        id: userId,
+        email,
+        full_name: fullName,
+        role: 'teacher',
+        password_hash: passwordHash,
+        is_active: true,
+        created_at: new Date().toISOString(),
+      });
+
+    if (userError) {
+      await supabaseAdmin.auth.admin.deleteUser(userId);
+      return NextResponse.json({ error: userError.message || 'Failed to create user record' }, { status: 500 });
+    }
+
     // Handle file uploads (store as URLs - in production, use proper storage)
     let cvUrl: string | null = null;
     let certificationUrl: string | null = null;
@@ -86,8 +108,9 @@ export async function POST(request: Request) {
       .single();
 
     if (teacherError) {
-      // Rollback: delete the auth user if teacher creation fails
+      // Rollback: delete the auth user and users record if teacher creation fails
       await supabaseAdmin.auth.admin.deleteUser(userId);
+      await supabaseAdmin.from('users').delete().eq('id', userId);
       return NextResponse.json({ error: teacherError.message || 'Failed to create teacher record' }, { status: 500 });
     }
 
