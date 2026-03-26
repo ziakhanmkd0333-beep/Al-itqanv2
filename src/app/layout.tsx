@@ -7,8 +7,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alnooronlineacademy.com"),
-  title: "Alnoor Online Quran & Hadees Academy",
-  description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida, Quran reading, Tajweed, Hifz, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
+  title: "Al-NOOR Online Quran & Hadees Academy",
+  description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
   keywords: [
     "Online Quran Academy",
     "Online Hadees Academy",
@@ -40,14 +40,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "https://alnooronlineacademy.com/",
-    title: "Alnoor Online Quran & Hadees Academy",
-    description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida, Quran reading, Tajweed, Hifz, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
+    title: "Al-NOOR Online Quran & Hadees Academy",
+    description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization.",
     locale: "en_US",
     alternateLocale: ["ar_SA", "ur_PK"],
-    siteName: "Alnoor Online Quran & Hadees Academy",
+    siteName: "Al-NOOR Online Quran & Hadees Academy",
     images: [
       {
-        url: "/logo.png",
+        url: "https://i.ibb.co/V0pRN6XT/logo.png",
         width: 1200,
         height: 630,
         alt: "Al-NOOR Online Quran & Hadees Academy - Complete Islamic Knowledge Web App"
@@ -56,9 +56,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Alnoor Online Quran & Hadees Academy",
-    description: "Learn complete Islamic knowledge online with Alnoor Academy — from Noorani Qaida to Takhassus fil Hadees under qualified scholars.",
-    images: ["/logo.png"],
+    title: "Al-NOOR Online Quran & Hadees Academy",
+    description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization.",
+    images: ["https://i.ibb.co/V0pRN6XT/logo.png"],
     creator: "@alnooracademy",
     site: "@alnooracademy"
   },
@@ -72,14 +72,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico', sizes: 'any' },
+      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico',
   },
   manifest: '/manifest.json',
   verification: {
