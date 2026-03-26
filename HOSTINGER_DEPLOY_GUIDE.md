@@ -1,38 +1,55 @@
-# Alnoor Academy - Hostinger Deployment Guide
+# Alnoor Academy - Hostinger Business Hosting Deployment Guide
 
-## Deployment Package Ready
+## Prerequisites
 
-**Location:** `d:\completed projects\Alnoor Online Quran Academy\alnoor-academy\hostinger-deploy\`
-**Zip File:** `alnoor-hostinger-deploy.zip`
+- Hostinger Business Hosting plan (supports Node.js)
+- SSH access enabled
+- Domain: alnooronlineacademy.com
 
 ## Deployment Steps
 
-### Option 1: File Manager Upload (Recommended)
+### 1. Prepare Files for Upload
 
-1. **Login to Hostinger hPanel**
-   - Go to: https://hpanel.hostinger.com/
-   - Login with your credentials
+Upload these files and folders to Hostinger:
 
-2. **Navigate to File Manager**
-   - Find your domain: alnooronlineacademy.com
-   - Click "File Manager" or "Files"
+**Required Files:**
+- `package.json`
+- `next.config.ts`
+- `.htaccess`
+- `.env.production` (rename to `.env` on server)
+- `public/` folder
+- `src/` folder
 
-3. **Upload Files**
-   - Navigate to `public_html` folder
-   - Delete existing files (if any)
-   - Upload `alnoor-hostinger-deploy.zip`
-   - Extract the zip file
+**After Upload:**
+- Run `npm install` on server
+- Run `npm run build` on server
 
-4. **Configure Node.js (If Available)**
-   - Go to "Advanced" → "Node.js"
-   - Select Node.js version 18 or 20
-   - Set application root to: `public_html`
-   - Set startup file to: (leave blank for Next.js)
-   - Click "Create"
+### 2. Configure Node.js in Hostinger hPanel
 
-### Option 2: VPS/Business Hosting (For Full Next.js Support)
+1. Login to Hostinger hPanel
+2. Go to **Hosting** → **Manage** → **Advanced** → **Node.js**
+3. Click **Create Application**
+4. Configure:
+   - **Node.js version:** 20.x (or 18.x minimum)
+   - **Application mode:** Production
+   - **Application root:** `public_html` (or your domain folder)
+   - **Application URL:** alnooronlineacademy.com
+   - **Startup file:** Leave empty (uses package.json scripts)
+   - **Environment variables:** Add all from `.env.production`
 
-If you have VPS or Business hosting with SSH access:
+### 3. Environment Variables
+
+Add these in Hostinger Node.js configuration:
+
+```
+NODE_ENV=production
+NEXT_TELEMETRY_DISABLED=1
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+### 4. SSH Deployment (Recommended)
 
 ```bash
 # SSH into your server
@@ -41,80 +58,97 @@ ssh username@alnooronlineacademy.com
 # Navigate to web root
 cd ~/public_html
 
-# Remove old files
-rm -rf *
+# Clone from GitHub (recommended)
+git clone https://github.com/ziakhanmkd0333-beep/Alnoor-v2.git .
 
-# Upload and extract new files
-# (Use FileZilla or SCP to upload alnoor-hostinger-deploy.zip)
-
-# Extract
-unzip alnoor-hostinger-deploy.zip
+# Or upload files via SFTP/FileZilla
 
 # Install dependencies
-npm install --production
+npm install
 
-# Start the application
+# Build the application
+npm run build
+
+# Start the application (Hostinger will manage this via Node.js panel)
 npm start
 ```
 
-### Option 3: Git Deployment
+### 5. Configure Port
 
-If Hostinger supports Git:
+Hostinger will assign a port automatically. The application uses:
+- `process.env.PORT` (set by Hostinger)
+- Default fallback: 3000
 
-1. Go to "Advanced" → "Git"
-2. Connect your GitHub repository
-3. Set branch: `main`
-4. Set deploy path: `public_html`
-5. Click "Deploy"
+### 6. Verify Deployment
 
-## Important Configuration
+1. Visit https://alnooronlineacademy.com
+2. Check that pages load correctly
+3. Test login/register functionality
+4. Verify API routes work (check Network tab in browser)
 
-### Environment Variables
-
-Add these in Hostinger's "Environment Variables" section:
+## File Structure on Server
 
 ```
-NEXT_TELEMETRY_DISABLED=1
-NODE_VERSION=20
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+public_html/
+├── .env                    # Environment variables
+├── .htaccess               # Apache configuration
+├── package.json            # Dependencies
+├── next.config.ts          # Next.js config
+├── public/                 # Static assets
+│   ├── images/
+│   ├── favicon.ico
+│   └── ...
+├── src/                    # Source code
+│   ├── app/
+│   ├── components/
+│   ├── contexts/
+│   ├── hooks/
+│   └── lib/
+├── .next/                  # Build output (after npm run build)
+└── node_modules/           # Dependencies (after npm install)
 ```
 
-### .htaccess Configuration
+## Troubleshooting
 
-Create `.htaccess` file in `public_html`:
+### Common Issues
 
-```apache
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
-</IfModule>
-```
+1. **502 Bad Gateway**
+   - Check Node.js application is running in hPanel
+   - Verify port configuration
+   - Check error logs
 
-## Post-Deployment
+2. **API Routes Not Working**
+   - Ensure Node.js is properly configured (not just static hosting)
+   - Check `.htaccess` is uploaded
+   - Verify environment variables are set
 
-1. **Test the website:** Visit https://alnooronlineacademy.com
-2. **Check API routes:** Test login/register functionality
-3. **Verify database connections:** Ensure Supabase is connected
-4. **SSL Certificate:** Make sure SSL is enabled
+3. **Build Fails**
+   - Check Node.js version (must be 18+)
+   - Verify all dependencies installed
+   - Check error logs in hPanel
+
+### Check Logs
+
+1. Go to hPanel → **Hosting** → **Manage**
+2. Navigate to **Advanced** → **Error Logs**
+3. Or use SSH: `tail -f ~/logs/error.log`
+
+## Important Notes
+
+- **Do NOT use static export** - This app requires server-side rendering for API routes
+- **Keep `.env` secure** - Never commit to Git
+- **Monitor usage** - Check bandwidth and resource usage in hPanel
+- **Enable SSL** - Force HTTPS in hPanel
 
 ## Support
 
-If you encounter issues:
-1. Check Hostinger logs in "Advanced" → "Error Logs"
-2. Verify all files were uploaded correctly
-3. Check file permissions (should be 644 for files, 755 for folders)
-4. Contact Hostinger support if needed
+- Hostinger Support: https://www.hostinger.com/contact
+- Check documentation: https://support.hostinger.com
 
 ## Build Information
 
-- **Build Date:** $(Get-Date)
 - **Next.js Version:** 16.2.1
-- **Node.js Version:** 20
-- **Total Pages:** 62
+- **Node.js Required:** 18.x or higher
+- **Total Pages:** 67
 - **API Routes:** 43
+- **Middleware:** Yes (auth protection)
