@@ -18,15 +18,8 @@ RewriteBase /
   RequestHeader unset Expect early
 </IfModule>
 
-# Don't rewrite Next.js static assets (JS/CSS chunks) - MUST be first
-RewriteCond %{REQUEST_URI} ^/_next/ [NC]
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^ - [L]
-
-# If _next file doesn't exist, don't rewrite (return 404)
-RewriteCond %{REQUEST_URI} ^/_next/ [NC]
-RewriteRule ^ - [L,R=404]
+# Don't rewrite Next.js static assets (JS/CSS chunks)
+RewriteRule ^_next/(.*)$ - [L]
 
 # Don't rewrite actual files or directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
