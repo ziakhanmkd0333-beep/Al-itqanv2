@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
   <url>
     <loc>https://alnooronlineacademy.com/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+
+  <!-- Main Public Pages -->
   <url>
     <loc>https://alnooronlineacademy.com/about</loc>
     <changefreq>weekly</changefreq>
@@ -26,6 +29,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://alnooronlineacademy.com/privacy</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/terms</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Auth Pages -->
+  <url>
     <loc>https://alnooronlineacademy.com/auth/login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -44,5 +59,135 @@
     <loc>https://alnooronlineacademy.com/admin-login</loc>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
+  </url>
+
+  <!-- Quran Courses -->
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/noorani-qaida</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/nazra-quran</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/quran-with-tajweed</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-tajweed</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/hifz-ul-quran</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/tarjumat-ul-quran</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-tafseer</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Arabic Language Courses -->
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/beginner-arabic</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/intermediate-arabic</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-spoken-arabic</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-balaghat</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Fiqh Courses -->
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/basic-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/intermediate-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/basic-usool-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/intermediate-usool-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-usool-fiqh</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Sarf & Nahw Courses -->
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/basic-sarf-nahw</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/intermediate-sarf-nahw</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-sarf-nahw</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Hadith Courses -->
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/basic-hadith</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/intermediate-hadith</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/advanced-hadith</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://alnooronlineacademy.com/courses/takhassus-fil-hadith</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
 </urlset>
