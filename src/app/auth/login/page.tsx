@@ -76,30 +76,18 @@ function LoginForm() {
     setError("");
     setSuccess(false);
 
-    console.log('[Login] Attempting login for:', formData.email);
+    const result = await login(formData.email, formData.password, formData.rememberMe);
 
-    try {
-      const result = await login(formData.email, formData.password, formData.rememberMe);
+    if (result.success && result.user) {
+      setSuccess(true);
+      // Get the redirect path from URL or default to role-based dashboard using returned user data
+      const redirectPath = searchParams.get('redirect') || `/dashboard/${result.user.role}`;
       
-      console.log('[Login] Result:', result);
-
-      if (result.success && result.user) {
-        setSuccess(true);
-        // Get the redirect path from URL or default to role-based dashboard using returned user data
-        const redirectPath = searchParams.get('redirect') || `/dashboard/${result.user.role}`;
-        
-        console.log('[Login] Success! Redirecting to:', redirectPath);
-        
-        setTimeout(() => {
-          router.push(redirectPath);
-        }, 1000);
-      } else {
-        console.error('[Login] Failed:', result.error);
-        setError(result.error || 'Login failed');
-      }
-    } catch (err: any) {
-      console.error('[Login] Exception:', err);
-      setError(err.message || 'An error occurred during login');
+      setTimeout(() => {
+        router.push(redirectPath);
+      }, 1000);
+    } else {
+      setError(result.error || 'Login failed');
     }
     
     setIsLoading(false);
