@@ -60,6 +60,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser);
           setUser(parsedUser);
+          // Also set cookie for middleware auth check
+          document.cookie = `user=${encodeURIComponent(storedUser)}; path=/; max-age=86400; SameSite=Lax`;
         } else {
           setUser(null);
         }
@@ -121,13 +123,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return { success: false, error: data.error || 'Login failed' };
       }
 
-      // Store user data
+      // Store user data in localStorage/sessionStorage
       const userDataStr = JSON.stringify(data.user);
       if (rememberMe) {
         localStorage.setItem('user', userDataStr);
       } else {
         sessionStorage.setItem('user', userDataStr);
       }
+
+      // Also set cookie for middleware auth check
+      const maxAge = rememberMe ? 7 * 24 * 60 * 60 : 24 * 60 * 60; // 7 days or 1 day
+      document.cookie = `user=${encodeURIComponent(userDataStr)}; path=/; max-age=${maxAge}; SameSite=Lax`;
 
       setUser(data.user);
       return { success: true, user: data.user };
