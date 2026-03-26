@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { supabaseBrowser, getCurrentUser } from '@/lib/supabase-browser';
+import { adminDataService, studentDataService, teacherDataService } from '@/lib/client-services';
 
 // Generic hook for fetching and subscribing to data
 export function useRealtimeData<T>(
@@ -89,27 +90,18 @@ export function useAdminDashboard() {
     try {
       setLoading(true);
       
-      // Get user from storage for authorization
-      const storedUser = typeof window !== 'undefined' 
-        ? localStorage.getItem('user') || sessionStorage.getItem('user') 
-        : null;
+      // Use client-side service instead of API
+      const [stats, admissions, payments, sessions] = await Promise.allSettled([
+        adminDataService.getDashboardStats(),
+        adminDataService.getRecentAdmissions(5),
+        adminDataService.getRecentPayments(5),
+        adminDataService.getUpcomingSessions(5)
+      ]);
       
-      const response = await fetch('/api/admin/dashboard', {
-        headers: {
-          ...(storedUser && { 'Authorization': `Bearer ${storedUser}` })
-        }
-      });
-      
-      if (response.ok) {
-        const result = await response.json();
-        setStats(result.stats || {});
-        setRecentAdmissions(result.recentAdmissions || []);
-        setRecentPayments(result.recentPayments || []);
-        setUpcomingSessions(result.upcomingSessions || []);
-      } else if (response.status === 401) {
-        console.error('Admin dashboard: Unauthorized - not an admin user');
-        // Don't update state on 401, let the ProtectedRoute handle redirect
-      }
+      setStats(stats.status === 'fulfilled' ? stats.value : {});
+      setRecentAdmissions(admissions.status === 'fulfilled' ? admissions.value : []);
+      setRecentPayments(payments.status === 'fulfilled' ? payments.value : []);
+      setUpcomingSessions(sessions.status === 'fulfilled' ? sessions.value : []);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
@@ -258,14 +250,25 @@ export function useTeacherDashboard(teacherId: string | null) {
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/teacher/dashboard?teacherId=${teacherId}`);
-      const data = await res.json();
+      // Use client-side service instead of API
+      const data = await teacherDataService.getDashboardData(teacherId);
       
-      if (!res.ok) throw new Error(data.error);
-      
-      setStats(data.stats || {});
-      setTodaySchedule(data.todaySchedule || []);
-      setStudents(data.students || []);
+      setStats(data);
+      // Fetch today's schedule separately
+      const today = new Date().toISOString().split('T')[0];
+      const { data: sessions } = await supabaseBrowser
+        .from('sessions')
+        .select('*, courses(title), students(full_name)')
+        .eq('teacher_id', teacherId)
+        .eq('scheduled_date', today);
+      setTodaySchedule(sessions || []);
+      // Fetch students
+      const { data: enrollments } = await supabaseBrowser
+        .from('enrollments')
+        .select('*, students(*)')
+        .eq('teacher_id', teacherId)
+        .eq('status', 'active');
+      setStudents(enrollments?.map((e: any) => e.students) || []);
     } catch (error) {
       console.error('Teacher dashboard error:', error);
     } finally {
@@ -384,15 +387,13 @@ export function useStudentDashboard(studentId: string | null) {
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/student/dashboard?studentId=${studentId}`);
-      const data = await res.json();
+      // Use client-side service instead of API
+      const data = await studentDataService.getDashboardData(studentId);
       
-      if (!res.ok) throw new Error(data.error);
-      
-      setEnrollments(data.enrollments || []);
-      setUpcomingSessions(data.upcomingSessions || []);
-      setCertificates(data.certificates || []);
-      setAttendanceRate(data.attendanceRate || 0);
+      setEnrollments(data.enrollments);
+      setUpcomingSessions(data.upcomingSessions);
+      setCertificates(data.certificates);
+      setAttendanceRate(data.attendanceRate);
     } catch (error) {
       console.error('Student dashboard error:', error);
     } finally {
