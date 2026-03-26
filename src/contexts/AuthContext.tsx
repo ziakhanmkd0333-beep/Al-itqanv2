@@ -102,40 +102,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [checkAuth]);
 
-  // Login function
+  // Login function - using custom API only (Supabase Auth times out)
   const login = useCallback(async (email: string, password: string, rememberMe: boolean = false): Promise<{ success: boolean; user?: User; error?: string }> => {
     try {
-      // First try Supabase Auth sign in
-      const { data: authData, error: authError } = await supabaseBrowser.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (!authError && authData.user) {
-        // Get user data from our users table
-        const { data: userData, error: userError } = await supabaseBrowser
-          .from('users')
-          .select('*')
-          .eq('id', authData.user.id)
-          .single();
-
-        if (!userError && userData) {
-          const { password_hash, ...safeUser } = userData;
-          
-          // Store in localStorage for compatibility
-          const userJson = JSON.stringify(safeUser);
-          if (rememberMe) {
-            localStorage.setItem('user', userJson);
-          } else {
-            sessionStorage.setItem('user', userJson);
-          }
-          
-          setUser(safeUser as User);
-          return { success: true, user: safeUser as User };
-        }
-      }
-
-      // Fallback: try custom API login
+      // Use custom API login directly (Supabase Auth has timeout issues)
+      console.log('[AuthContext] Using custom API login for:', email);
+      
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -143,6 +115,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       const data = await response.json();
+      console.log('[AuthContext] API response:', data);
 
       if (!response.ok) {
         return { success: false, error: data.error || 'Login failed' };
@@ -159,6 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(data.user);
       return { success: true, user: data.user };
     } catch (error: any) {
+      console.error('[AuthContext] Login error:', error);
       return { success: false, error: error.message || 'An error occurred' };
     }
   }, []);
