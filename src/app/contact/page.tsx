@@ -113,17 +113,9 @@ export default function ContactPage() {
       
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 min-h-[45vh] flex items-center overflow-hidden">
-        {/* Background Image */}
+        {/* Background with Gradient */}
         <div className="absolute inset-0 z-0">
-          <Image
-            src="/contact-hero.png"
-            alt={t("contact.title") || "Contact Us"}
-            fill
-            className="object-cover"
-            priority
-          />
-          
-          {/* Gradient Overlay */}
+          {/* Base Gradient */}
           <div 
             className="absolute inset-0"
             style={{
