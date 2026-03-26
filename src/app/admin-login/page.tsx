@@ -95,7 +95,7 @@ export default function AdminLoginPage() {
             Admin Login
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Al-NOOR Online Quran Academy
+            *الإتقان للدراسات الإسلامية والعربية*
           </p>
         </div>
 
@@ -245,7 +245,7 @@ export default function AdminLoginPage() {
           className="mt-6 text-center text-xs text-gray-500 dark:text-gray-400"
         >
           <p>This is a secure admin portal. Unauthorized access is prohibited.</p>
-          <p className="mt-1">© 2024 Al-NOOR Online Quran Academy. All rights reserved.</p>
+          <p className="mt-1">© 2024 *الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies. All rights reserved.</p>
         </motion.div>
       </motion.div>
     </div>

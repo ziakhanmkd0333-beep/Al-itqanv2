@@ -426,7 +426,7 @@ function StudentCertificatesContent() {
                     <Award className="w-10 h-10 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">Certificate of Completion</h3>
-                  <p className="text-gray-500 dark:text-gray-400 mt-1">Al-NOOR Online Quran & Hadees Academy</p>
+                  <p className="text-gray-500 dark:text-gray-400 mt-1">*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies</p>
                 </div>
 
                 {/* Content */}

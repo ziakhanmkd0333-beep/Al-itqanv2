@@ -69,7 +69,7 @@ function StudentNotificationsContent() {
       setNotifications([
         {
           id: '1',
-          title: 'Welcome to Al-NOOR Academy',
+          title: 'Welcome to Al-Itqan Institute',
           message: 'We are excited to have you join our Islamic learning journey. Your course will start soon.',
           type: 'announcement',
           is_read: false,

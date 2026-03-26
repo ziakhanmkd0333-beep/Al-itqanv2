@@ -68,7 +68,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
                 className="w-[120px] h-[120px] rounded-full flex items-center justify-center overflow-hidden border-2 border-[#C9A84C]"
                 style={{ position: 'relative' }}
               >
-                <Image src="/logo.png" alt="Al-NOOR Academy" fill className="object-contain" priority />
+                <Image src="/logo.png" alt="Al-Itqan Institute" fill className="object-contain" priority />
               </div>
             </motion.div>
 
@@ -79,7 +79,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-[#F5FDF8] text-xl md:text-2xl font-bold text-center font-brand mb-1"
             >
-              Al-NOOR Online Quran
+              *الإتقان للدراسات الإسلامية والعربية*
             </motion.h1>
 
             <motion.h2
@@ -88,7 +88,7 @@ export function SplashScreen({ onComplete }: SplashScreenProps) {
               transition={{ duration: 0.5, delay: 0.3 }}
               className="text-[#C9A84C] text-base md:text-lg font-brand text-center mb-4"
             >
-              & Hadees Academy
+              Al-Itqan Institute
             </motion.h2>
 
             {/* Loading Dots */}

@@ -100,7 +100,7 @@ function LoginForm() {
         <Image
           src="/admission-hero.png"
           alt="Login"
-          fill
+          title="Welcome to Al-Itqan Institute for Islamic & Arabic Studies"
           className="object-cover"
           priority
         />
@@ -184,7 +184,7 @@ function LoginForm() {
             <div className="relative w-16 h-16">
               <Image
                 src="/logo.png"
-                alt="Al-NOOR Academy"
+                alt="Al-Itqan Institute for Islamic & Arabic Studies"
                 fill
                 className="object-contain rounded-full"
                 priority
@@ -278,7 +278,7 @@ function LoginForm() {
                   onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                   className="w-4 h-4 rounded border-gray-300 text-[var(--primary)] focus:ring-[var(--primary)]"
                 />
-                <span className={`text-gray-600 text-sm ${isRTL ? "arabic-text" : ""}`}>{t("login.rememberMe") || "Remember me"}</span>
+                <p className="text-gray-500 dark:text-gray-400 mt-1">*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies</p>
               </label>
               <Link href="/auth/forgot-password" className={`text-[var(--primary)] text-sm hover:underline ${isRTL ? "arabic-text" : ""}`}>
                 {t("login.forgotPassword") || "Forgot password?"}

@@ -79,7 +79,7 @@ export function Navbar() {
               <div className="relative w-full h-full rounded-full overflow-hidden ring-2 ring-[var(--gold)]/30 group-hover:ring-[var(--gold)] transition-all duration-300">
                 <Image
                   src="/logo.png"
-                  alt="Al-NOOR Academy Logo"
+                  alt="Al-Itqan Institute Logo"
                   fill
                   className="object-contain"
                   priority

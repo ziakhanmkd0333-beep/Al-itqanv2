@@ -39,7 +39,7 @@ export default function TermsPage() {
                 <h2 className="text-xl font-semibold text-[var(--text-primary)]">Educational Services</h2>
               </div>
               <p className="text-[var(--text-muted)] leading-relaxed">
-                Al-NOOR Online Quran & Hadees Academy provides online Islamic education services. 
+                *الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies provides online Islamic education services. 
                 By enrolling in our courses, you agree to participate actively, complete assignments, 
                 and follow the guidance of our qualified teachers.
               </p>

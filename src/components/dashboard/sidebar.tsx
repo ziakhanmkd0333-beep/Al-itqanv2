@@ -109,13 +109,13 @@ export function DashboardSidebar({ userType }: { userType: "admin" | "student" |
             <div className="relative w-10 h-10">
               <Image
                 src="/logo.png"
-                alt="Al-NOOR Academy"
+                alt="Al-Itqan Institute"
                 fill
                 className="object-contain rounded-full"
               />
             </div>
             <div>
-              <h1 className="font-brand font-bold text-sm">Al-NOOR Academy</h1>
+              <h1 className="font-brand font-bold text-sm">Al-Itqan Institute</h1>
               <p className="text-white/60 text-xs capitalize">{userType} {t("sidebar.panel") || "Panel"}</p>
             </div>
           </Link>

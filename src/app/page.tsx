@@ -91,7 +91,7 @@ function WhyChooseUs() {
           </h2>
 
           <p className={`text-[var(--text-secondary)] text-lg md:text-xl max-w-3xl mx-auto leading-relaxed ${isRTL ? "arabic-text" : ""}`}>
-            {t("whyChooseUs.subtitle") || "Discover why thousands of students worldwide choose Al-NOOR Academy for their Islamic education journey"}
+            {t("whyChooseUs.subtitle") || "Discover why thousands of students worldwide choose Al-Itqan Institute for their Islamic education journey"}
           </p>
 
           {/* Decorative Line */}

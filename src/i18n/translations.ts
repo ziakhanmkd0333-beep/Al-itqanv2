@@ -11,15 +11,15 @@ export const translations = {
       contact: "Contact",
       login: "Login",
       applyNow: "Apply Now",
-      brandName: "Al-NOOR Academy",
-      brandTagline: "Online Quran & Hadees",
+      brandName: "Al-Itqan Institute",
+      brandTagline: "Islamic & Arabic Studies",
     },
     // Hero Section
     hero: {
       bismillah: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
       title: "Complete Islamic Knowledge Web App",
       subtitle: "From Noorani Qaida to Takhassus fil Hadees — All in One Platform",
-      description: "Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
+      description: "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
       exploreCourses: "Explore Courses",
       applyNow: "Apply Now",
     },
@@ -393,11 +393,11 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "About Al-NOOR Academy",
+      title: "About Al-Itqan Institute",
       subtitle: "About Us",
       description: "Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
       heroAlt: "About Us",
-      logoAlt: "Al-NOOR Academy Logo",
+      logoAlt: "Al-Itqan Institute Logo",
       missionVision: {
         title: "Our Mission & Vision",
       },
@@ -507,7 +507,7 @@ export const translations = {
       quickLinks: "Quick Links",
       contact: "Contact Us",
       followUs: "Follow Us",
-      rights: "Al-NOOR Online Quran & Hadees Academy. All Rights Reserved.",
+      rights: "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies. All Rights Reserved.",
       madeWith: "Made with",
       forUmmah: "for the Ummah",
       subtitle: "Online Quran & Hadees",
@@ -719,8 +719,8 @@ export const translations = {
     },
     // Why Choose Us
     whyChooseUs: {
-      title: "Why Choose Al-NOOR Online Quran & Hadees Academy?",
-      subtitle: "Discover why thousands of students worldwide choose Al-NOOR Academy for their Islamic education journey",
+      title: "Why Choose *الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies?",
+      subtitle: "Discover why thousands of students worldwide choose Al-Itqan Institute for their Islamic education journey",
       completeSyllabus: "Complete Islamic syllabus from beginner to specialization",
       completeSyllabusDesc: "Complete structured curriculum from beginner to specialization level",
       scholarSupervision: "Qualified scholar supervision with traditional sanad-based learning",
@@ -755,7 +755,7 @@ export const translations = {
       guardianInfoNote: "Required for minors",
       additionalMessage: "Additional Message",
       submitted: "Application Submitted!",
-      thankYou: "Thank you for applying to Al-NOOR Academy. We have received your application and will review it shortly. You will receive a confirmation email within 24-48 hours.",
+      thankYou: "Thank you for applying to Al-Itqan Institute. We have received your application and will review it shortly. You will receive a confirmation email within 24-48 hours.",
       form: {
         fullName: "Full Name",
         email: "Email Address",
