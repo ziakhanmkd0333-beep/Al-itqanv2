@@ -393,7 +393,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "About Al-Itqan Institute",
+      title: "Complete Islamic Studies Platform",
       subtitle: "About Us",
       description: "Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
       heroAlt: "About Us",
@@ -1300,7 +1300,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "عن الإتقان",
+      title: "منصة الدراسات الإسلامية الشاملة",
       subtitle: "من نحن",
       description: "أول تطبيق ويب كامل للمعرفة الإسلامية في العالم — يجلب التعليم الإسلامي الأصيل من العلماء التقليديين إلى الطلاب حول العالم",
       heroAlt: "من نحن",
@@ -2208,7 +2208,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "الاتقان کے بارے میں",
+      title: "مکمل اسلامی مطالعہ پلیٹ فارم",
       subtitle: "ہمارے بارے میں",
       description: "دنیا کا پہلا مکمل اسلامی علم ویب ایپ — روایتی علما سے دنیا بھر کے طلباء تک مستند اسلامی تعلیم",
       heroAlt: "ہمارے بارے میں",
