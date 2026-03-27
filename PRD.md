@@ -1,931 +1,995 @@
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 1 of 26 • www.alnooracademy.com
-☪ Al-NOOR Online Quran & Hadees Academy ☪
-ننننن • Knowledge of Light • ننننن ننن
-World's First Complete Islamic Knowledge Web App
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 1
+والعربية اإلسالمية للدراسات اإلتقان
+Al-Itqan Institute for Islamic & Arabic Studies
 PRODUCT REQUIREMENTS DOCUMENT
-Document Version v2.0 — Complete Edition
-Prepared By Al-NOOR Academy Product Team
-Scholar Supervisor Dr. Noor Ur Rahman Hazarvi (ḥāfiẓahūllāh)
-Date June 2025
-Status 🟢 Approved & Active
-Classification 🟢 CONFIDENTIAL
-Platform Web Application (Desktop & Mobile Responsive)
-Technology Stack React · Node.js · Supabase · Tailwind CSS
-Languages English · Arabic (RTL) · Urdu (RTL)
-Themes Green Islamic (Default) · Light Mode · Dark Mode
-Total Courses 24 Structured Courses across 5 Disciplines
-Arabic/Urdu Fonts Amiri, Noto Naskh Arabic, Scheherazade New, Traditional Arabic, Arial, sansserif
-ِم ☪
-ِس ْ
-ِللا ب
-
-ن
-ٰ
-م
-ْ
-ح
-َّ
-ِم الر
-ْ
-ِحي
-َّ
-الر
-"In the name of Allah, the Most Gracious, the Most Merciful"
-"Read! In the name of your Lord who created." — Surah Al-Alaq 96:1
-"Allah will exalt those who believe among you, and those who have knowledge, to high ranks." — Surah AlMujadila 58:11
-◆ ◆ ◆
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 2 of 26 • www.alnooracademy.com
- 1. Executive Summary
-Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web application providing complete and
-structured Islamic knowledge from the foundational level to advanced scholarly specialization. Under the scholarly
-supervision of Dr. Noor Ur Rahman Hazarvi (ḥāfiẓahūllāh) — PhD from International Islamic University Islamabad, Khārij of
-Jamia Banori Town, and Daktūra fī ʿUlūm as-Sunnah — the academy offers an authentic and continuous learning journey
-starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilmus-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in
-Takhassus fil Hadees.
-This unified platform is designed for students worldwide seeking authentic Islamic education online with a clear roadmap,
-certifications, and scholar-led instruction. The system encompasses four tightly integrated panels — Public, Admin, Student,
-and Teacher — powered by a modern, scalable technology stack (React, Node.js, Supabase).
-Core Objectives
-▸ Deliver a professional, globally accessible Islamic learning platform
-▸ Enable seamless management of admissions, courses, payments, and attendance
-▸ Support multi-language (EN / AR / UR) and multi-theme accessibility for diverse learners
-▸ Provide one-to-one live classes with qualified scholars via an intuitive interface
-▸ Ensure platform security (Supabase RLS + JWT), scalability, and full mobile responsiveness
-▸ Build a strong SEO-optimized public presence for organic global reach
-▸ Complete Islamic syllabus from beginner to specialization — all in one platform
- 2. Product Overview
-Product Name Al-NOOR Online Quran & Hadees Academy
-Platform Web — Desktop & Mobile Responsive (320px and above)
-Target Audience Students of all ages — children & adults — globally
-Languages English, Arabic (RTL), Urdu (RTL)
-Theme System Green Islamic (Default) · Light Mode · Dark Mode
-Courses Offered 24 structured courses across 5 disciplines
-Live Class Format One-to-One with qualified scholars via video call
-Certificates PDF completion certificates for every course
-Scholar Supervisor Dr. Noor Ur Rahman Hazarvi (ḥāfiẓahūllāh)
- 2.1 Panel Architecture
-Panel Primary Purpose Primary Users
-Public Panel Marketing site — homepage, courses, admissions, about All Visitors
-Admin Panel Full system management — students, teachers, courses,
-payments Academy Admins
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 3 of 26 • www.alnooracademy.com
-Panel Primary Purpose Primary Users
-Student Panel Personal learning space — courses, progress, certificates Enrolled Students
-Teacher Panel Class management — students, attendance, sessions Assigned Teachers
- 3. SEO Strategy — Complete Specification
- 3.1 SEO Meta Tags
-Meta Title (58–60 chars) Al-NOOR Online Quran & Hadees Academy | Complete Islamic Knowledge
-Web App
-Meta Description (155–160 chars) Learn complete Islamic knowledge online with Al-NOOR Online Quran &
-Hadees Academy—from Noorani Qaida, Hifz-ul-Qur’an, Tafseer, Arabic
-language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.
-SEO Slug / URL /online-quran-hadees-academy
-Open Graph og:title Al-NOOR Online Quran & Hadees Academy | Complete Islamic Knowledge
-Web App
-Open Graph og:type website
-Open Graph og:image alt Online Quran and Hadees learning at Al-NOOR Academy
-Canonical Tag https://www.alnooracademy.com/online-quran-hadees-academy
- 3.2 Heading Hierarchy
-Tag Content
-H1 (Main Heading) World's First Complete Islamic Knowledge Web App
-H2 (Secondary Heading) From Noorani Qaida to Takhassus fil Hadees — All in One Platform
-H3 (Supportive Section) Why Choose Al-NOOR Online Quran & Hadees Academy?
-H3 (Courses) Complete 24-Course Islamic Curriculum
-H3 (Scholar) Scholarly Supervision by Dr. Noor Ur Rahman Hazarvi
-H3 (Admission) Simple Online Admission & Approval System
- 3.3 Primary & Secondary Keywords
-Primary Focus Keywords
-▸ Online Quran Academy
-▸ Online Hadees Academy
-▸ Islamic Knowledge Web App
-▸ Noorani Qaida Online
-▸ Hifz-ul-Quran Online
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 4 of 26 • www.alnooracademy.com
-▸ Tafseer Quran Course
-▸ Arabic Language Online
-▸ Ilm-us-Sarf & Nahw
-▸ Fiqh and Usool-ul-Fiqh
-▸ Hadith Studies Online
-▸ Takhassus fil Hadees
-▸ Islamic Studies Online
-Secondary & Long-tail Keywords
-▸ One-to-one online Quran classes
-▸ Online Tajweed course with certification
-▸ Dars-e-Nizami online program
-▸ Advanced Balaghat Arabic course online
-▸ Ilm-us-Sigha and Al-Kafia online
-▸ Sharah al-Jami advanced Arabic grammar
-▸ Sahih Bukhari online study
-▸ Usool Fiqh Noor-ul-Anwar online
-▸ Islamic certificate courses online
-▸ Qualified scholar-supervised online Quran
- 3.4 SEO Above-the-Fold Paragraph
-Homepage SEO Paragraph (Exact Text for H1 Section)
-Al-NOOR Online Quran & Hadees Academy is a world-class Islamic education web app providing
-complete and structured Islamic knowledge from the foundational level to advanced scholarly
-specialization. Under the scholarly supervision of Dr. Noor Ur Rahman Hazarvi (ḥāfiẓahūllāh)—PhD
-from International Islamic University Islamabad, Khārij of Jamia Banori Town, and Daktūra fī
-ʿUlūm as-Sunnah—the academy offers an authentic and continuous learning journey starting from
-Noorani Qaida, progressing through Qur’an Nazra, Tajweed, Hifz-ul-Qur’an, Tarjuma & Tafseer,
-Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh,
-Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.
-This unified platform is designed for students worldwide seeking authentic Islamic education
-online with a clear roadmap, certifications, and scholar-led instruction.
- 3.5 H3 Why Choose Al-NOOR Section
-▸ Complete Islamic syllabus from beginner to specialization
-▸ Qualified scholar supervision with traditional sanad-based learning
-▸ One-to-one online classes & recorded lessons
-▸ Structured curriculum with progress tracking
-▸ Global access with multilingual support (Urdu, Arabic, English)
-▸ Secure admission, approval, and payment system
- 3.6 Schema & Technical SEO
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 5 of 26 • www.alnooracademy.com
-Schema Type Implementation Details
-Organization Schema Academy name, URL, logo, contact, sameAs (social profiles)
-Person Schema Dr. Noor Ur Rahman Hazarvi — name, credentials, affiliation, jobTitle
-Course Schema Implemented per each of the 24 courses: name, description, provider, price
-FAQ Schema Admissions FAQ, class format FAQ, payment FAQ, language FAQ
-BreadcrumbList Home > Courses > [Course Name] for all course pages
-WebSite Schema Site name, URL, search action (sitelinks searchbox)
-EducationalOrg Accreditation, hasCredential, teaches properties
-Technical SEO Element Requirement / Target
-XML Sitemap Auto-generated; all 24 course pages + main pages; submitted to GSC
-Canonical Tags Self-referencing canonical on every page; no duplicate content
-hreflang en, ar, ur language tags declared on all pages
-Core Web Vitals LCP < 2.5s, FID < 100ms, CLS < 0.1 — monitored via Search Console
-Image Alt Text "Online Quran and Hadees learning at Al-NOOR Academy" + course-specific alts
-Robots.txt Allow all; disallow admin/student/teacher panel routes
-HTTPS Enforced site-wide; HSTS header enabled
-Structured Slugs /courses/noorani-qaida, /courses/hifz-ul-quran, /courses/takhassus-fil-hadees, etc.
-Page Speed Lazy-load images; preload Amiri & Noto Naskh Arabic fonts; CDN-served assets
- 4. Font System & Arabic/Urdu Typography
- 4.1 Arabic & Urdu Font Stack (Complete CSS Declaration)
-font-family: Amiri, "Noto Naskh Arabic", "Scheherazade New", "Traditional Arabic", Arial, sans-serif !important;
-This complete font stack ensures maximum Arabic/Urdu rendering compatibility across all operating systems and browsers
-worldwide. Each font serves as a graceful fallback in priority order.
-Priority Font Name Role Loading Method
-1 — Primary Amiri Main Arabic/Urdu display & body font;
-classical beauty
-Google Fonts CDN
-(preload)
-2 — Fallback Noto Naskh Arabic Google's comprehensive Naskh covering full
-Unicode Arabic
-Google Fonts CDN
-(preload)
-3 — Fallback Scheherazade New SIL International; excellent for extended
-Arabic scripts Google Fonts CDN
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 6 of 26 • www.alnooracademy.com
-Priority Font Name Role Loading Method
-4 — System Traditional Arabic Windows built-in; ensures Windows user
-coverage
-System (built-in)
-5 — Generic Arial Universal Latin/Arabic hybrid fallback System (built-in)
-6 — Generic sans-serif Ultimate browser-default fallback Browser default
- 4.2 Complete Font CSS Implementation
-/* Global Arabic/Urdu font applied when lang=ar or lang=ur */ [lang="ar"], [lang="ur"], [dir="rtl"] { font-family: Amiri, "Noto Naskh
-Arabic", "Scheherazade New", "Traditional Arabic", Arial, sans-serif !important; line-height: 2.0; letter-spacing: 0; } /* Google
-Fonts Import */ @import
-url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;50
-0;600;700&family=Scheherazade+New:wght@400;500;600;700&display=swap'); /* English Display Fonts */ font-family:
-"Cormorant Garamond", "Cinzel", Calibri, serif; /* Hero headings */ font-family: Calibri, "Segoe UI", sans-serif; /* Body & UI
-elements */
- 4.3 Complete Font Reference Table
-Font Language Weight Options Usage in App
-Amiri Arabic/Urdu 400, 700 (+ italic variants) All AR/UR body text, Bismillah, headings,
-navigation
-Noto Naskh Arabic Arabic 400, 500, 600, 700 Fallback Arabic rendering; Quranic text
-display
-Scheherazade New Arabic 400, 500, 600, 700 Extended Arabic scripts; specialized Quranic
-display
-Traditional Arabic Arabic Regular Windows OS system fallback
-Arial Universal Regular, Bold Cross-platform generic fallback
-Cormorant Garamond English 300, 400, 500, 600, 700 English hero headings & hero text
-Cinzel English 400, 600, 700 Splash screen title, brand name
-Calibri English 400, 700 Body text, forms, admin/student panels
- 5. Functional Requirements
- 5.1 Public Panel
-Responsive Navbar
-▸ Academy round logo with animated glow and pulse effect on load
-▸ Academy name: Al-NOOR Online Quran & Hadees Academy (responsive; truncates on mobile)
-▸ Navigation links: Home | Courses | About Us | Admission | Contact
-▸ Language switcher: English (EN) | Arabic (AR) | Urdu (UR) with flag icons
-▸ Theme toggler: Green Islamic / Light / Dark with smooth CSS transition
-▸ Login button (secondary) and Apply Now button (primary gold CTA)
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 7 of 26 • www.alnooracademy.com
-▸ Mobile hamburger menu — fully collapsible with slide-in animation
-Hero Section
-▸ HTML5 video background with compressed MP4/WebM; poster image fallback on mobile
-▸ Bismillah Arabic calligraphy overlay using Amiri font with fade-in animation
-▸ H1 tag: World's First Complete Islamic Knowledge Web App
-▸ H2 tag: From Noorani Qaida to Takhassus fil Hadees — All in One Platform
-▸ Dual CTAs: Explore Courses (primary gold) & Apply Now (secondary)
-▸ Animated Islamic geometric pattern overlay (CSS SVG)
-▸ Scroll-down indicator with smooth bounce animation
-Course Preview Section (Condensed)
-▸ 8 featured courses displayed with course images, titles, levels, duration, and fees
-▸ CTA buttons: View Course Details and View All 24 Courses
-▸ Animated card hover: lift effect, gold border, shadow transition
-Courses Page — All 24 Courses
-▸ Full listing of all 24 courses with cover image, title, level, category, duration, fee
-▸ Filter bar: by Category (Quran / Arabic / Fiqh / Sarf & Nahw / Hadith) and Level
-▸ Progression path clearly shown per discipline (e.g., Basic > Intermediate > Advanced)
-▸ Enrollment CTA per course linking to Admission form with pre-selected course
-Admission Page
-▸ Fields: Full Name, Email, Phone, Country, Age, Language Preference
-▸ Course selection dropdown (all 24 courses), preferred timing, guardian info (minors)
-▸ Real-time form validation + success/error toast notifications
-▸ Data persisted to Supabase admissions table with status: pending
-About Us Page
-▸ Academy mission, vision, and Islamic teaching philosophy
-▸ Scholar profile: Dr. Noor Ur Rahman Hazarvi — photo, PhD credentials, Jamia Banori Town
-▸ Teaching methodology — one-to-one live sessions, flexible timings, sanad-based learning
-▸ Animated stats counters: students enrolled, courses, countries, years of excellence
-Footer
-▸ Contact details: email, phone, WhatsApp link
-▸ Quick links: all main pages and social media icons
-▸ Copyright notice and Islamic greeting
- 5.2 Admin Panel
-Dashboard
-▸ KPI cards: Total Students, Active Teachers, Active Courses, Pending Admissions
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 8 of 26 • www.alnooracademy.com
-▸ Recent enrollments list and payment charts (bar + pie)
-▸ Quick actions: Add Student, Add Teacher, Review Admissions
-Student Management
-▸ Paginated, searchable, filterable table of all students
-▸ Add / Edit / Deactivate student records and profiles
-▸ Per-student view: enrolled courses, payment history, attendance log
-Teacher / Scholar Management
-▸ Add, edit, and manage teacher/scholar profiles and specializations
-▸ Assign teachers to courses with one-click assignment
-▸ View teacher's assigned students and session schedule
-Course Management
-▸ Create, update, publish, and archive all 24 courses with progression paths
-▸ Set: title, level, category, description, fee, image, core books, prerequisites, teacher
-▸ Upload course materials and resources to Supabase Storage
-Admission Management
-▸ Review pending applications with full student details
-▸ Approve / Reject / Defer with one-click action and admin notes
-▸ Auto-assign teacher upon approval; auto-notify student via email
-Payment Management
-▸ Track fees, payment status (paid / pending / overdue) per student
-▸ Per-student payment timeline and receipt PDF generation
-▸ Export payment reports as CSV and PDF
- 5.3 Student Panel
-▸ Personal dashboard: enrolled courses, animated progress bars, upcoming sessions
-▸ Assigned teacher profile with credentials and contact/WhatsApp link
-▸ Course access: structured lessons, downloadable materials, recorded sessions
-▸ Course progression path display: current course and next recommended course
-▸ Attendance history: per-session attendance with date and status
-▸ Certificate page: view and download PDF completion certificate per course
-▸ Profile management: update personal info, avatar, change password
- 5.4 Teacher Panel
-▸ Dashboard: assigned courses count, total students, upcoming session schedule
-▸ Student list per course with contact details, progress, last session date
-▸ Attendance management: mark present / absent / late per session with date
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 9 of 26 • www.alnooracademy.com
-▸ Session notes and material upload per class
-▸ Direct communication link to contact assigned students
- 6. Complete Course Catalogue — All 24 Courses
-Al-NOOR Online Quran & Hadees Academy offers 24 professionally structured courses across five disciplines, organized in
-clear progression paths from foundational beginner level through to advanced specialization. Every course is supervised by
-Dr. Noor Ur Rahman Hazarvi (ḥāfiẓahūllāh).
- 6.1 Quran Courses — 7 Courses
-Progression Path: Noorani Qaida → Nazra Quran → Quran with Tajweed → Advanced Tajweed → Hifz-ul-Quran →
-Tarjamat-ul-Quran → Advanced Tafseer
- Course 1 — Noorani Qaida Course
-Level Beginner
-Category Quran
-Duration 2–3 Months
-Schedule 3–5 days/week · 30 min (children) / 45 min (adults)
-Fee $20–$30/month (~PKR 5,500–8,500)
-Prerequisites None
-Next Course Nazra Quran / Quran with Tajweed
-Description: A beginner-level course designed for students who want to start learning how to read the Holy Quran
-correctly. Focuses on basic Arabic alphabet, correct pronunciation (Makharij), joining letters, and simple reading rules.
-Suitable for children, beginners, and new learners with no prior Arabic knowledge. Students learn to recognize Arabic
-letters, pronounce from correct articulation points, combine letters into words, and read short Quranic phrases accurately.
-Learning Outcomes: Identify all Arabic letters · Read joined letters and words · Apply basic pronunciation rules · Prepare for
-Quran Reading with Tajweed
- Course 2 — Nazra Quran (Quran Reading Course)
-Level Beginner
-Category Quran
-Duration 3–4 Months
-Schedule 3–5 days/week · 30 min (children) / 45 min (adults)
-Fee $25–$35/month (~PKR 7,000–10,000)
-Prerequisites Noorani Qaida or basic Arabic letters knowledge
-Next Course Quran with Tajweed
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 10 of 26 • www.alnooracademy.com
-Description: Designed for students who know basic Arabic letters and want to read the Holy Quran fluently and correctly.
-Focuses on reading speed, accuracy, and confidence while applying basic Tajweed rules. Regular recitation practice,
-listening exercises, and correction sessions develop proper Quran reading skills.
-Learning Outcomes: Read the Holy Quran confidently · Recognize common Tajweed rules · Prepare for advanced Tajweed
-learning
- Course 3 — Quran with Tajweed Course
-Level Intermediate
-Category Quran
-Duration 4–6 Months
-Schedule 3–5 days/week · 30 min (children) / 45 min (adults)
-Fee $30–$40/month (~PKR 8,500–11,500)
-Prerequisites Nazra Quran or ability to read the Quran
-Next Course Hifz-ul-Quran or Tafseer-ul-Quran
-Description: Advanced Quran recitation course for students who can read the Quran but want to perfect recitation by
-mastering complete Tajweed rules — Makharij, Sifaat, Ikhfa, Idgham, Iqlab, Qalqalah, Madd rules, and Waqf/Ibtida.
-Teachers guide step-by-step through Quranic verse recitation with live correction.
-Learning Outcomes: Recite the Holy Quran clearly, confidently, and according to proper Tajweed rules
- Course 4 — Advanced Tajweed Program
-Level Advanced
-Category Quran
-Duration 1 Year
-Schedule 3–5 days/week · 30–45 min per session
-Fee $35–$50/month (~PKR 10,000–14,000)
-Prerequisites Quran with Tajweed Course
-Core Books Jamal ul-Quran, Khulasat ut-Tajweed, Fawaid Makkiyah, Al-Jazariyyah (Ibn al-Jazari)
-Description: Complete one-year advanced Tajweed training program covering both theoretical and practical Tajweed.
-Topics include Makharij, Sifaat, Noon Saakinah/Meem Saakinah rules, Ikhfa, Idgham, Iqlab, Qalqalah, Madd rules,
-Waqf/Ibtida, and advanced recitation techniques. Students study from classical and recognized Tajweed books under
-qualified teacher supervision.
-Learning Outcomes: Develop strong theoretical Tajweed knowledge · Recite the Holy Quran fluently and accurately
-according to authentic Tajweed rules · Prepare for high-level Quran recitation and further Islamic studies
- Course 5 — Hifz-ul-Quran (Quran Memorization Program)
-Level Specialized
-Category Quran
-Duration 2.5–3 Years (Complete Hifz) / 6 Months–1 Year (Partial)
-Schedule 5 days/week · 45–60 min per session
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 11 of 26 • www.alnooracademy.com
-Fee $40–$60/month (~PKR 11,000–17,000)
-Prerequisites Ability to read Quran correctly with Tajweed
-Certificate Certificate of Quran Memorization upon completion
-Description: Specialized memorization course for students wishing to memorize the Holy Quran completely or partially
-under qualified Huffaz supervision. Focuses on systematic memorization, daily revision (Muraja'ah), and correct recitation
-with Tajweed. Students follow a structured daily routine of new lesson (Sabaq), recent revision (Sabaqi), and old revision
-(Manzil) to strengthen memorization and maintain accuracy.
-Learning Outcomes: Complete or partial Quran memorization with Tajweed · Lifelong retention through structured revision
-methodology
- Course 6 — Tarjamat-ul-Quran Course
-Level Intermediate
-Category Quran
-Duration 1 Year
-Schedule 3–5 days/week · 45–60 min per session
-Fee $30–$45/month (~PKR 8,500–12,000)
-Language Options Arabic, Urdu, or English
-Prerequisites Basic Quran reading or Tajweed completion
-Description: Comprehensive program for students wanting to understand the meanings and translation of the Holy Quran.
-Focuses on Quranic verse interpretation, translation (Tafsir in simple language), key themes, moral guidance, rules, and
-lessons. Connects the Arabic text with meaning through lectures, interactive discussions, verse-by-verse explanation, and
-real-life application examples.
-Learning Outcomes: Read Quranic verses and understand their translation accurately · Explain lessons and guidance
-contained in the Quran · Prepare for advanced Islamic studies
- Course 7 — Advanced Tafseer-ul-Quran Course
-Level Advanced
-Category Quran
-Duration 2 Years
-Schedule 3–5 days/week · 45–60 min per session
-Fee $40–$60/month (~PKR 11,000–17,000)
-Core Texts Tafseer Ibn Kathir, Tafseer Al-Jalalayn, Tafseer Al-Tabari
-Prerequisites Tarjamat-ul-Quran or equivalent
-Description: Specialized two-year program for deep understanding of the Holy Quran — meanings, context, and rulings.
-Goes beyond basic translation to comprehensive analysis including linguistic, grammatical, jurisprudential, and historical
-contexts. Covers Usul al-Tafseer, Ta'wil and Tafsir, Asbab al-Nuzul, Ahkam al-Quran, Naskh (abrogation), and crossreferencing with Hadith and Sunnah.
-Learning Outcomes: Understand the Quran in depth · Explain complex verses · Derive rulings · Teach Tafseer to others ·
-Prepare for higher Islamic scholarship
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 12 of 26 • www.alnooracademy.com
- 6.2 Arabic Language Courses — 4 Courses
-Progression Path: Beginner Arabic → Intermediate Arabic → Advanced Spoken Arabic → Advanced Ilm-e-Balaghat
- Course 8 — Beginner Arabic Course
-Level Beginner
-Category Arabic Language
-Duration 3 Months
-Schedule 3–5 days/week · 30–45 min per session
-Fee $20–$30/month (~PKR 5,500–8,500)
-Core Books Al-Arabiyyah Bayna Yadayk, Arabic for Beginners
-Prerequisites None
-Description: Designed for students with no prior Arabic knowledge. Builds a strong foundation in Arabic reading, writing,
-and comprehension covering the Arabic alphabet, pronunciation (Makharij), basic vocabulary, simple sentence structure,
-Quranic word recognition, and essential phrases for daily use. Uses interactive teaching methods including practice
-exercises, reading drills, and pronunciation correction.
-Learning Outcomes: Read Arabic words · Understand simple phrases · Write basic sentences · Recognize Quranic words for
-further studies
- Course 9 — Intermediate Arabic Course
-Level Intermediate
-Category Arabic Language
-Duration 6 Months
-Schedule 3–5 days/week · 45–60 min per session
-Fee $25–$40/month (~PKR 7,000–11,000)
-Core Books Al-Kitaab fii Ta'allum al-'Arabiyya (Parts 1 & 2), Arabic Grammar Made Easy
-Prerequisites Beginner Arabic Course or basic Arabic knowledge
-Description: Builds on beginner foundations with intermediate grammar (nouns, verbs, tenses, gender, sentence structure),
-expanded vocabulary, reading short paragraphs, writing simple sentences, and basic conversational skills. Includes reading
-exercises, conversation practice, writing short paragraphs, and comprehension drills. Also addresses Quranic phrase
-comprehension for practical Islamic learning.
-Learning Outcomes: Read and understand intermediate Arabic texts · Write simple paragraphs · Communicate in basic
-conversation · Prepare for Advanced Spoken Arabic
- Course 10 — Advanced Spoken Arabic Course
-Level Advanced
-Category Arabic Language
-Duration 1 Year
-Schedule 3–5 days/week · 45–60 min per session
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 13 of 26 • www.alnooracademy.com
-Fee $35–$50/month (~PKR 10,000–14,000)
-Core Books Al-Mawrid (Arabic-English Dictionary), Fus'ha Arabic for Advanced Learners, Arabic
-Conversation Made Easy
-Prerequisites Intermediate Arabic Course
-Description: For students who have completed Intermediate level and want to achieve fluency in Arabic speaking, reading,
-writing, and comprehension. Covers advanced grammar, complex sentence structures, advanced vocabulary for daily and
-Islamic contexts, fluent conversation, Quranic and Hadith Arabic comprehension, essay writing, and listening skills. Teaching
-methods include role-playing, conversation drills, listening comprehension, essay writing, Quranic text analysis, and
-interactive discussions.
-Learning Outcomes: Speak Arabic fluently · Understand classical and Quranic Arabic · Write advanced texts · Engage
-confidently in conversation · Prepare for higher Islamic studies or teaching Arabic
- Course 11 — Advanced Ilm-e-Balaghat Course (Arabic Eloquence & Rhetoric)
-Level Advanced
-Category Arabic Language
-Duration 1 Year
-Schedule 3–5 days/week · 45–60 min per session
-Fee $40–$60/month (~PKR 11,000–17,000)
-Core Books Balaghat-ul-Quran, Al-Balagha al-Wadihah, Al-Bayan wa al-Tabyin (Al-Jahiz), Al-Badi’ fi al-Adab
-Optional Miftah al-Balagha
-Prerequisites Advanced Arabic or equivalent
-Description: Designed for students wanting to master Arabic eloquence (Balagha), the art of rhetoric, literary analysis, and
-stylistic excellence. Covers Ilm al-Ma'ani (Science of Meanings), Ilm al-Bayan (Science of Clarity — metaphors, similes,
-allegories, metonymy), and Ilm al-Badi' (Science of Literary Ornamentation — figures of speech). Includes practical Quranic
-and Hadith analysis, classical Arabic poetry analysis, and stylistic writing exercises.
-Learning Outcomes: Analyze Quranic verses and Hadith using Balagha principles · Recognize and apply advanced rhetorical
-devices · Compose eloquent Arabic texts · Prepare for advanced Tafseer, Hadith analysis, and Arabic literature scholarship
- 6.3 Fiqh Courses — 6 Courses
-Fiqh Progression: Basic Fiqh (Qudoori) → Intermediate Fiqh (Kanz) → Advanced Fiqh (Hidaya)
-Usool Fiqh Progression: Basic (Shashi) → Intermediate (Noor-ul-Anwar to Qiyas) → Advanced (Noor-ul-Anwar Qiyas
-onwards + Husami, Taozi, Talwe)
- Course 12 — Basic Fiqh Course
-Level Beginner
-Category Fiqh
-Duration 2–3 Months
-Schedule 3–5 days/week · 45 min per session
-Fee $20–$30/month (~PKR 5,500–8,500)
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 14 of 26 • www.alnooracademy.com
-Main Book Mukhtasar al-Qudoori
-Next Course Intermediate Fiqh (Kanz)
-Description: Introduces fundamentals of Islamic jurisprudence in a simple, accessible manner. Covers acts of worship
-(Ibadat) — Salah, Sawm, Zakat, Hajj — and personal/social conduct (Mu'amalat) including cleanliness, eating etiquettes,
-and family interactions. Students learn to distinguish between Wajib, Mustahab, Mubah, Makruh, and Haram. Step-by-step
-lessons with interactive practice and exercises.
-Learning Outcomes: Recognize and apply basic fiqh rulings in worship and daily activities · Perform Salah, fasting, Zakat,
-and Hajj correctly · Build foundation for Intermediate Fiqh
- Course 13 — Intermediate Fiqh Course
-Level Intermediate
-Category Fiqh
-Duration 6 Months
-Schedule 3–4 days/week · 60 min per session
-Fee $25–$35/month (~PKR 7,000–10,000)
-Main Book Kanz ud-Daqaiq
-Prerequisites Basic Fiqh (Qudoori)
-Next Course Advanced Fiqh (Hidaya)
-Description: Builds on basic Fiqh with more detailed rulings and practical applications. Advanced worship topics include
-missed/combined prayers, special fasting cases, detailed zakat calculation, and Hajj/Umrah rituals. Social and financial
-matters — marriage, divorce, inheritance basics, contracts, and business transactions — are studied in greater depth. Reallife examples and teacher-led discussions strengthen understanding.
-Learning Outcomes: Apply fiqh rulings to complex worship and social situations · Understand reasoning behind Islamic laws
-· Prepare for Advanced Fiqh and scholarly discussions
- Course 14 — Advanced Fiqh Course
-Level Advanced
-Category Fiqh
-Duration 12 Months (1 Year)
-Schedule 3–4 days/week · 60–90 min per session
-Fee $35–$50/month (~PKR 10,000–15,000)
-Main Book Al-Hidaya (Imam al-Marghinani)
-Prerequisites Intermediate Fiqh (Kanz)
-Description: Designed for students seeking mastery in Islamic jurisprudence. Using the classical text Al-Hidaya, students
-explore in-depth rulings for all acts of worship, complex social dealings, inheritance, criminal laws, and contemporary
-challenges. Emphasizes research skills, analytical thinking, and the ability to apply fiqh principles to modern situations.
-Prepares students for scholarly work, teaching, or advanced fiqh research, including skills to issue informed rulings (Ifta).
-Learning Outcomes: Master classical fiqh texts · Apply Islamic law to contemporary scenarios · Conduct scholarly research ·
-Issue informed fiqh guidance · Develop expertise for teaching or issuing fatawa
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 15 of 26 • www.alnooracademy.com
- Course 15 — Basic Usool Fiqh Course
-Level Beginner
-Category Fiqh
-Duration 3 Months
-Schedule 3–5 days/week · 45 min per session
-Fee $20–$30/month (~PKR 5,500–8,500)
-Main Book Usool Shashi
-Next Course Intermediate Usool Fiqh (Noor-ul-Anwar)
-Description: Designed for students new to the principles of Islamic jurisprudence. Using Usool Shashi, students learn
-foundational rules and terminology for deriving Islamic rulings from the Quran and Sunnah. Topics include primary Shariah
-sources (Quran, Sunnah, Ijma, Qiyas), basic types of evidence, and understanding obligatory, recommended, and
-permissible actions. A simple and practical approach to understanding how jurists make legal decisions.
-Learning Outcomes: Understand basic principles of Islamic law and legal derivation · Learn key fiqh terminology and
-concepts · Prepare for Intermediate Usool Fiqh
- Course 16 — Intermediate Usool Fiqh Course
-Level Intermediate
-Category Fiqh
-Duration 6 Months
-Schedule 3–4 days/week · 60 min per session
-Fee $25–$35/month (~PKR 7,000–10,000)
-Main Book Noor-ul-Anwar (up to Qiyas)
-Prerequisites Basic Usool Fiqh (Shashi)
-Description: Builds on Shashi foundations using Noor-ul-Anwar to guide students through intermediate principles of Islamic
-jurisprudence — Ijtihad, Qiyas, Ijma, definitive vs. speculative texts, and masalih al-mursalah (public interest). Emphasizes
-applying principles to real-life fiqh cases and preparing students for advanced classical text study.
-Learning Outcomes: Apply Usool Fiqh principles up to Qiyas · Understand reasoning behind juristic differences · Analyze reallife fiqh issues using scholarly methodology
- Course 17 — Advanced Usool Fiqh Course
-Level Advanced
-Category Fiqh
-Duration 12 Months (1 Year)
-Schedule 3–4 days/week · 60–90 min per session
-Fee $35–$50/month (~PKR 10,000–15,000)
-Main Books Noor-ul-Anwar (Qiyas to end), Husami, Taozi, Talwe
-Prerequisites Intermediate Usool Fiqh
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 16 of 26 • www.alnooracademy.com
-Description: For students aiming to achieve mastery in Islamic legal theory. Studies the later sections of Noor-ul-Anwar
-along with Husami, Taozi, and Talwe to explore advanced principles, abrogation (Naskh), speculative vs. definitive texts,
-contemporary legal issues, and juristic reasoning in complex scenarios. Focus on analytical thinking, case studies, research
-exercises, and application of fiqh principles to modern situations.
-Learning Outcomes: Master advanced Islamic jurisprudence principles · Analyze and evaluate differing juristic opinions ·
-Conduct research in classical and contemporary fiqh · Apply Usool Fiqh methodology to modern legal and ethical issues
- 6.4 Sarf & Nahw Courses — 3 Courses
-Sarf & Nahw Progression: Basic (Irshad-us-Sarf, Nahw-e-Meer with Ijra) → Intermediate (Ilm-us-Sigha, Al-Kafia) → Advanced
-(Sharah al-Jami)
- Course 18 — Basic Sarf & Nahw Course
-Level Beginner
-Category Sarf & Nahw (Arabic Grammar)
-Duration 6 Months
-Schedule 3–5 days/week · 45–60 min per session
-Fee $20–$30/month (~PKR 5,500–8,500)
-Main Books Irshad-us-Sarf, Nahw-e-Meer with Ijra
-Next Course Intermediate Sarf & Nahw
-Description: For students starting Arabic grammar and morphology from scratch. Covers Arabic letters, vowels (Harakat),
-simple nouns and verbs (singular, dual, plural), basic sentence structures (subject, predicate, object), and practical exercises
-using Quranic verses. Includes recitation practice (Ijra) to improve fluency and pronunciation. Emphasizes understanding
-and applying basic grammatical rules in reading and writing Arabic.
-Learning Outcomes: Read and understand basic Arabic sentences · Recognize and conjugate simple nouns and verbs · Apply
-fundamental grammatical rules in Quranic reading · Prepare for Intermediate Sarf & Nahw
- Course 19 — Intermediate Sarf & Nahw Course
-Level Intermediate
-Category Sarf & Nahw (Arabic Grammar)
-Duration 10 Months
-Schedule 3–4 days/week · 60 min per session
-Fee $25–$35/month (~PKR 7,000–10,000)
-Main Books Ilm-us-Sigha, Al-Kafia
-Prerequisites Basic Sarf & Nahw
-Description: Provides deeper understanding of Arabic morphology and sentence structures. Covers detailed verb forms
-(past, present, imperative) and derivatives, complex noun forms and pluralization, grammatical cases (Marfu', Mansub,
-Majrur), sentence analysis (prepositions, pronouns, conjunctions), and application of rules to Quranic verses and classical
-Arabic texts. Emphasizes reading comprehension and analytical skills.
-Learning Outcomes: Analyze and construct complex Arabic sentences · Conjugate verbs and nouns accurately · Apply
-grammar rules to Quranic and classical Arabic texts · Prepare for Advanced Sarf & Nahw
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 17 of 26 • www.alnooracademy.com
- Course 20 — Advanced Sarf & Nahw Course
-Level Advanced
-Category Sarf & Nahw (Arabic Grammar)
-Duration 8 Months
-Schedule 3–4 days/week · 60–90 min per session
-Fee $35–$50/month (~PKR 10,000–15,000)
-Main Book Sharah al-Jami
-Prerequisites Intermediate Sarf & Nahw
-Description: For students aiming for mastery in Arabic grammar and morphology. Using Sharah al-Jami, covers advanced
-verb forms and derivatives, irregular verbs, complex sentence structures (conditional, negation, emphasis), advanced noun
-forms and exceptions, syntax analysis of Quranic verses and Hadith, and application of grammar in advanced writing,
-Tafseer, and scholarly interpretation.
-Learning Outcomes: Master complex Arabic grammar and sentence structures · Analyze classical and Quranic texts
-accurately · Prepare for advanced Islamic studies in Tafseer, Hadith, and Fiqh
- 6.5 Hadith Courses — 4 Courses
-Hadith Progression: Basic (Riyadh-us-Saliheen) → Intermediate (Mishkat al-Masabih) → Advanced (Sahih Bukhari, Sahih
-Muslim, Sharah) → Takhassus fil Hadith
- Course 21 — Basic Hadith Course
-Level Beginner
-Category Hadith
-Duration 4 Months
-Schedule 3–5 days/week · 45 min per session
-Fee $20–$30/month (~PKR 5,500–8,500)
-Main Books Riyadh-us-Saliheen (selected sections) / Basic Hadith Notes
-Next Course Intermediate Hadith
-Description: Introduces students to the sayings, actions, and approvals of Prophet Muhammad (PBUH). Covers
-fundamentals of Hadith sciences (Ilm al-Hadith), basic classification of Hadith (Sahih, Hasan, Da'if), selected Hadiths on daily
-life, morals, and worship, and correct reading and basic Arabic understanding for Hadith. Focuses on practical application
-and understanding how Hadith guides daily conduct and spiritual life.
-Learning Outcomes: Understand basic Hadith classifications and importance · Memorize and explain selected Hadiths ·
-Apply basic Hadith teachings to daily life · Prepare for Intermediate Hadith studies
- Course 22 — Intermediate Hadith Course
-Level Intermediate
-Category Hadith
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 18 of 26 • www.alnooracademy.com
-Duration 6 Months
-Schedule 3–4 days/week · 60 min per session
-Fee $25–$35/month (~PKR 7,000–10,000)
-Main Books Mishkat al-Masabih / Selected Hadith Collections
-Prerequisites Basic Hadith Course
-Description: Provides deeper understanding of Hadith with contextual analysis. Covers detailed Hadith collections
-(meanings and context), the chain of narrators (Isnad) and Hadith terminology, practical application in daily life, and
-comparison and analysis of Hadiths to resolve apparent contradictions. Bridges memorization and analytical understanding.
-Learning Outcomes: Analyze Hadith texts with context and reasoning · Identify authentic Hadiths · Apply Hadith teachings
-to contemporary situations · Prepare for Advanced Hadith studies
- Course 23 — Advanced Hadith Course
-Level Advanced
-Category Hadith
-Duration 2 Years
-Schedule 3–4 days/week · 60–90 min per session
-Fee $35–$50/month (~PKR 10,000–15,000)
-Main Books Sahih al-Bukhari, Sahih Muslim, Sharah of Major Hadith Collections
-Prerequisites Intermediate Hadith Course
-Description: For students aiming for mastery in Hadith studies. In-depth analysis of Sahih al-Bukhari, Sahih Muslim, and
-other major collections; detailed study of Isnad and Matn; advanced authentication methods (Ilm al-Rijal, Ilm al-Jarh wa alTa'dil); application of Hadith in Fiqh, Tafseer, and contemporary Islamic issues; and Sharah (explanation) of complex Hadiths
-and scholarly interpretations.
-Learning Outcomes: Master major Hadith collections and their explanations · Authenticate and critically analyze Hadith
-using classical methods · Apply Hadith knowledge to Fiqh, Tafseer, and modern issues · Prepare for teaching, research, or
-scholarly work in Hadith sciences
- Course 24 — Takhassus fil Hadith (Specialization in Hadith Sciences)
-Level Advanced / Specialization
-Category Hadith
-Duration 2 Years
-Schedule 3–5 days/week · 90 min per session
-Fee $50–$70/month (~PKR 15,000–22,000)
-Main Books Sahih al-Bukhari, Sahih Muslim, Sunan Abu Dawood, Tirmidhi, Nasa’i, Ibn Majah, Musnad
-Collections, Classical Commentaries
-Prerequisites Basic → Intermediate → Advanced Hadith completion (all three levels)
-Certificate Advanced Specialization Certificate in Hadith Sciences
-Description: The highest level of Hadith education — an advanced specialization for students who have completed all three
-Hadith levels and want to master Hadith sciences. Focuses on in-depth study of all six major Hadith collections, advanced
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 19 of 26 • www.alnooracademy.com
-Sharah of complex Hadiths, detailed Isnad and Matn analysis, advanced authentication methodologies, resolving
-contradictions and understanding narration variations, application to Fiqh and Tafseer, and guidance on teaching, scholarly
-writing, and issuing fatawa.
-Learning Outcomes: Master classical Hadith texts and commentaries · Analyze chains of narrators and authenticate
-narrations accurately · Interpret complex Hadiths and resolve scholarly differences · Conduct research, write scholarly
-articles, and teach Hadith at an advanced level
- 6.6 Complete Course Catalog Summary Table
-# Course Name Category Level Duration Monthly Fee (USD)
-1 Noorani Qaida Quran Beginner 2–3 mo $20–$30
-2 Nazra Quran Quran Beginner 3–4 mo $25–$35
-3 Quran with Tajweed Quran Intermediate 4–6 mo $30–$40
-4 Advanced Tajweed Program Quran Advanced 1 Year $35–$50
-5 Hifz-ul-Quran Quran Specialized 2.5–3
-Years $40–$60
-6 Tarjamat-ul-Quran Quran Intermediate 1 Year $30–$45
-7 Advanced Tafseer-ul-Quran Quran Advanced 2 Years $40–$60
-8 Beginner Arabic Arabic Language Beginner 3 mo $20–$30
-9 Intermediate Arabic Arabic Language Intermediate 6 mo $25–$40
-10 Advanced Spoken Arabic Arabic Language Advanced 1 Year $35–$50
-11 Advanced Ilm-e-Balaghat Arabic Language Advanced 1 Year $40–$60
-12 Basic Fiqh (Qudoori) Fiqh Beginner 2–3 mo $20–$30
-13 Intermediate Fiqh (Kanz) Fiqh Intermediate 6 mo $25–$35
-14 Advanced Fiqh (Hidaya) Fiqh Advanced 1 Year $35–$50
-15 Basic Usool Fiqh (Shashi) Fiqh Beginner 3 mo $20–$30
-16 Intermediate Usool Fiqh Fiqh Intermediate 6 mo $25–$35
-17 Advanced Usool Fiqh Fiqh Advanced 1 Year $35–$50
-18 Basic Sarf & Nahw Sarf & Nahw Beginner 6 mo $20–$30
-19 Intermediate Sarf & Nahw Sarf & Nahw Intermediate 10 mo $25–$35
-20 Advanced Sarf & Nahw Sarf & Nahw Advanced 8 mo $35–$50
-21 Basic Hadith Hadith Beginner 4 mo $20–$30
-22 Intermediate Hadith Hadith Intermediate 6 mo $25–$35
-23 Advanced Hadith Hadith Advanced 2 Years $35–$50
-24 Takhassus fil Hadith Hadith Specialization 2 Years $50–$70
- 7. Non-Functional Requirements
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 20 of 26 • www.alnooracademy.com
-Category Requirement Target / Standard
-Performance Page load time on standard broadband ≤ 2 seconds
-Responsiveness Mobile-first layout breakpoints 320px, 480px, 768px, 1024px, 1440px+
-Security Authentication method Supabase JWT + Row-Level Security (RLS)
-Security Data transmission HTTPS enforced site-wide; HSTS header
-Security Payment data Encrypted; no raw card data; Stripe PCIcompliant
-Scalability Concurrent users 10,000+ without architecture redesign
-Availability Uptime target 99.9% with CDN-enabled cloud hosting
-Accessibility Compliance standard WCAG 2.1 AA — ARIA roles + keyboard
-navigation
-SEO Technical requirements Structured data, sitemap, canonical, Core Web
-Vitals
-Internationalization Language support English (LTR) · Arabic (RTL) · Urdu (RTL)
-Arabic/Urdu Font Full CSS font-family stack Amiri, 'Noto Naskh Arabic', 'Scheherazade New',
-'Traditional Arabic', Arial, sans-serif !important
-RTL Support Layout direction dir="rtl" on <html>; all text, forms, tables flip
- 8. Technology Stack
-Layer Technology Purpose
-Frontend React + HTML5 Dynamic UI, routing, component architecture
-Styling Tailwind CSS Responsive, utility-first Islamic-themed design
-Arabic Font #1 Amiri (Google Fonts) Primary Arabic/Urdu font — classical Naskh beauty
-Arabic Font #2 Noto Naskh Arabic Full Unicode Arabic coverage fallback
-Arabic Font #3 Scheherazade New (SIL) Extended Arabic scripts fallback
-Arabic Font #4 Traditional Arabic Windows built-in system fallback
-English Font #1 Cormorant Garamond English hero headings — elegant classical serif
-English Font #2 Cinzel Splash screen title, brand name
-Backend / API Node.js + Express Server-side logic and REST API handling
-BaaS Supabase Auth, real-time DB, file storage, RLS policies
-Database PostgreSQL (via Supabase) Structured data: students, courses, payments
-Animation CSS3 / Framer Motion Splash screen, transitions, scroll animations
-PDF Generation jsPDF / html2pdf Certificate PDF download generation
-Deployment Vercel / AWS CloudFront CDN-enabled, auto-scaling infrastructure
-Version Control Git + GitHub Source code management and CI/CD pipelines
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 21 of 26 • www.alnooracademy.com
- 9. UI / UX Design Specifications
- 9.1 Advanced Splash Screen
-▸ Full-screen radial gradient background: deep green (#0D4D2F) to near-black (#071410)
-▸ Rotating Islamic geometric hexagonal SVG pattern overlay (30s CSS animation loop)
-▸ Four concentric gold rings pulsing outward with staggered animation delays
-▸ Central round logo: Al-NOOR Arabic calligraphy in Amiri font, 140×140px, border-radius: 50%
-▸ Logo: border: 3px solid #C9A84C; box-shadow: 0 0 60px rgba(201,168,76,.4), 0 0 120px rgba(26,122,74,.3), inset 0
-0 30px rgba(201,168,76,.1)
-▸ Academy name in Amiri Arabic font fading up (0.8s ease)
-▸ English tagline in Cinzel font with letter-spacing animation
-▸ Gold loading dots animated beneath with staggered 1.7s delay
-▸ Auto-transition to homepage after 3.5 seconds with smooth fade-out
- 9.2 Theme System
-Theme Primary Background Accent Use Case
-Green Islamic (Default) #1A7A4A Soft green #D6EEE1 #C9A84C Gold Standard Islamic
-identity
-Light Mode #1A7A4A White / #F5FDF8 #C9A84C Gold Daytime comfortable
-reading
-Dark Mode #27A862 Charcoal #071410 #C9A84C Gold Low-light / night
-sessions
- 9.3 Multi-Language System
-▸ Language switcher in navbar: EN | AR | UR with respective flag icons
-▸ Dynamic re-render of all UI content on language change (React state-based i18n)
-▸ Arabic and Urdu: dir="rtl" applied to <html> element automatically
-▸ Font: font-family: Amiri, 'Noto Naskh Arabic', 'Scheherazade New', 'Traditional Arabic', Arial, sans-serif !important;
-▸ Navigation links order reverses in RTL; icons flip appropriately
-▸ All form fields, tables, and text elements support RTL alignment
-▸ Language preference saved to localStorage and Supabase user profile
- 10. Database Schema — Core Tables
-All data is stored in PostgreSQL via Supabase with Row-Level Security (RLS) policies enforced on every table. JWT
-authentication ensures users can only access authorized data.
- 10.1 Students
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 22 of 26 • www.alnooracademy.com
-Column Type Description
-id UUID (PK) Unique identifier — auto-generated
-full_name VARCHAR(255) Student's full legal name
-email VARCHAR(255) Unique email — used for login
-phone VARCHAR(20) Contact phone with country code
-language ENUM(en,ar,ur) Preferred UI language
-enrolled_courses UUID[] Array of enrolled course IDs
-status ENUM(active,inactive,suspended) Account status
-created_at TIMESTAMP Account creation datetime
- 10.2 Teachers
-Column Type Description
-id UUID (PK) Unique identifier
-full_name VARCHAR(255) Teacher's full name
-email VARCHAR(255) Login email address
-specialization VARCHAR(255) e.g., Tajweed, Hifz, Hadith, Fiqh
-assigned_courses UUID[] Array of assigned course IDs
-status ENUM(active,inactive) Account status
- 10.3 Courses
-Column Type Description
-id UUID (PK) Unique course identifier
-title VARCHAR(255) Course full name
-level VARCHAR(50) Beginner / Intermediate / Advanced / Specialized
-category VARCHAR(100) Quran / Arabic / Fiqh / Sarf & Nahw / Hadith
-description TEXT Full course description
-fee_min DECIMAL(10,2) Minimum monthly fee in USD
-fee_max DECIMAL(10,2) Maximum monthly fee in USD
-duration VARCHAR(100) e.g., 3 Months, 1 Year, 2 Years
-schedule VARCHAR(255) Days per week and session duration
-prerequisites TEXT Required prior courses or knowledge
-core_books TEXT Core textbooks for the course
-next_course VARCHAR(255) Recommended progression course
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 23 of 26 • www.alnooracademy.com
-Column Type Description
-status ENUM(draft,published,archived) Course visibility
-teacher_id UUID (FK) Reference to teachers.id
-image_url TEXT Supabase Storage URL for course image
- 10.4 Admissions
-Column Type Description
-id UUID (PK) Unique admission record
-student_id UUID (FK) Reference to students.id
-course_id UUID (FK) Reference to courses.id
-status ENUM(pending,approved,rejected) Application status
-applied_at TIMESTAMP Application submission datetime
-reviewed_by UUID (FK) Admin who reviewed the application
-notes TEXT Admin notes on the application
- 10.5 Payments
-Column Type Description
-id UUID (PK) Unique payment record
-student_id UUID (FK) Reference to students.id
-amount DECIMAL(10,2) Payment amount in USD
-method VARCHAR(50) e.g., Stripe, PayPal, Bank Transfer
-status ENUM(paid,pending,failed,overdue) Payment status
-transaction_id VARCHAR(255) External payment gateway reference
-paid_at TIMESTAMP Payment completion datetime
- 10.6 Attendance
-Column Type Description
-id UUID (PK) Unique attendance record
-teacher_id UUID (FK) Teacher who marked attendance
-student_id UUID (FK) Attending student
-course_id UUID (FK) Related course
-date DATE Session date
-status ENUM(present,absent,late) Attendance outcome
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 24 of 26 • www.alnooracademy.com
-Column Type Description
-notes TEXT Optional session notes
- 10.7 Certificates
-Column Type Description
-id UUID (PK) Unique certificate record
-student_id UUID (FK) Reference to students.id
-course_id UUID (FK) Completed course reference
-issued_at TIMESTAMP Certificate issue datetime
-download_url TEXT Supabase Storage URL for PDF certificate
- 11. Project Milestones & Timeline
-# Milestone Key Deliverables Timeline Status
-1 Project Setup & Design Figma wireframes, color system, Islamic
-component library Week 1–2 🟢 In Progress
-2 Public Panel Homepage, Courses, Admission, About —
-fully responsive Week 3–5 🟢 Planned
-3 Auth & Database Supabase auth, all 7 SQL tables, RLS
-policies, storage Week 4–5 🟢 Planned
-4 Admin Panel Dashboard + all 5 admin management
-modules Week 6–8 🟢 Planned
-5
-Student & Teacher
-Panels
-Both panels fully functional with real-time
-data Week 9–11 🟢 Planned
-6
-Multi-language &
-Themes
-AR/UR/EN switcher, 3 themes, full RTL +
-Amiri font stack Week 12 🟢 Planned
-7 Testing & QA Cross-browser, mobile, security
-penetration testing Week 13–14 🟢 Planned
-8 SEO & Launch SEO audit, Core Web Vitals, schema
-markup, production deploy Week 15 🟢 Planned
- 12. Risks & Mitigations
-Risk Probability Impact Mitigation Strategy
-RTL layout issues (Arabic/Urdu) Medium High Tailwind RTL plugin + Amiri/Noto Naskh font stack; crossbrowser testing on real devices
-Supabase downtime / API limits Low High Redis caching layer; Supabase status alerts; fallback API
-responses
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 25 of 26 • www.alnooracademy.com
-Risk Probability Impact Mitigation Strategy
-Video background perf on
-mobile High Medium Compressed WebM/MP4; poster image fallback; lazy-load
-attribute
-Payment data security Low Critical Supabase RLS + encrypted storage; Stripe PCI-compliant;
-no raw card data stored
-Scope creep Medium Medium Strict milestone gating; formal change request process
-with sign-off
-Scholar/teacher availability Medium High Pre-vetted scholar pool; backup teacher assignment
-system in admin panel
-Amiri/Noto Naskh font loading Medium Low Google Fonts CDN preload; font-display: swap; Traditional
-Arabic system fallback
-24-course management
-complexity Medium Medium Structured course builder in admin; progression path
-validation; bulk import tool
- 13. Appendices
- 13.1 Complete Arabic/Urdu Font CSS Declaration
-/* ===== COMPLETE ARABIC & URDU FONT STACK ===== */ [lang="ar"], [lang="ur"], [dir="rtl"], .arabic-text, .urdu-text, .quran-text {
-font-family: Amiri, "Noto Naskh Arabic", "Scheherazade New", "Traditional Arabic", Arial, sans-serif !important; direction:
-rtl; text-align: right; line-height: 2.2; letter-spacing: 0.01em; font-size: 1.1rem; } /* Google Fonts Import */ @import
-url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;50
-0;600;700&family=Scheherazade+New:wght@400;500;600;700&display=swap');
- 13.2 Supabase RLS Policies
-students: USING (auth.uid() = id) -- students see only their own record attendance: USING (teacher_id = auth.uid() OR
-student_id = auth.uid()) payments: USING (student_id = auth.uid()) -- own payments only courses: FOR SELECT
-USING (status = 'published') -- public read admissions: Admin bypasses RLS via service_role key (server-side only)
-certificates: USING (student_id = auth.uid()) -- own certificates only
- 13.3 Color Palette Reference
-Token Hex Value Usage
---primary #1A7A4A Primary green — buttons, headings, active borders
---primary-dark #0D4D2F Dark green — navbar, splash background, section headers
---primary-light #27A862 Light green — hover states, icons, badges
---gold #C9A84C Gold accent — CTA buttons, highlights, logo border, ornaments
---gold-light #FDF6E3 Gold tint — info box backgrounds
---bg-green #D6EEE1 Background tint — card and section fills
---bg-dark #071410 Dark mode background
-☪ Al-NOOR Online Quran & Hadees Academy — Product Requirements Document ☪
-© 2025 Al-NOOR Online Quran & Hadees Academy • CONFIDENTIAL • Page 26 of 26 • www.alnooracademy.com
-Token Hex Value Usage
---text-dark #0D1F15 Primary body text
---text-muted #4A6B58 Secondary / caption text
---gray-light #F4F8F5 Alternating table row fill
---border #D0DDD6 Standard border color
- 13.4 Discipline Progression Summary
-Discipline Progression Path Courses
-Quran Noorani Qaida → Nazra → Tajweed → Adv. Tajweed → Hifz → Tarjama →
-Tafseer 7
-Arabic Language Beginner → Intermediate → Advanced Spoken → Balaghat 4
-Fiqh Basic (Qudoori) → Int. (Kanz) → Adv. (Hidaya) | Basic (Shashi) → Int. → Adv.
-Usool 6
-Sarf & Nahw Irshad-us-Sarf/Nahw-e-Meer → Ilm-us-Sigha/Al-Kafia → Sharah al-Jami 3
-Hadith Riyadh-us-Saliheen → Mishkat → Bukhari/Muslim → Takhassus fil Hadith 4
-☪ Al-NOOR Online Quran & Hadees Academy ☪
-Product Requirements Document • Version 2.0 • Complete Edition • CONFIDENTIAL
-© 2025 Al-NOOR Online Quran & Hadees Academy • All Rights Reserved
-◆ ◆ ◆
+Full-Stack Islamic LMS Platform — v2.0
+March 2026 | CONFIDENTIAL | Production Ready
+https://itqaninstitute.com
+Production Domain
+Scholar: Dr. Noor Ur Rahman Hazarvi (Hafizahullah)
+Tech Stack: React 18 + Vite + Node.js/Express + Supabase (PostgreSQL)
+Project Type: Islamic LMS — Multi-Role Web Application
+Target Users: Students · Teachers · Administrators (Global)
+Languages: Arabic (RTL) · Urdu (RTL) · English (LTR)
+Total Courses: 24 (Auto-seeded at launch)
+Status: APPROVED — Ready for Development
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 2
+1. Executive Summary
+Al-Itqan Institute for Islamic & Arabic Studies is a world-class online Islamic education platform under
+the scholarly supervision of Dr. Noor Ur Rahman Hazarvi (Hafizahullah) — PhD, International Islamic
+University Islamabad, and Head of Hadith Specialization at Jamia Al-Rashid Karachi.
+This PRD defines the complete requirements for a production-grade Islamic Learning Management
+System (LMS) built on React 18 + Node.js/Express + Supabase (PostgreSQL). The platform delivers
+24 structured courses, serves a global audience in Arabic, Urdu and English, and features role-based
+access for Admins, Teachers and Students.
+1.1 Core Mission
+• Deliver authentic, structured Islamic and Arabic education from beginner to advanced
+specialization
+• Provide scholar-led content supervised by Dr. Noor Ur Rahman Hazarvi
+• Serve a global Muslim audience with multi-language, RTL-capable, mobile-first interface
+• Build a secure, scalable platform using Supabase + Node.js + React
+1.2 Platform at a Glance
+Metric Value
+Total Courses 24 (auto-seeded at launch)
+Course Categories Quran · Arabic · Fiqh · Sarf & Nahw · Hadith
+User Roles Super Admin · Admin · Teacher · Student
+Supported Languages Arabic (RTL) · Urdu (RTL) · English (LTR)
+Auth System Supabase Auth + JWT + Row Level Security (RLS)
+Real-Time Supabase Realtime (WebSocket channels)
+File Storage Supabase Storage (CVs, certificates, images)
+Database PostgreSQL via Supabase
+Backend Node.js + Express.js (REST API)
+Frontend React 18 + Vite + TailwindCSS + React Router v6
+WhatsApp Contact +923434487450
+Email info@itqaninstitute.com
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 3
+2. Technology Stack — Complete Specification
+2.1 Frontend Stack
+Technology Version Purpose
+React 18.x Core UI framework (SPA)
+Vite 5.x Build tool & dev server (fast HMR)
+React Router v6 Client-side routing & protected routes
+TailwindCSS 3.x Utility-first responsive styling
+Framer Motion 10.x Animations & page transitions
+Zustand 4.x Lightweight global state management
+TanStack Query 5.x Server state, caching, real-time sync
+Axios 1.x HTTP client for REST API calls
+React Hook Form 7.x Form handling & validation
+Zod 3.x Schema validation (shared frontend/backend)
+i18next + react-i18next 23.x Multi-language internationalization
+Recharts 2.x Dashboard analytics charts
+TipTap 2.x Rich text editor for blogs
+React Dropzone latest File upload UI (CV, images)
+React Hot Toast latest Toast notification system
+Amiri (Google Font) — Arabic typography (Quranic text)
+Poppins (Google Font) — English UI typography
+2.2 Backend Stack
+Technology Version Purpose
+Node.js 20 LTS Runtime environment
+Express.js 4.x REST API framework
+@supabase/supabase-js 2.x DB, Auth, Storage, Realtime SDK
+Helmet.js 7.x HTTP security headers (15 headers set)
+express-rate-limit 7.x API rate limiting (DDoS protection)
+xss-clean 0.x XSS sanitization middleware
+express-validator 7.x Input validation per route
+bcryptjs 2.x Password hashing (12 salt rounds)
+jsonwebtoken 9.x JWT access + refresh tokens
+Multer 1.x Multipart file upload handling
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 4
+Technology Version Purpose
+Morgan 1.x HTTP request logging
+Winston 3.x Structured application logging
+Joi 17.x Server-side schema validation
+node-cron 3.x Daily Hadith/Ayah scheduler
+compression 1.x Gzip response compression
+hpp 0.x HTTP Parameter Pollution prevention
+2.3 Supabase Services Used
+Supabase Service Usage in Project
+Supabase Auth User registration, login, JWT refresh, email confirm
+PostgreSQL Database All relational data: users, courses, students, teachers, blogs, admissions
+Row Level Security (RLS) Per-row access policies for each user role
+Supabase Realtime Live notifications, admission status, course count sync
+Supabase Storage Profile photos, CV/resume PDFs, course images, certificates
+Supabase Edge Functions Daily Hadith/Ayah scheduler, email notification triggers
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 5
+3. Database Schema — PostgreSQL via Supabase
+All tables use UUID primary keys and timestamptz for dates. Row Level Security (RLS) is enabled on
+every table. No anonymous access to protected data is possible without a valid JWT.
+3.1 profiles (extends Supabase auth.users)
+Column Type Constraints Description
+id UUID PK, DEFAULT gen_random_uuid() Primary key
+user_id UUID FK auth.users(id), UNIQUE, NOT
+NULL
+Supabase auth
+reference
+full_name TEXT NOT NULL Full display name
+email TEXT UNIQUE, NOT NULL Login email
+role TEXT CHECK IN
+(super_admin,admin,teacher,student)
+Access role
+status TEXT DEFAULT active, CHECK IN
+(active,banned,suspended)
+Account status
+avatar_url TEXT NULL Supabase Storage
+URL
+preferred_language TEXT DEFAULT en, CHECK IN (en,ar,ur) UI language
+theme TEXT DEFAULT light, CHECK IN
+(light,dark,green)
+Theme preference
+created_at TIMESTAMPTZ DEFAULT NOW() Registration date
+updated_at TIMESTAMPTZ DEFAULT NOW() Last update
+3.2 students
+Column Type Constraints Description
+id UUID PK Primary key
+user_id UUID FK profiles(user_id), NOT NULL Linked profile
+father_name TEXT NOT NULL Father's full name
+whatsapp TEXT NOT NULL WhatsApp with
+country code
+country TEXT NOT NULL Country of residence
+city TEXT NULL City
+gender TEXT CHECK IN (male,female) Gender
+date_of_birth DATE NULL Date of birth
+course_id UUID FK courses(id) Primary enrolled
+course
+study_mode TEXT CHECK IN (one_to_one,group) Learning mode
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 6
+Column Type Constraints Description
+preferred_time TEXT CHECK IN
+(morning,afternoon,evening,night)
+Time preference
+weekly_days TEXT[] DEFAULT '{}' Available days array
+applied_for TEXT CHECK IN
+(nazra,tajweed,hifz,arabic,fiqh,hadith)
+Application type
+additional_message TEXT NULL Optional message
+created_at TIMESTAMPTZ DEFAULT NOW() Creation date
+3.3 teachers
+Column Type Constraints Description
+id UUID PK Primary key
+user_id UUID FK profiles(user_id),
+NOT NULL
+Linked profile
+phone TEXT NOT NULL Phone number
+country TEXT NOT NULL Country
+highest_qualification TEXT NOT NULL Degree level
+field_of_study TEXT NOT NULL Academic field
+institution_name TEXT NOT NULL University/Institute
+year_of_completion INT NOT NULL Graduation year
+total_experience TEXT CHECK IN
+(1yr,2_3yr,5plus,10plus)
+Teaching experience
+teaching_type TEXT CHECK IN
+(online,physical,both)
+Mode
+subjects_taught TEXT[] DEFAULT '{}' Previously taught subjects
+primary_specialization TEXT NOT NULL Main specialization
+languages_known TEXT[] DEFAULT '{}' Languages array
+preferred_teaching_language TEXT NOT NULL Primary language
+available_days TEXT[] DEFAULT '{}' Available days
+available_slots TEXT[] DEFAULT '{}' Morning/Afternoon/Evening/Night
+device_type TEXT CHECK IN
+(mobile,laptop,tablet)
+Device used
+internet_quality TEXT CHECK IN
+(excellent,good,average)
+Connection quality
+cv_url TEXT NULL Supabase Storage CV path
+certifications_url TEXT[] DEFAULT '{}' Certification files
+why_teach TEXT NULL Motivation statement
+short_bio TEXT NULL Biography
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 7
+Column Type Constraints Description
+created_at TIMESTAMPTZ DEFAULT NOW() Application date
+3.4 courses
+Column Type Constraints Description
+id UUID PK Primary key
+title TEXT NOT NULL Course full
+name
+title_ar TEXT NULL Arabic title
+title_ur TEXT NULL Urdu title
+category TEXT CHECK IN
+(quran,arabic,fiqh,sarf_nahw,hadith)
+Category
+level TEXT CHECK IN
+(beginner,intermediate,advanced,specialized)
+Level
+duration TEXT NOT NULL e.g. 4-6
+Months
+fee_usd_min NUMERIC(8,2) NOT NULL Min monthly
+fee USD
+fee_usd_max NUMERIC(8,2) NOT NULL Max monthly
+fee USD
+fee_pkr_min NUMERIC(10,0) NULL Min fee PKR
+fee_pkr_max NUMERIC(10,0) NULL Max fee PKR
+prerequisites TEXT NULL Required prior
+knowledge
+core_books TEXT NULL Main textbooks
+description TEXT NOT NULL Full description
+learning_outcomes TEXT[] DEFAULT '{}' Array of
+outcomes
+image_url TEXT NULL Course
+thumbnail URL
+teacher_id UUID FK teachers(id), NULL Assigned
+teacher
+students_count INT DEFAULT 0 Enrolled count
+status TEXT DEFAULT active, CHECK IN
+(active,draft,archived)
+Visibility
+schedule TEXT NULL e.g. 3-5
+days/week · 45
+min
+sort_order INT DEFAULT 0 Display order
+created_at TIMESTAMPTZ DEFAULT NOW() Creation date
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 8
+Column Type Constraints Description
+updated_at TIMESTAMPTZ DEFAULT NOW() Last modified
+3.5 admissions
+Column Type Constraints Description
+id UUID PK Primary key
+type TEXT NOT NULL, CHECK IN
+(student,teacher)
+Application type
+applicant_user_id UUID FK profiles(user_id), NULL Linked if registered
+data JSONB NOT NULL Full application payload
+status TEXT DEFAULT pending, CHECK IN
+(pending,approved,rejected,waitlisted)
+Status
+reviewed_by UUID FK profiles(user_id), NULL Admin reviewer
+review_note TEXT NULL Admin's internal note
+reviewed_at TIMESTAMPTZ NULL Review timestamp
+created_at TIMESTAMPTZ DEFAULT NOW() Submission date
+3.6 blogs
+Column Type Constraints Description
+id UUID PK Primary key
+title TEXT NOT NULL Blog post title
+slug TEXT UNIQUE, NOT NULL URL-friendly identifier
+excerpt TEXT NULL Short preview (2-3
+lines)
+content TEXT NOT NULL Full HTML/Markdown
+content
+image_url TEXT NULL Featured image URL
+author_id UUID FK profiles(user_id) Author reference
+category TEXT CHECK IN
+(quran,hadith,fiqh,arabic,spirituality,general)
+Category
+tags TEXT[] DEFAULT '{}' Searchable tags
+views INT DEFAULT 0 View counter
+is_featured BOOLEAN DEFAULT FALSE Featured post flag
+status TEXT DEFAULT draft, CHECK IN
+(draft,published,archived)
+Status
+published_at TIMESTAMPTZ NULL Publication timestamp
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 9
+Column Type Constraints Description
+created_at TIMESTAMPTZ DEFAULT NOW() Creation date
+3.7 enrollments
+Column Type Constraints Description
+id UUID PK Primary key
+student_id UUID FK students(id) Student reference
+course_id UUID FK courses(id) Course reference
+status TEXT DEFAULT active, CHECK IN
+(active,completed,dropped)
+Status
+progress_percent INT DEFAULT 0, CHECK (0-100) Completion %
+enrolled_at TIMESTAMPTZ DEFAULT NOW() Enrollment date
+completed_at TIMESTAMPTZ NULL Completion date
+3.8 notifications
+Column Type Constraints Description
+id UUID PK Primary key
+title TEXT NOT NULL Notification
+headline
+message TEXT NOT NULL Body text
+type TEXT CHECK IN
+(ayah,hadith,course_update,admission_status,broadcast,syste
+m)
+Type
+target_role TEXT NULL, CHECK IN (all,student,teacher,admin) Audience
+target_user_i
+d
+UUID NULL Specific user
+(null=broadcast
+)
+is_read BOOLEAN DEFAULT FALSE Read status
+metadata JSONB NULL Extra data
+(links, IDs)
+created_at TIMESTAMPT
+Z
+DEFAULT NOW() Send time
+3.9 Other Tables
+Table Key Columns Purpose
+contact_messages full_name, email, whatsapp, subject,
+message, status
+Contact form submissions inbox
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 10
+Table Key Columns Purpose
+daily_content type(ayah/hadith), content_ar, content_en,
+content_ur, display_date
+Daily Quran verse + Hadith
+system
+certificates student_id, course_id, certificate_url,
+issued_by, issued_at
+Downloadable course completion
+certificates
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 11
+4. Row Level Security (RLS) Policies
+All Supabase tables have RLS enabled. No data is accessible without a valid authenticated JWT.
+Policies enforce role-based access at the database layer — independent of API logic.
+SECURITY MANDATE: Admin email pass93630@gmail.com is seeded as SUPER_ADMIN
+with bcrypt-hashed password (12 salt rounds). Raw password NEVER stored in any table,
+log, or API response.
+Table Role SELECT INSERT UPDATE DELETE
+profiles own user own row on
+register
+own row X
+profiles admin/super_admin ALL YES ALL YES
+students student own row on
+admission
+own row X
+students admin ALL YES ALL YES
+teachers teacher own row on
+admission
+own row X
+teachers admin ALL YES ALL YES
+courses public/student active only X X X
+courses teacher assigned X assigned X
+courses admin ALL YES ALL YES
+admissions student/teacher own on apply X X
+admissions admin ALL YES ALL YES
+blogs public published X X X
+blogs admin ALL YES ALL YES
+enrollments student own X X X
+enrollments admin ALL YES ALL YES
+notifications any auth own+broadcast X own
+is_read
+X
+notifications admin ALL YES ALL YES
+contact_messages public X YES (rate
+limit)
+X X
+contact_messages admin ALL YES ALL YES
+certificates student own X X X
+certificates admin ALL YES ALL YES
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 12
+5. REST API Endpoints — Complete Specification
+Base URL: https://itqaninstitute.com/api/v1 | All responses are JSON. Auth via Bearer JWT. Rate limit:
+100 req/15min public, 500 req/15min authenticated. IP blocked after 5 failed login attempts.
+5.1 Authentication
+Method Endpoint Auth Description
+POST /auth/register Public Register (blocks temp emails, validates password
+strength)
+POST /auth/login Public Login → access_token + refresh_token (HttpOnly
+cookie)
+POST /auth/logout Bearer
+JWT
+Invalidate Supabase session
+POST /auth/refresh Refresh
+Token
+Get new access token
+POST /auth/forgot-password Public Send password reset email
+POST /auth/reset-password Reset
+Token
+Set new password
+GET /auth/me Bearer
+JWT
+Current authenticated user profile
+5.2 Courses
+Method Endpoint Auth Description
+GET /courses Public List active courses
+(?category=&level=&search=&sort=)
+GET /courses/:id Public Single course detail with full metadata
+POST /courses Admin Create course (multipart: image upload to Supabase
+Storage)
+PUT /courses/:id Admin Full course update
+PATCH /courses/:id/status Admin Toggle active/draft/archived
+DELETE /courses/:id Admin Soft-delete course
+GET /courses/stats Admin Enrollment analytics by category/level
+5.3 Admissions
+Method Endpoint Auth Description
+POST /admissions/student Public Submit student application (multipart form)
+POST /admissions/teacher Public Submit teacher application (CV + certificates
+upload)
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 13
+Method Endpoint Auth Description
+GET /admissions Admin List all admissions
+(?type=&status=&page=&limit=)
+GET /admissions/:id Admin Single admission full JSONB payload
+PATCH /admissions/:id/status Admin Approve/Reject/Waitlist + send realtime
+notification
+GET /admissions/my Student/Teacher Own application status
+5.4 Blogs
+Method Endpoint Auth Description
+GET /blogs Public List published blogs
+(?category=&author=&sort=&page=)
+GET /blogs/featured Public Get 1-2 featured posts
+GET /blogs/:slug Public Single blog (increments views counter)
+POST /blogs Admin Create blog with image upload
+PUT /blogs/:id Admin Update blog content
+PATCH /blogs/:id/publish Admin Publish/unpublish toggle
+PATCH /blogs/:id/feature Admin Toggle featured status
+DELETE /blogs/:id Admin Delete blog
+5.5 Users & Profiles
+Method Endpoint Auth Description
+GET /admin/users Admin All users (?role=&status=&page=)
+GET /admin/users/:id Admin Single user + linked student/teacher data
+PATCH /admin/users/:id/status Admin Ban/activate/suspend user
+PATCH /admin/users/:id/role Super
+Admin
+Change user role
+PUT /profile Any Auth Update own profile (name, photo, language, theme)
+POST /profile/avatar Any Auth Upload profile photo to Supabase Storage
+5.6 Notifications, Contact & Dashboard
+Method Endpoint Auth Description
+GET /notifications Any Auth Own notifications (unread first)
+PATCH /notifications/:id/read Any Auth Mark as read
+PATCH /notifications/read-all Any Auth Mark all as read
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 14
+Method Endpoint Auth Description
+POST /notifications/broadcast Admin Broadcast to role (all/student/teacher)
+GET /daily-content/today Public Today's Ayah + Hadith
+POST /contact Public
+(rate
+limited)
+Submit contact form message
+GET /contact/messages Admin Contact messages inbox
+PATCH /contact/messages/:id/status Admin Update message status
+GET /admin/dashboard Admin Platform stats (students, teachers, courses,
+admissions)
+GET /admin/stats/analytics Admin Traffic, enrollment trends, top courses
+5.7 Enrollments & Certificates
+Method Endpoint Auth Description
+POST /enrollments Admin Enroll student in course
+GET /enrollments/my Student Own enrolled courses with progress
+PATCH /enrollments/:id/progress Teacher/Admin Update student progress %
+POST /certificates Admin Issue certificate (PDF stored in Supabase
+Storage)
+GET /certificates/my Student Download own certificates
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 15
+6. Security Specification
+6.1 Admin Credentials — SUPER_ADMIN Seed
+CONFIDENTIAL — Do NOT expose in frontend code, git repos, or logs
+Admin Email: pass93630@gmail.com
+Admin Password: WAQASkhan@5713079
+Role: SUPER_ADMIN
+Storage: bcrypt hashed (12 salt rounds) via Supabase Auth — NEVER stored as plaintext
+Seeding: scripts/seed-admin.js runs once on first deploy. Admin can only be re-seeded by
+Super Admin.
+6.2 Password Security Rules
+• Minimum 8 characters
+• At least 1 uppercase letter (A-Z)
+• At least 1 number (0-9)
+• At least 1 special character (!@#$%^&*)
+• bcryptjs hashing — 12 salt rounds
+• Passwords never returned in any API response
+• Password strength meter shown in all signup/registration forms
+6.3 Blocked Disposable Email Domains
+At registration, email domain is checked against a blocklist. HTTP 422 returned with message:
+'Disposable email addresses are not permitted.' Blocked domains include:
+• mailinator.com, tempmail.com, guerrillamail.com
+• 10minutemail.com, yopmail.com, throwam.com
+• sharklasers.com, guerrillamailblock.com, grr.la, trashmail.com
+6.4 Security Middleware Stack (Express)
+Middleware Purpose Configuration
+helmet() Sets 15 HTTP security headers Default + custom CSP for Supabase/fonts
+cors() Cross-origin control Whitelist: itqaninstitute.com, localhost:5173
+express-rate-limit Brute force + DDoS protection 100/15min public; lockout after 5 failed logins
+xss-clean XSS sanitization on
+req.body/query
+Applied globally before all routes
+express-validator Input validation per route Custom error messages with field context
+hpp() HTTP Parameter Pollution
+prevention
+Whitelist safe repeated params
+compression() Gzip all API responses threshold: 1024 bytes
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 16
+6.5 JWT & Session Strategy
+• Access Token: 15-minute expiry (short-lived Bearer token)
+• Refresh Token: 7-day expiry stored in HttpOnly, Secure, SameSite=Strict cookie
+• Role claim embedded in JWT payload → verified server-side on every protected route
+• Token invalidation on logout via Supabase signOut() — revokes session server-side
+• SUPER_ADMIN routes: role also re-checked against DB (not just JWT claim)
+6.6 Role-Based Access Control (RBAC)
+Role Access Level Capabilities
+SUPER_ADMIN Full platform control All admin capabilities + change roles, manage admins,
+system settings
+ADMIN Platform management Course CRUD, blog management, approve admissions,
+view messages, broadcast notifications
+TEACHER Course-level access View assigned courses, upload materials, track student
+progress, manage schedule
+STUDENT Personal learning View/enroll courses, track own progress, download own
+certificates, view own notifications
+6.7 Supabase Storage Security
+• All buckets are private — no public access without signed URLs
+• Signed URLs generated server-side, expire in 1 hour
+• File type validation: PDFs only for CVs, images only for photos (MIME check)
+• Max sizes: profile photos 2MB, CVs 10MB, certificates 5MB, course images 5MB
+• Storage bucket names: avatars, course-images, cvs, certificates, blog-images
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 17
+7. Frontend — Pages, Routes & Components
+7.1 Public Pages
+Route Page Key Sections
+/ Homepage Video hero, Daily Ayah+Hadith, Notification bar, Courses grid, Why
+Choose Us, Footer
+/courses Courses Page Hero, Search+Filter bar, Courses grid (dynamic), Why Study With Us
+/blogs Blogs Page Hero, Featured blog banner, Blog grid (search/filter), Pagination
+/blogs/:slug Blog Detail Full article, Author card, Related blogs, Share buttons
+/about About Us Hero, Scholar profile (Dr. Hazarvi), Biography accordion, Expertise
+badges, Publications
+/admission Admission Tab: Student | Teacher. Multi-step form with progress bar
+/contact Contact Us Hero, Contact cards (WhatsApp/Email), Form, Quick support, FAQ
+accordion
+/login Login Email + password, Forgot password, Role-based redirect after login
+/signup Signup Basic registration → redirects to admission form for full profile
+7.2 Dashboard Routes (Role-Protected)
+Route Role Description
+/admin/dashboard Admin/Super
+Admin
+Analytics: students, teachers, admissions, courses, traffic
+charts
+/admin/courses Admin Course CRUD table with Add/Edit/Delete modals
+/admin/blogs Admin Blog management with TipTap rich text editor
+/admin/admissions Admin Applications with approve/reject + notes
+/admin/users Admin All users with ban/activate/role controls
+/admin/messages Admin Contact messages inbox
+/admin/notifications Admin Broadcast notification composer
+/admin/settings Super Admin Theme, language, site config
+/student/dashboard Student Enrolled courses, progress, schedule view
+/student/courses Student My courses with continue button and progress bar
+/student/certificates Student Certificate download gallery
+/student/profile Student Edit personal info, avatar, language preference
+/teacher/dashboard Teacher Assigned courses overview, student count
+/teacher/courses Teacher Course content management, upload materials
+/teacher/students Teacher Enrolled students, attendance, progress
+/teacher/profile Teacher Edit professional profile, specialization
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 18
+7.3 Core Components Library
+Component Description
+<Navbar /> Sticky glassmorphism nav, logo, links, language switcher, theme switcher,
+auth buttons
+<Footer /> Logo, description, WhatsApp link, email, quick links, social icons
+<Hero /> Configurable with video/image background, gradient overlay, animated CTA
+buttons
+<CourseCard /> Thumbnail, title, excerpt, duration, level badge, students count, enroll button
+<BlogCard /> Image, title, excerpt, author, date, category tag, read more link
+<ScholarCard /> Dr. Hazarvi full profile with qualifications, positions, expertise badges
+<ThemeSwitcher /> Light/Dark/Islamic Green 3-way toggle with localStorage persistence
+<LanguageSwitcher /> Flag icons EN/AR/UR with i18n integration and RTL auto-toggle
+<NotificationBell /> Badge counter, dropdown list, mark-read, clear all
+<DailyContent /> Today's Ayah and Hadith cards with Amiri Arabic font
+<SkeletonLoader /> Configurable skeleton for courses, blogs, and table rows
+<MultiStepForm /> Progress bar, step validation, back/next navigation, success popup
+<PasswordStrengthMeter
+/>
+Visual strength bar: weak/medium/strong with rules checklist
+<FileUploadDropzone /> Drag-and-drop with preview, type/size validation
+<RichTextEditor /> TipTap-based editor for blog creation with formatting toolbar
+<ProtectedRoute /> HOC checking auth + role, redirects unauthorized users to login
+<RTLProvider /> Wraps app — sets dir attribute and font based on i18n.language
+<ConfirmModal /> Reusable confirmation dialog for destructive actions
+<ToastNotification /> React Hot Toast styled with Islamic green theme
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 19
+8. Complete 24-Course Catalogue (Auto-Seed Data)
+All 24 courses are seeded on first deployment via scripts/seed-courses.js. Each includes full
+description, fee, duration, level, prerequisites, and learning outcomes.
+8.1 Quran Courses — 7 Courses
+Progression: Noorani Qaida → Nazra → Tajweed → Advanced Tajweed → Hifz → Tarjama →
+Advanced Tafseer
+# Course Title Level Duration Fee
+(USD/mo)
+Core Books
+1 Noorani Qaida Course Beginner 2-3 Months $20-$30 Noorani Qaida
+2 Nazra Quran (Reading) Beginner 3-4 Months $25-$35 Direct Quran text
+3 Quran with Tajweed Intermediate 4-6 Months $30-$40 Tajweed rules texts
+4 Advanced Tajweed
+Program
+Advanced 1 Year $35-$50 Al-Jazariyyah, Khulasat
+ut-Tajweed
+5 Hifz-ul-Quran
+(Memorization)
+Specialized 2.5-3
+Years
+$40-$60 Full Quran (Sabaq+Manzil
+method)
+6 Tarjamat-ul-Quran Intermediate 1 Year $30-$45 Translation texts
+(AR/UR/EN options)
+7 Advanced Tafseer-ul-Quran Advanced 2 Years $40-$60 Ibn Kathir, Al-Jalalayn, AlTabari
+8.2 Arabic Language Courses — 4 Courses
+Progression: Beginner Arabic → Intermediate → Advanced Spoken → Ilm-e-Balaghat
+# Course Title Level Duration Fee
+(USD/mo)
+Core Books
+8 Beginner Arabic Beginner 3 Months $20-$30 Al-Arabiyyah Bayna
+Yadayk
+9 Intermediate Arabic Intermediate 6 Months $25-$40 Al-Arabiyyah Bayna
+Yadayk Vol 2-3
+10 Advanced Spoken Arabic Advanced 1 Year $35-$50 Advanced conversation +
+media texts
+11 Advanced Ilm-e-Balaghat Advanced 1 Year $40-$60 Mukhatasar al-Maani,
+classical texts
+8.3 Fiqh Courses — 6 Courses
+Progression: Basic Qudoori → Intermediate Kanz → Advanced Hidaya + Usool al-Fiqh track (3 levels)
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 20
+# Course Title Level Duration Fee
+(USD/mo)
+Core Books
+12 Basic Fiqh — Qudoori Beginner 2-3 Months $20-$30 Mukhtasar al-Qudoori
+13 Intermediate Fiqh — Kanz Intermediate 6 Months $25-$35 Kanz al-Daqa'iq
+14 Advanced Fiqh — AlHidaya
+Advanced 1 Year $35-$50 Al-Hidaya (Al-Marghinani)
+15 Basic Usool al-Fiqh —
+Shashi
+Beginner 3 Months $20-$30 Usool al-Shashi
+16 Intermediate Usool al-Fiqh Intermediate 6 Months $25-$35 Nur al-Anwar
+17 Advanced Usool al-Fiqh Advanced 1 Year $35-$50 Al-Tawdih wa al-Talwih
+8.4 Sarf & Nahw (Grammar) — 3 Courses
+Progression: Basic → Intermediate (Al-Kafia) → Advanced (Sharah al-Jami)
+# Course Title Level Duration Fee
+(USD/mo)
+Core Books
+18 Basic Sarf & Nahw Beginner 6 Months $20-$30 Ilm us-Sarf basics, Mizan
+ul-Sarf
+19 Intermediate Sarf & Nahw Intermediate 10 Months $25-$35 Ilm us-Sigha, Al-Kafia
+20 Advanced Sarf & Nahw Advanced 8 Months $35-$50 Sharah al-Jami
+8.5 Hadith Sciences — 4 Courses
+Progression: Basic → Intermediate → Advanced → Takhassus fil Hadith (highest specialization)
+# Course Title Level Duration Fee
+(USD/mo)
+Core Books
+21 Basic Hadith Beginner 4 Months $20-$30 Riyadh-us-Saliheen
+(selected)
+22 Intermediate Hadith Intermediate 6 Months $25-$35 Mishkat al-Masabih
+23 Advanced Hadith Advanced 2 Years $35-$50 Sahih al-Bukhari, Sahih
+Muslim
+24 Takhassus fil Hadith Specialization 2 Years $50-$70 All 6 major Hadith
+collections + Sharah
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 21
+9. Multi-Language System & Typography
+9.1 Font Stack by Language
+Language Font Family Usage Direction
+Arabic (العربية (Amiri (Google Fonts) Quranic text, Arabic headings,
+Islamic content, Hadith
+RTL (dir=rtl)
+Urdu (اردو (Jameel Noori Nastaleeq Urdu UI translations, course
+content
+RTL (dir=rtl)
+English Poppins, Inter, Roboto
+(fallback)
+UI labels, admin panel, forms,
+system content
+LTR (dir=ltr)
+9.2 i18n Implementation
+• Translation files: /public/locales/en/translation.json, /ar/translation.json, /ur/translation.json
+• Language detection order: localStorage → navigator.language → default 'en'
+• RTL auto-toggle: <html dir='rtl'> set automatically on AR/UR selection
+• Font auto-switch: CSS class on <body> (lang-ar, lang-ur, lang-en) changes font-family
+• Hijri calendar display option alongside Gregorian for Islamic dates
+9.3 Theme System
+Theme Primary Accent Background Text CSS Variable
+Light (default) #0F766E (teal-green) #FFFFFF #111827 data-theme='light'
+Dark #10B981 (emerald) #0F172A #F1F5F9 data-theme='dark'
+Islamic Green #065F46 (deep green) #ECFDF5 #1F2937 data-theme='green'
+• Theme persisted in localStorage and synced to profiles.theme column in Supabase
+• CSS custom properties (--color-primary, --color-bg, --color-text) switched via data-theme
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 22
+10. Real-Time Features — Supabase Realtime
+Supabase Realtime uses WebSocket channels (Phoenix-backed) to push DB changes to subscribed
+clients. No separate Socket.io server is required.
+Channel Trigger Subscribers UI Effect
+courses:changes INSERT/UPDATE on
+courses
+Public (all visitors) Course count updates
+live, new card appears
+admissions:status UPDATE on
+admissions.status
+Authenticated
+applicant
+Toast: Your application
+has been approved
+notifications:user INSERT on notifications
+for user
+Authenticated user Bell badge count
+increments, item added
+notifications:broadcast INSERT where
+target_role=all
+All authenticated users Global notification
+banner
+blogs:published INSERT on blogs where
+status=published
+Public visitors New blog card appears
+in listing
+courses:count UPDATE on
+courses.students_count
+Public Card enrollment number
+updates
+10.1 Daily Content Scheduler
+• node-cron job runs daily at 00:00 PKT
+• Queries daily_content table for today's date
+• Inserts notification records for all users (type: ayah, hadith)
+• Supabase Realtime pushes to connected clients instantly
+• Homepage displays today's Ayah + Hadith in dedicated cards with Arabic (Amiri) font
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 23
+11. Featured Scholar — Dr. Noor Ur Rahman Hazarvi
+The About Us page prominently features the founding scholar as primary scholarly authority and
+supervisor of all Al-Itqan courses.
+Dr. Noor Ur Rahman Hazarvi (Hafizahullah)
+Head of Hadith Specialization — Jamia Al-Rashid Karachi
+PhD: International Islamic University Islamabad (CGPA 4.0 —
+Highest Grade)
+MPhil: Hadith Sciences — IIUI (Highest Distinction)
+MA Arabic: IIUI — Gold Medal
+Alimiyyah: 1st Position Nationwide — Wafaq al-Madaris al-Arabiyyah
+Pakistan
+Kharij: Jamia Banori Town, Karachi
+Daktūra: Ulum as-Sunnah — Advanced Specialization
+Current Positions
+• Head — Specialization in Hadith Department, Jamia Al-Rashid Karachi
+• Member — Specialization in Hadith Department, Jamia Haqqania Akora Khattak
+• Coordinator — MS Islamic Studies (Hadith), Al-Ghazali University Karachi
+Previous Academic Positions
+• Visiting Lecturer — University of Chakwal
+• Visiting Lecturer — University of Peshawar
+• Assistant Professor (Adjunct Faculty) — Al-Kawthar University Karachi
+• Columnist — Wafaq al-Madaris (scholarly magazine, several years)
+Areas of Scholarly Expertise
+• Ilm al-Tafsir — Science of Quranic Exegesis
+• Ilm al-Ilal — Science of Hidden Defects in Hadith
+• Ilm al-Jarh wa al-Tadil — Narrator Criticism and Praise
+• Ulum al-Hadith — Hadith Sciences (full spectrum)
+• Usul al-Fiqh al-Hanafi with practical jurisprudential applications
+• Ilm al-Balagha — Arabic Rhetoric and Literary Sciences
+• Arabic Literature, Nahw (Syntax) and Sarf (Morphology)
+• Mantiq (Logic) and other classical Islamic disciplines
+Languages
+• Arabic — Native scholarly fluency (oratory and writing)
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 24
+• Urdu — Native
+• English — Proficient
+• Pashto — Proficient
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 25
+12. SEO & Indexing Specification
+Site URL: https://itqaninstitute.com
+Meta Title: Al-Itqan | Islamic & Arabic Studies Institute
+Meta
+Description:
+Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering
+structured learning from foundational Quran recitation to advanced Arabic, Fiqh, and
+Hadith sciences.
+OG Image: https://i.ibb.co/V0pRN6XT/logo.png
+Favicon
+ICO:
+https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico
+Favicon
+32px:
+https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon32x32.png
+Apple
+Touch Icon:
+https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/appletouch-icon.png
+12.1 robots.txt Configuration
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /student/
+Disallow: /teacher/
+Sitemap: https://itqaninstitute.com/sitemap.xml
+12.2 sitemap.xml Pages
+• https://itqaninstitute.com/ — Homepage
+• https://itqaninstitute.com/courses — Courses
+• https://itqaninstitute.com/blogs — Blogs
+• https://itqaninstitute.com/admission — Admission
+• https://itqaninstitute.com/about — About Us
+• https://itqaninstitute.com/contact — Contact Us
+• https://itqaninstitute.com/blogs/:slug — Dynamic blog pages (all published)
+• https://itqaninstitute.com/courses/:id — Dynamic course detail pages
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 26
+13. Project Folder Structure
+13.1 Frontend — React + Vite
+itqan-frontend/
+├── public/
+│ ├── locales/en/translation.json
+│ ├── locales/ar/translation.json
+│ ├── locales/ur/translation.json
+│ ├── robots.txt & sitemap.xml
+├── src/
+│ ├── api/ # Axios instances + typed API call functions
+│ ├── assets/ # Images, fonts, SVGs, icons
+│ ├── components/
+│ │ ├── layout/ # Navbar, Footer, RTLProvider, ThemeSwitcher
+│ │ ├── ui/ # Button, Input, Modal, Toast, Skeleton, Badge
+│ │ ├── forms/ # MultiStepForm, PasswordMeter, FileDropzone
+│ │ └── cards/ # CourseCard, BlogCard, ScholarCard
+│ ├── hooks/ # useAuth, useTheme, useLanguage, useNotifications
+│ ├── i18n/ # i18next config + language detection
+│ ├── pages/
+│ │ ├── public/ # Home, Courses, Blogs, BlogDetail, About, Admission,
+Contact
+│ │ ├── admin/ # Dashboard, CourseMgmt, BlogMgmt, Admissions, Users,
+Messages
+│ │ ├── student/ # Dashboard, MyCourses, Certificates, Profile
+│ │ └── teacher/ # Dashboard, Courses, Students, Profile
+│ ├── router/ # React Router config + ProtectedRoute HOC
+│ ├── store/ # Zustand stores: authStore, themeStore, langStore
+│ ├── supabase/ # createClient() init file
+│ └── utils/ # validators.js, formatters.js, constants.js
+├── .env # VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY,
+VITE_API_BASE_URL
+└── vite.config.js
+13.2 Backend — Node.js + Express
+itqan-backend/
+├── src/
+│ ├── config/ # supabaseClient.js, corsOptions.js, rateLimiter.js
+│ ├── middleware/ # authenticate.js, roleGuard.js, validate.js,
+errorHandler.js
+│ ├── routes/ # auth.js, courses.js, blogs.js, admissions.js,
+│ │ # notifications.js, contact.js, admin.js, enrollments.js
+│ ├── controllers/ # One controller per route group (thin, delegates to
+services)
+│ ├── services/ # Business logic: supabase calls, storage ops, email
+│ ├── validators/ # Joi/Zod schemas for each route group
+│ └── utils/ # logger.js, tempEmailBlocklist.js, passwordHash.js
+├── scripts/
+│ ├── seed-admin.js # Seeds SUPER_ADMIN (run once on first deploy)
+│ └── seed-courses.js# Seeds all 24 courses with full metadata
+├── app.js # Express app: middleware stack + route mounting
+├── server.js # HTTP server entry point (PORT=8080)
+└── .env # SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, JWT_SECRET,
+PORT
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 27
+14. Contact & Communication Specification
+WhatsApp Number: +923434487450
+WhatsApp URL: https://wa.me/923434487450
+Email: info@itqaninstitute.com
+Website: https://itqaninstitute.com
+Support Hours: 24/7 (global online institute)
+Reach: Online — Global Access (no physical address)
+14.1 WhatsApp Integration Points
+• Homepage hero CTA — primary 'Chat on WhatsApp' button
+• Contact page hero CTA — 'WhatsApp Chat' button
+• Quick Support cards (Course Guidance, Admission Help, Technical Support)
+• Footer WhatsApp icon + number hyperlink
+• Mobile sticky floating WhatsApp button (bottom-right)
+• Contact form submission success — option to follow up on WhatsApp
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 28
+15. Development Phases & Milestones
+Phase Sprint Deliverables Duration
+Phase 1 —
+Foundation
+Sprint 1 Supabase setup, DB schema, RLS policies, seed
+scripts
+1 Week
+Phase 1 —
+Foundation
+Sprint 2 Node.js backend skeleton, all API routes,
+middleware stack
+1 Week
+Phase 2 — Public
+Frontend
+Sprint 3 Navbar, Footer, Theme system, i18n, Homepage
+(full)
+1 Week
+Phase 2 — Public
+Frontend
+Sprint 4 Courses page, Blogs page, Blog detail,
+Search+Filter
+1 Week
+Phase 2 — Public
+Frontend
+Sprint 5 About Us (Scholar profile), Admission multi-step
+forms
+1 Week
+Phase 2 — Public
+Frontend
+Sprint 6 Contact Us page, FAQ accordion, form API
+integration
+3 Days
+Phase 3 — Auth &
+Roles
+Sprint 7 Login/Signup, Protected routes, role-based
+redirects
+1 Week
+Phase 4 — Admin
+Panel
+Sprint 8 Admin dashboard, Course CRUD, Blog manager
+(TipTap)
+1 Week
+Phase 4 — Admin
+Panel
+Sprint 9 Admission manager, User management, Contact
+inbox
+1 Week
+Phase 5 — Student
+Panel
+Sprint 10 Student dashboard, My Courses, Progress,
+Certificates
+1 Week
+Phase 6 — Teacher
+Panel
+Sprint 11 Teacher dashboard, Assigned courses, Student
+list
+1 Week
+Phase 7 — RealTime
+Sprint 12 Supabase Realtime channels, Notifications, Daily
+scheduler
+1 Week
+Phase 8 — SEO &
+Launch
+Sprint 13 SEO meta, sitemap, robots.txt, performance
+audit
+1 Week
+Phase 8 — SEO &
+Launch
+Sprint 14 Production deploy, SSL, env config, smoke
+testing
+3 Days
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 29
+16. Deployment & Environment Configuration
+16.1 Frontend Environment (.env)
+VITE_SUPABASE_URL=https://[project-ref].supabase.co
+VITE_SUPABASE_ANON_KEY=[anon-public-key]
+VITE_API_BASE_URL=https://itqaninstitute.com/api/v1
+VITE_WA_NUMBER=923434487450
+16.2 Backend Environment (.env)
+SUPABASE_URL=https://[project-ref].supabase.co
+SUPABASE_SERVICE_ROLE_KEY=[service-role-secret — KEEP PRIVATE]
+JWT_SECRET=[random-64-char-string]
+PORT=8080
+NODE_ENV=production
+FRONTEND_URL=https://itqaninstitute.com
+16.3 Recommended Hosting Stack
+Service Purpose Plan
+Supabase (cloud) Database, Auth, Storage, Realtime Free tier → Pro ($25/mo) as scale grows
+Vercel React frontend hosting (CDNbacked)
+Free → Pro for custom domains + analytics
+Railway / Render Node.js backend hosting Railway Starter ($5/mo) — persistent, easy
+deploy
+Cloudflare CDN, DNS management, DDoS
+protection
+Free plan covers DNS + CDN
+GitHub Actions CI/CD — auto-deploy on push to
+main
+Free for public repos
+Al-Itqan Institute for Islamic & Arabic Studies — PRD v2.0 | CONFIDENTIAL
+https://itqaninstitute.com | info@itqaninstitute.com | Page 30
+17. Document Control & Sign-Off
+Document Version: 2.0 — Final Production PRD
+Date: March 2026
+Classification: CONFIDENTIAL — Internal Use Only
+Institute: Al-Itqan Institute for Islamic & Arabic Studies
+Scholar Authority: Dr. Noor Ur Rahman Hazarvi (Hafizahullah)
+Website: https://itqaninstitute.com
+Email: info@itqaninstitute.com
+WhatsApp: https://wa.me/923434487450
+Tech Stack: React 18 + Vite + TailwindCSS + Node.js/Express + Supabase
+PostgreSQL
+Total Sections: 17 sections covering all aspects from DB schema to
+deployment
+Total Courses: 24 courses (auto-seeded) across 5 Islamic disciplines
+Al-Itqan Institute — Serving Authentic Islamic Knowledge Globally
+https://itqaninstitute.com
