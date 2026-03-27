@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://alnooronlineacademy.com/sitemap.xml
+Sitemap: https://itqaninstitute.com/sitemap.xml

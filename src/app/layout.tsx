@@ -6,9 +6,9 @@ import { LanguageProvider } from "@/context/language-context";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://alnooronlineacademy.com"),
-  title: "Al-Itqan",
-  description: "Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences.",
+  metadataBase: new URL("https://itqaninstitute.com"),
+  title: "Al-Itqan Institute",
+  description: "Al-Itqan Institute for Islamic & Arabic Studies. is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
   keywords: [
     "Online Quran Academy",
     "Online Hadees Academy",
@@ -39,9 +39,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: "https://alnooronlineacademy.com/",
-    title: "Al-Itqan",
-    description: "Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences.",
+    url: "https://itqaninstitute.com/",
+    title: "Al-Itqan Institute",
+    description: "Al-Itqan Institute for Islamic & Arabic Studies. is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
     locale: "en_US",
     alternateLocale: ["ar_SA", "ur_PK"],
     siteName: "Al-Itqan",
@@ -56,18 +56,18 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Al-Itqan",
-    description: "Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences.",
+    title: "Al-Itqan Institute",
+    description: "Al-Itqan Institute for Islamic & Arabic Studies. is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
     images: ["https://i.ibb.co/V0pRN6XT/logo.png"],
     creator: "@alnooracademy",
     site: "@alnooracademy"
   },
   alternates: {
-    canonical: "https://alnooronlineacademy.com",
+    canonical: "https://itqaninstitute.com",
     languages: {
-      'en-US': 'https://alnooronlineacademy.com',
-      'ar-SA': 'https://alnooronlineacademy.com/?lang=ar',
-      'ur-PK': 'https://alnooronlineacademy.com/?lang=ur',
+      'en-US': 'https://itqaninstitute.com',
+      'ar-SA': 'https://itqaninstitute.com/?lang=ar',
+      'ur-PK': 'https://itqaninstitute.com/?lang=ur',
     },
   },
   icons: {
