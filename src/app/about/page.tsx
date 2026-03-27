@@ -5,14 +5,13 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { Award, Users, Globe, BookOpen, GraduationCap, Heart, MessageCircle } from "lucide-react";
+import { Award, Users, BookOpen, GraduationCap, Heart, MessageCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 const stats = [
-  { value: "1000+", labelKey: "about.stats.students", icon: Users },
+  { value: "500+", labelKey: "about.stats.students", icon: Users },
   { value: "24", labelKey: "about.stats.courses", icon: BookOpen },
-  { value: "50+", labelKey: "about.stats.countries", icon: Globe },
-  { value: "10+", labelKey: "about.stats.experience", icon: Award }
+  { value: "6", labelKey: "about.stats.experience", icon: Award }
 ];
 
 const values = [

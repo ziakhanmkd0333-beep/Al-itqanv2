@@ -63,7 +63,7 @@ export async function POST(request: Request) {
       .from('students')
       .insert({
         user_id: userId, full_name: fullName, email, phone: phone || null, country: country || null,
-        age: age || null, language: language || 'English', course_id: courseId || null,
+        age: age || null, language: language || 'English',
         preferred_timing: preferredTiming || null, start_date: startDate || null,
         guardian_name: guardianName || null, guardian_phone: guardianPhone || null,
         message: message || null, status: 'active',
