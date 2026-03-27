@@ -993,3 +993,7 @@ deployment
 Total Courses: 24 courses (auto-seeded) across 5 Islamic disciplines
 Al-Itqan Institute — Serving Authentic Islamic Knowledge Globally
 https://itqaninstitute.com
+
+animation
+
+GLASSMORPHISM UI (ANIMATED & PREMIUM)
