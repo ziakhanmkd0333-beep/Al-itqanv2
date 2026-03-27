@@ -393,7 +393,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "Complete Islamic Studies Platform",
+      title: "World's First Institute of Complete Islamic Education and Learning",
       subtitle: "About Us",
       description: "Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
       heroAlt: "About Us",
@@ -1300,7 +1300,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "منصة الدراسات الإسلامية الشاملة",
+      title: "أول معهد في العالم للتعليم والتعلم الإسلامي الشامل",
       subtitle: "من نحن",
       description: "أول تطبيق ويب كامل للمعرفة الإسلامية في العالم — يجلب التعليم الإسلامي الأصيل من العلماء التقليديين إلى الطلاب حول العالم",
       heroAlt: "من نحن",
@@ -2208,7 +2208,7 @@ export const translations = {
     },
     // About Page
     about: {
-      title: "مکمل اسلامی مطالعہ پلیٹ فارم",
+      title: "دنیا کا پہلا ادارہ مکمل اسلامی تعلیم و تعلم کا",
       subtitle: "ہمارے بارے میں",
       description: "دنیا کا پہلا مکمل اسلامی علم ویب ایپ — روایتی علما سے دنیا بھر کے طلباء تک مستند اسلامی تعلیم",
       heroAlt: "ہمارے بارے میں",
