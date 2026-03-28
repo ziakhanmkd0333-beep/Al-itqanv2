@@ -19,7 +19,7 @@ export const translations = {
       bismillah: "بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ",
       title: "The World's First Web Application for Complete Islamic Education",
       subtitle: "From Noorani Qaida to Takhassus fil Hadees — All in One Platform",
-      description: "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
+      description: "Al-Itqan Institute for Islamic & Arabic Studies is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
       exploreCourses: "Explore Courses",
       applyNow: "Apply Now",
     },
