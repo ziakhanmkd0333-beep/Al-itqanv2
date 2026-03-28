@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { Award, Users, BookOpen, GraduationCap, Heart, MessageCircle } from "lucide-react";
+import { Award, Users, Globe, BookOpen, GraduationCap, Heart, MessageCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 const stats = [

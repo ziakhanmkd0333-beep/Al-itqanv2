@@ -130,6 +130,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             sessionStorage.setItem('user', userJson);
           }
           
+          // Also set cookie for middleware/proxy compatibility
+          document.cookie = `user=${encodeURIComponent(userJson)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+          
           setUser(safeUser as User);
           return { success: true, user: safeUser as User };
         }
@@ -155,6 +158,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         sessionStorage.setItem('user', userDataStr);
       }
+
+      // Also set cookie for middleware/proxy compatibility
+      document.cookie = `user=${encodeURIComponent(userDataStr)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
 
       setUser(data.user);
       return { success: true, user: data.user };

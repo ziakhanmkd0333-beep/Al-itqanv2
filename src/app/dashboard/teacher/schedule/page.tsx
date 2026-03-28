@@ -82,6 +82,7 @@ function TeacherScheduleContent() {
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch('/api/teacher/schedule', {
+        credentials: 'include',
         headers: { 'Authorization': `Bearer ${session.access_token}` },
         signal: controller.signal
       });
@@ -108,9 +109,11 @@ function TeacherScheduleContent() {
 
       const [coursesRes, studentsRes] = await Promise.all([
         fetch('/api/teacher/courses', {
+          credentials: 'include',
           headers: { 'Authorization': `Bearer ${session.access_token}` }
         }),
         fetch('/api/teacher/students/all', {
+          credentials: 'include',
           headers: { 'Authorization': `Bearer ${session.access_token}` }
         })
       ]);

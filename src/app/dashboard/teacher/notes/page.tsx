@@ -86,6 +86,7 @@ function TeacherNotesContent() {
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch('/api/teacher/notes', {
+        credentials: 'include',
         headers: { 'Authorization': `Bearer ${session.access_token}` },
         signal: controller.signal
       });

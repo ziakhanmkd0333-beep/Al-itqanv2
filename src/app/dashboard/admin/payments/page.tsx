@@ -204,8 +204,8 @@ const paymentMethods = [
 
 export default function PaymentsManagementPage() {
   const { t, isRTL } = useTranslation();
-  const [payments, setPayments] = useState<Payment[]>(mockPayments);
-  const [loading, setLoading] = useState(false);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [methodFilter, setMethodFilter] = useState<string>("all");
@@ -215,6 +215,49 @@ export default function PaymentsManagementPage() {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   const itemsPerPage = 10;
+
+  // Fetch payments from backend
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/admin/payments?page=1&limit=100');
+        if (!response.ok) throw new Error('Failed to fetch payments');
+        const data = await response.json();
+        
+        // Transform backend data to match frontend interface
+        const transformedPayments: Payment[] = (data.payments || []).map((p: any) => ({
+          id: p.id,
+          student_id: p.student_id || '',
+          student_name: p.student_name || 'Unknown',
+          student_email: p.student_email || '',
+          course_id: p.course_id || '',
+          course_name: p.course_name || 'Unknown Course',
+          amount: p.amount || 0,
+          currency: 'USD',
+          payment_method: (p.method || 'other').toLowerCase(),
+          status: (p.status || 'pending').toLowerCase(),
+          transaction_id: p.transaction_id,
+          payment_date: p.paid_at || p.created_at,
+          due_date: p.due_date || p.created_at,
+          created_at: p.created_at,
+          receipt_sent: p.status === 'paid',
+          invoice_number: p.id ? `INV-${p.id.slice(0, 8).toUpperCase()}` : `INV-${Date.now()}`,
+          notes: p.notes
+        }));
+        
+        setPayments(transformedPayments);
+      } catch (error) {
+        console.error('Error fetching payments:', error);
+        // Fallback to mock data if API fails
+        setPayments(mockPayments);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPayments();
+  }, []);
 
   // Filter and search logic
   const filteredPayments = payments.filter((payment) => {

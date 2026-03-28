@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,9 +15,9 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status') || '';
 
-    let query = supabase
+    let query = supabaseAdmin
       .from('admissions')
-      .select('*, courses(title), users(email)', { count: 'exact' })
+      .select('*', { count: 'exact' })
       .order('applied_at', { ascending: false })
       .range((page - 1) * limit, page * limit - 1);
 
@@ -57,18 +57,18 @@ export async function PATCH(request: Request) {
     };
     if (notes) updateData.notes = notes;
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('admissions')
       .update(updateData)
       .eq('id', id)
-      .select('*, courses(title)')
+      .select()
       .single();
 
     if (error) throw error;
 
     // If approved, create enrollment
     if (status === 'approved') {
-      await supabase.from('enrollments').insert([{
+      await supabaseAdmin.from('enrollments').insert([{
         student_id: data.student_id,
         course_id: data.course_id,
         status: 'active',

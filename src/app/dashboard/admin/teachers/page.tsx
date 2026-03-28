@@ -106,7 +106,7 @@ export default function TeachersManagementPage() {
 
   const itemsPerPage = 10;
 
-  // Fetch teachers from Supabase
+  // Fetch teachers from admin API
   useEffect(() => {
     fetchTeachers();
   }, []);
@@ -114,13 +114,31 @@ export default function TeachersManagementPage() {
   const fetchTeachers = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("teachers")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setTeachers(data || []);
+      const res = await fetch('/api/admin/teachers?page=1&limit=100', { credentials: 'include' });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error);
+      
+      // Transform API data to match Teacher interface
+      const transformedTeachers: Teacher[] = (data.teachers || []).map((t: any) => ({
+        id: t.id,
+        full_name: t.full_name,
+        email: t.email,
+        phone: t.phone || '',
+        specialization: Array.isArray(t.specialization) ? t.specialization : 
+          typeof t.specialization === 'string' && t.specialization.includes(',')
+            ? t.specialization.split(',').map((s: string) => s.trim()).filter(Boolean)
+            : t.specialization ? [t.specialization] : [],
+        qualification: t.qualification || t.qualifications || '',
+        status: t.status || 'active',
+        assigned_courses: t.assigned_courses || [],
+        students_count: t.students_count || 0,
+        created_at: t.created_at,
+        avatar_url: t.avatar_url,
+        bio: t.bio || ''
+      }));
+      
+      setTeachers(transformedTeachers);
     } catch (error) {
       console.error("Error fetching teachers:", error);
       setTeachers([]);
@@ -221,54 +239,27 @@ export default function TeachersManagementPage() {
     e.preventDefault();
     try {
       if (modalMode === "add") {
-        const { error } = await supabase.from("teachers").insert([formData]);
-        if (error) throw error;
+        const res = await fetch('/api/admin/teachers', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        if (!res.ok) throw new Error('Failed to add teacher');
       } else if (modalMode === "edit" && selectedTeacher) {
-        const { error } = await supabase
-          .from("teachers")
-          .update(formData)
-          .eq("id", selectedTeacher.id);
-        if (error) throw error;
+        const res = await fetch(`/api/admin/teachers/${selectedTeacher.id}`, {
+          method: 'PUT',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        if (!res.ok) throw new Error('Failed to update teacher');
       }
       await fetchTeachers();
       closeModal();
     } catch (error) {
       console.error("Error saving teacher:", error);
-      // Update local state for demo
-      if (modalMode === "add") {
-        const newTeacher: Teacher = {
-          id: Date.now().toString(),
-          full_name: formData.full_name,
-          email: formData.email,
-          phone: formData.phone,
-          specialization: formData.specialization,
-          qualification: formData.qualification,
-          status: formData.status,
-          assigned_courses: [],
-          students_count: 0,
-          created_at: new Date().toISOString().split("T")[0],
-          bio: formData.bio
-        };
-        setTeachers((prev) => [newTeacher, ...prev]);
-      } else if (modalMode === "edit" && selectedTeacher) {
-        setTeachers((prev) =>
-          prev.map((t) =>
-            t.id === selectedTeacher.id
-              ? {
-                  ...t,
-                  full_name: formData.full_name,
-                  email: formData.email,
-                  phone: formData.phone,
-                  specialization: formData.specialization,
-                  qualification: formData.qualification,
-                  status: formData.status,
-                  bio: formData.bio
-                }
-              : t
-          )
-        );
-      }
-      closeModal();
+      alert("Failed to save teacher. Please try again.");
     }
   };
 
@@ -276,12 +267,15 @@ export default function TeachersManagementPage() {
   const handleDelete = async () => {
     if (!teacherToDelete) return;
     try {
-      const { error } = await supabase.from("teachers").delete().eq("id", teacherToDelete);
-      if (error) throw error;
-      setTeachers((prev) => prev.filter((t) => t.id !== teacherToDelete));
+      const res = await fetch(`/api/admin/teachers/${teacherToDelete}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
+      if (!res.ok) throw new Error('Failed to delete teacher');
+      await fetchTeachers();
     } catch (error) {
       console.error("Error deleting teacher:", error);
-      setTeachers((prev) => prev.filter((t) => t.id !== teacherToDelete));
+      alert("Failed to delete teacher. Please try again.");
     } finally {
       setShowDeleteConfirm(false);
       setTeacherToDelete(null);
@@ -976,7 +970,7 @@ export default function TeachersManagementPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}

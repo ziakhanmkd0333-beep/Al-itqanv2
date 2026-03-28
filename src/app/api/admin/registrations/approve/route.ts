@@ -7,55 +7,57 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   try {
     const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    let adminUserId: string | null = null;
+    let adminRole: string | null = null;
+
+    // Try to get user from Authorization header first
+    if (authHeader?.startsWith('Bearer ')) {
+      const token = authHeader.split(' ')[1];
+      
+      try {
+        const userData = JSON.parse(token);
+        if (userData && userData.id && userData.role) {
+          adminUserId = userData.id;
+          adminRole = userData.role;
+        }
+      } catch {
+        // Not valid JSON, try as Supabase JWT
+        const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
+        if (!authError && user) {
+          adminUserId = user.id;
+          const { data: adminUser } = await supabaseAdmin
+            .from('users')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+          adminRole = adminUser?.role || '';
+        }
+      }
     }
 
-    const token = authHeader.split(' ')[1];
-    
-    // Try to parse as user object first (from localStorage)
-    let adminUserId: string;
-    let adminRole: string;
-    
-    try {
-      const userData = JSON.parse(token);
-      if (userData && userData.id && userData.role) {
-        adminUserId = userData.id;
-        adminRole = userData.role;
-      } else {
-        // Fallback: try as Supabase JWT
-        const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-        if (authError || !user) {
-          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // If no user from auth header, try cookie
+    if (!adminUserId || !adminRole) {
+      const cookieHeader = request.headers.get('cookie');
+      if (cookieHeader) {
+        const userCookie = cookieHeader.split(';').find(c => c.trim().startsWith('user='));
+        if (userCookie) {
+          try {
+            const cookieValue = decodeURIComponent(userCookie.split('=')[1]);
+            const cookieUser = JSON.parse(cookieValue);
+            if (cookieUser?.id && cookieUser?.role) {
+              adminUserId = cookieUser.id;
+              adminRole = cookieUser.role;
+            }
+          } catch {
+            // Invalid cookie
+          }
         }
-        adminUserId = user.id;
-        // Fetch role from database
-        const { data: adminUser } = await supabaseAdmin
-          .from('users')
-          .select('role')
-          .eq('id', user.id)
-          .single();
-        adminRole = adminUser?.role || '';
       }
-    } catch {
-      // Not valid JSON, try as Supabase JWT
-      const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(token);
-      if (authError || !user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      adminUserId = user.id;
-      // Fetch role from database
-      const { data: adminUser } = await supabaseAdmin
-        .from('users')
-        .select('role')
-        .eq('id', user.id)
-        .single();
-      adminRole = adminUser?.role || '';
     }
 
     // Verify user is admin
-    if (adminRole !== 'admin') {
-      return NextResponse.json({ error: 'Access denied - Admin only' }, { status: 403 });
+    if (!adminUserId || adminRole !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized - Admin access required' }, { status: 401 });
     }
 
     const body = await request.json();

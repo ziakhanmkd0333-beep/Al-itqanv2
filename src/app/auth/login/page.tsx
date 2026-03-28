@@ -101,6 +101,8 @@ function LoginForm() {
           src="/admission-hero.png"
           alt="Login"
           title="Welcome to Al-Itqan Institute for Islamic & Arabic Studies"
+          fill
+          sizes="100vw"
           className="object-cover"
           priority
         />

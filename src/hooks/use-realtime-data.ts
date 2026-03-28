@@ -90,18 +90,16 @@ export function useAdminDashboard() {
     try {
       setLoading(true);
       
-      // Use client-side service instead of API
-      const [stats, admissions, payments, sessions] = await Promise.allSettled([
-        adminDataService.getDashboardStats(),
-        adminDataService.getRecentAdmissions(5),
-        adminDataService.getRecentPayments(5),
-        adminDataService.getUpcomingSessions(5)
-      ]);
+      // Use admin dashboard API with credentials
+      const res = await fetch('/api/admin/dashboard', { credentials: 'include' });
+      const data = await res.json();
       
-      setStats(stats.status === 'fulfilled' ? stats.value : {});
-      setRecentAdmissions(admissions.status === 'fulfilled' ? admissions.value : []);
-      setRecentPayments(payments.status === 'fulfilled' ? payments.value : []);
-      setUpcomingSessions(sessions.status === 'fulfilled' ? sessions.value : []);
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch dashboard');
+      
+      setStats(data.stats || {});
+      setRecentAdmissions(data.recentAdmissions || []);
+      setRecentPayments(data.recentPayments || []);
+      setUpcomingSessions(data.upcomingSessions || []);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
@@ -159,7 +157,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
         ...(status && { status })
       });
       
-      const res = await fetch(`/api/admin/students?${params}`);
+      const res = await fetch(`/api/admin/students?${params}`, { credentials: 'include' });
       const data = await res.json();
       
       if (!res.ok) throw new Error(data.error);
@@ -192,6 +190,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
   const createStudent = async (studentData: any) => {
     const res = await fetch('/api/admin/students', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(studentData)
     });
@@ -204,6 +203,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
   const updateStudent = async (id: string, studentData: any) => {
     const res = await fetch(`/api/admin/students/${id}`, {
       method: 'PUT',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(studentData)
     });
@@ -214,7 +214,10 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
   };
 
   const deleteStudent = async (id: string) => {
-    const res = await fetch(`/api/admin/students/${id}`, { method: 'DELETE' });
+    const res = await fetch(`/api/admin/students/${id}`, { 
+      method: 'DELETE',
+      credentials: 'include'
+    });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
     fetchStudents();
@@ -250,25 +253,15 @@ export function useTeacherDashboard(teacherId: string | null) {
     
     setLoading(true);
     try {
-      // Use client-side service instead of API
-      const data = await teacherDataService.getDashboardData(teacherId);
+      // Use API with credentials for proper auth
+      const res = await fetch(`/api/teacher/dashboard?teacherId=${teacherId}`, { credentials: 'include' });
+      const data = await res.json();
       
-      setStats(data);
-      // Fetch today's schedule separately
-      const today = new Date().toISOString().split('T')[0];
-      const { data: sessions } = await supabaseBrowser
-        .from('sessions')
-        .select('*, courses(title), students(full_name)')
-        .eq('teacher_id', teacherId)
-        .eq('scheduled_date', today);
-      setTodaySchedule(sessions || []);
-      // Fetch students
-      const { data: enrollments } = await supabaseBrowser
-        .from('enrollments')
-        .select('*, students(*)')
-        .eq('teacher_id', teacherId)
-        .eq('status', 'active');
-      setStudents(enrollments?.map((e: any) => e.students) || []);
+      if (!res.ok) throw new Error(data.error || 'Failed to fetch dashboard');
+      
+      setStats(data.stats || {});
+      setTodaySchedule(data.todaySchedule || []);
+      setStudents(data.students || []);
     } catch (error) {
       console.error('Teacher dashboard error:', error);
     } finally {
@@ -327,7 +320,7 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
       const params = new URLSearchParams({ teacherId });
       if (courseId) params.append('courseId', courseId);
       
-      const res = await fetch(`/api/teacher/students?${params}`);
+      const res = await fetch(`/api/teacher/students?${params}`, { credentials: 'include' });
       const data = await res.json();
       
       if (!res.ok) throw new Error(data.error);
@@ -363,6 +356,7 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
   const markAttendance = async (attendanceData: any) => {
     const res = await fetch('/api/teacher/students', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(attendanceData)
     });
@@ -459,7 +453,7 @@ export function useStudentAttendance(studentId: string | null) {
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/student/attendance?studentId=${studentId}`);
+      const res = await fetch(`/api/student/attendance?studentId=${studentId}`, { credentials: 'include' });
       const data = await res.json();
       
       if (!res.ok) throw new Error(data.error);
@@ -506,7 +500,7 @@ export function useStudentCertificates(studentId: string | null) {
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/student/certificates?studentId=${studentId}`);
+      const res = await fetch(`/api/student/certificates?studentId=${studentId}`, { credentials: 'include' });
       const data = await res.json();
       
       if (!res.ok) throw new Error(data.error);
@@ -575,6 +569,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
       const user = storedUser ? JSON.parse(storedUser) : null;
 
       const res = await fetch(`/api/admin/registrations?${params}`, {
+        credentials: 'include',
         headers: {
           ...(user && { 'Authorization': `Bearer ${storedUser}` })
         }
@@ -616,6 +611,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     const user = storedUser ? JSON.parse(storedUser) : null;
     const res = await fetch('/api/admin/registrations', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...(user && { 'Authorization': `Bearer ${JSON.stringify(user)}` })
@@ -635,6 +631,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     const user = storedUser ? JSON.parse(storedUser) : null;
     const res = await fetch('/api/admin/registrations', {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...(user && { 'Authorization': `Bearer ${JSON.stringify(user)}` })
@@ -654,6 +651,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     const user = storedUser ? JSON.parse(storedUser) : null;
     const res = await fetch(`/api/admin/registrations?id=${id}`, {
       method: 'DELETE',
+      credentials: 'include',
       headers: {
         ...(user && { 'Authorization': `Bearer ${JSON.stringify(user)}` })
       }
@@ -671,6 +669,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     const user = storedUser ? JSON.parse(storedUser) : null;
     const res = await fetch('/api/admin/registrations/approve', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...(user && { 'Authorization': `Bearer ${JSON.stringify(user)}` })
@@ -690,6 +689,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     const user = storedUser ? JSON.parse(storedUser) : null;
     const res = await fetch('/api/admin/registrations/approve', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
         ...(user && { 'Authorization': `Bearer ${JSON.stringify(user)}` })

@@ -58,7 +58,7 @@ function ApprovalsContent() {
     setLoading(true);
     setError("");
     try {
-      const response = await fetch('/api/admin/approve');
+      const response = await fetch('/api/admin/approve', { credentials: 'include' });
       const data = await response.json();
 
       if (!response.ok) {
@@ -94,6 +94,7 @@ function ApprovalsContent() {
     try {
       const response = await fetch('/api/admin/approve', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,

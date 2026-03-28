@@ -11,30 +11,45 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status') || '';
 
+    // Build base query
     let query = supabaseAdmin
       .from('students')
-      .select('*, enrollments(course_id, courses(title))', { count: 'exact' })
+      .select('*')
       .order('created_at', { ascending: false })
       .range((page - 1) * limit, page * limit - 1);
 
-    if (status) query = query.eq('status', status);
+    if (status) {
+      query = query.eq('status', status);
+    }
 
-    const { data, error, count } = await query;
+    const { data, error } = await query;
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase query error:', error);
+      throw error;
+    }
+
+    // Get total count separately
+    const { count, error: countError } = await supabaseAdmin
+      .from('students')
+      .select('*', { count: 'exact', head: true });
+
+    if (countError) {
+      console.error('Count error:', countError);
+    }
 
     return NextResponse.json({
       students: data || [],
-      total: count || 0,
+      total: count || data?.length || 0,
       page,
       limit,
-      totalPages: Math.ceil((count || 0) / limit)
+      totalPages: Math.ceil((count || data?.length || 0) / limit)
     });
 
   } catch (error: any) {
     console.error('Admin students fetch error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch students' },
+      { error: error.message || 'Failed to fetch students', details: error },
       { status: 500 }
     );
   }

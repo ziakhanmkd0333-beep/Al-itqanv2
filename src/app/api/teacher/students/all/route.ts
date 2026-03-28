@@ -3,7 +3,7 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
 
-// GET /api/teacher/courses - Get courses assigned to the teacher
+// GET /api/teacher/students/all - Get all students for a teacher
 export async function GET(request: Request) {
   try {
     // Get auth from cookie or header
@@ -49,22 +49,32 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: 'Teacher not found' }, { status: 404 });
     }
 
-    const { data: courses, error } = await supabaseAdmin
-      .from('courses')
-      .select('*')
-      .eq('teacher_id', teacher.id);
+    // Get enrollments for this teacher with student details
+    const { data: enrollments, error } = await supabaseAdmin
+      .from('enrollments')
+      .select('*, students(*), courses(title)')
+      .eq('teacher_id', teacher.id)
+      .eq('status', 'active');
 
     if (error) throw error;
 
+    // Extract unique students
+    const students = enrollments?.map((e: any) => ({
+      ...e.students,
+      course_id: e.course_id,
+      course_title: e.courses?.title,
+      enrollment_id: e.id
+    })) || [];
+
     return NextResponse.json({ 
-      courses: courses || [],
-      count: courses?.length || 0
+      students,
+      count: students.length
     });
 
   } catch (error: any) {
-    console.error('Teacher courses fetch error:', error);
+    console.error('Teacher students fetch error:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch courses' },
+      { error: error.message || 'Failed to fetch students' },
       { status: 500 }
     );
   }

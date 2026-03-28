@@ -129,6 +129,7 @@ function AdminDashboardContent() {
       setStats(prev => ({
         ...prev,
         totalStudents: realtimeStats.totalStudents || 0,
+        activeStudents: realtimeStats.activeStudents || 0,
         totalTeachers: realtimeStats.totalTeachers || 0,
         activeCourses: realtimeStats.activeCourses || 0,
         pendingAdmissions: realtimeStats.pendingAdmissions || 0,

@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
     let query = supabaseAdmin
       .from('payments')
-      .select('*, courses(title)', { count: 'exact' })
+      .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
       .range((page - 1) * limit, page * limit - 1);
 
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
         transaction_id,
         paid_at: status === 'paid' ? new Date().toISOString() : null
       }])
-      .select('*, courses(title)')
+      .select()
       .single();
 
     if (error) throw error;

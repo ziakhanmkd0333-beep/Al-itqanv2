@@ -95,7 +95,7 @@ export default function AdmissionsManagementPage() {
 
   const itemsPerPage = 10;
 
-  // Fetch admissions from backend
+  // Fetch admissions from admin API
   useEffect(() => {
     fetchAdmissions();
   }, []);
@@ -103,17 +103,35 @@ export default function AdmissionsManagementPage() {
   const fetchAdmissions = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("admissions")
-        .select("*")
-        .order("applied_at", { ascending: false });
-
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
-      }
-      console.log("Fetched admissions:", data?.length || 0, "records");
-      setAdmissions(data || []);
+      const res = await fetch('/api/admin/admissions?page=1&limit=100', { credentials: 'include' });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error);
+      
+      // Transform API data to match Admission interface
+      const transformedAdmissions: Admission[] = (data.admissions || []).map((a: any) => ({
+        id: a.id,
+        full_name: a.full_name,
+        email: a.email,
+        phone: a.phone || '',
+        country: a.country || '',
+        age: a.age || 0,
+        language: a.language || 'en',
+        course_id: a.course_id || '',
+        course_name: a.courses?.title || 'Unknown Course',
+        preferred_timing: a.preferred_timing || '',
+        guardian_name: a.guardian_name,
+        guardian_phone: a.guardian_phone,
+        status: a.status || 'pending',
+        applied_at: a.applied_at || a.created_at,
+        reviewed_by: a.reviewed_by,
+        reviewed_at: a.reviewed_at,
+        notes: a.notes,
+        admin_notes: a.admin_notes
+      }));
+      
+      console.log("Fetched admissions:", transformedAdmissions.length, "records");
+      setAdmissions(transformedAdmissions);
     } catch (error) {
       console.error("Error fetching admissions:", error);
       setAdmissions([]);
@@ -174,8 +192,6 @@ export default function AdmissionsManagementPage() {
   const handleAction = async () => {
     if (!selectedAdmission || !actionType) return;
 
-    const now = new Date().toISOString();
-
     // Map action type to database status value
     const statusMap: Record<string, string> = {
       approve: 'approved',
@@ -185,18 +201,19 @@ export default function AdmissionsManagementPage() {
     const newStatus = statusMap[actionType];
 
     try {
-      // Update in database
-      const { error } = await supabase
-        .from("admissions")
-        .update({
+      // Update via API
+      const res = await fetch('/api/admin/admissions', {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: selectedAdmission.id,
           status: newStatus,
-          reviewed_by: user?.id || null,
-          reviewed_at: now,
           notes: adminNotes
         })
-        .eq("id", selectedAdmission.id);
+      });
 
-      if (error) throw error;
+      if (!res.ok) throw new Error('Failed to update admission');
 
       // Update local state
       setAdmissions((prev) =>
@@ -204,9 +221,9 @@ export default function AdmissionsManagementPage() {
           a.id === selectedAdmission.id
             ? {
                 ...a,
-                status: actionType as Admission["status"],
-                reviewed_by: "Admin",
-                reviewed_at: now,
+                status: newStatus as Admission["status"],
+                reviewed_by: user?.id,
+                reviewed_at: new Date().toISOString(),
                 admin_notes: adminNotes
               }
             : a
@@ -727,7 +744,7 @@ export default function AdmissionsManagementPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 bg-black/50 z-[110] flex items-center justify-center p-4"
             onClick={closeModals}
           >
             <motion.div

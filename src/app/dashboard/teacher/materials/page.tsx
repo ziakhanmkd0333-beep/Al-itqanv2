@@ -68,6 +68,7 @@ function TeacherMaterialsContent() {
       const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       const response = await fetch(url, {
+        credentials: 'include',
         headers: { 'Authorization': `Bearer ${session.access_token}` },
         signal: controller.signal
       });
@@ -93,6 +94,7 @@ function TeacherMaterialsContent() {
       if (!session) return;
 
       const response = await fetch('/api/teacher/courses', {
+        credentials: 'include',
         headers: { 'Authorization': `Bearer ${session.access_token}` }
       });
 
