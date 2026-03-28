@@ -59,8 +59,8 @@ export const metadata: Metadata = {
     title: "Al-Itqan Institute",
     description: "Al-Itqan Institute for Islamic & Arabic Studies. is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization. The academy offers an authentic and continuous learning journey starting from Noorani Qaida, progressing through Qur'an Nazra, Tajweed, Hifz-ul-Qur'an, Tarjuma & Tafseer, Balaghat, Ilm-us-Sarf, Ilm-un-Nahw, Spoken & Advanced Arabic, and advancing into Fiqh, Usool-ul-Fiqh, Hadith sciences, culminating in Takhassus fil Hadees.",
     images: ["https://i.ibb.co/V0pRN6XT/logo.png"],
-    creator: "@alnooracademy",
-    site: "@alnooracademy"
+    creator: "@itqaninstitute",
+    site: "@itqaninstitute"
   },
   alternates: {
     canonical: "https://itqaninstitute.com",
@@ -111,49 +111,49 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "@id": "https://alnooronlineacademy.com/#organization",
+                  "@id": "https://itqaninstitute.com/#organization",
                   "name": "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies",
-                  "url": "https://alnooronlineacademy.com",
+                  "url": "https://itqaninstitute.com",
                   "logo": {
                     "@type": "ImageObject",
-                    "url": "https://alnooronlineacademy.com/logo.png",
+                    "url": "https://itqaninstitute.com/logo.png",
                     "width": 1200,
                     "height": 630
                   },
                   "description": "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies is a world-class Islamic education web app providing complete and structured Islamic knowledge from the foundational level to advanced scholarly specialization.",
                   "sameAs": [
-                    "https://www.facebook.com/alnooracademy",
-                    "https://www.youtube.com/alnooracademy",
+                    "https://www.facebook.com/itqaninstitute",
+                    "https://www.youtube.com/itqaninstitute",
                     "https://wa.me/923434487450"
                   ],
                   "contactPoint": {
                     "@type": "ContactPoint",
                     "telephone": "+923434487450",
                     "contactType": "customer service",
-                    "email": "waqas@alnooronlineacademy.com",
+                    "email": "info@itqaninstitute.com",
                     "availableLanguage": ["English", "Arabic", "Urdu"]
                   }
                 },
                 {
                   "@type": "WebSite",
-                  "@id": "https://alnooronlineacademy.com/#website",
-                  "url": "https://alnooronlineacademy.com",
+                  "@id": "https://itqaninstitute.com/#website",
+                  "url": "https://itqaninstitute.com",
                   "name": "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies",
                   "publisher": {
-                    "@id": "https://alnooronlineacademy.com/#organization"
+                    "@id": "https://itqaninstitute.com/#organization"
                   },
                   "inLanguage": ["en", "ar", "ur"]
                 },
                 {
                   "@type": "WebPage",
-                  "@id": "https://alnooronlineacademy.com/#webpage",
-                  "url": "https://alnooronlineacademy.com",
+                  "@id": "https://itqaninstitute.com/#webpage",
+                  "url": "https://itqaninstitute.com",
                   "name": "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies | Complete Islamic Knowledge Web App",
                   "isPartOf": {
-                    "@id": "https://alnooronlineacademy.com/#website"
+                    "@id": "https://itqaninstitute.com/#website"
                   },
                   "about": {
-                    "@id": "https://alnooronlineacademy.com/#organization"
+                    "@id": "https://itqaninstitute.com/#organization"
                   },
                   "description": "Learn complete Islamic knowledge online with *الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies—from Noorani Qaida, Hifz-ul-Qur'an, Tafseer, Arabic language, Fiqh, Hadith, to Takhassus fil Hadees under qualified scholars.",
                   "inLanguage": "en-US"
@@ -162,7 +162,7 @@ export default function RootLayout({
                   "@type": "EducationalOrganization",
                   "name": "*الإتقان للدراسات الإسلامية والعربية* Al-Itqan Institute for Islamic & Arabic Studies",
                   "description": "Complete Islamic education from Noorani Qaida to Takhassus fil Hadees",
-                  "url": "https://alnooronlineacademy.com/courses",
+                  "url": "https://itqaninstitute.com/courses",
                   "teaches": [
                     "Noorani Qaida",
                     "Quran Nazra",
@@ -212,7 +212,7 @@ export default function RootLayout({
                   "name": "Dr. Noor Ur Rahman Hazarvi",
                   "jobTitle": "Scholar in Charge",
                   "worksFor": {
-                    "@id": "https://alnooronlineacademy.com/#organization"
+                    "@id": "https://itqaninstitute.com/#organization"
                   },
                   "alumniOf": {
                     "@type": "EducationalOrganization",
