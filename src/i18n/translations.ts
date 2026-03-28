@@ -395,7 +395,7 @@ export const translations = {
     about: {
       title: "The World's First Web Application for Complete Islamic Education",
       subtitle: "About Us",
-      description: "Complete Islamic Knowledge Web App — bringing authentic Islamic education from traditional scholars to students globally",
+      description: "The World's First Web Application for Complete Islamic Education — bringing authentic Islamic education from traditional scholars to students globally",
       heroAlt: "About Us",
       logoAlt: "Al-Itqan Institute Logo",
       missionVision: {
