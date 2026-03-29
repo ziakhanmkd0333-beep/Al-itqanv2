@@ -3,16 +3,20 @@
 
 # Enable rewrite engine
 RewriteEngine On
+RewriteBase /
 
-# Serve Next.js static files from .next/static folder
-RewriteRule ^_next/static/(.*)$ .next/static/$1 [L]
+# Serve Next.js static files from .next/static folder (must be BEFORE other rules)
+RewriteRule ^_next/static/(.*)$ .next/static/$1 [NC,L]
+
+# Serve other _next files (webpack runtime, etc)
+RewriteRule ^_next/(.*)$ .next/$1 [NC,L]
 
 # Don't rewrite actual files or directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Proxy all other requests to Node.js server (port from environment)
+# Proxy all other requests to Node.js server
 RewriteRule ^(.*)$ http://localhost:%{ENV:PORT}/$1 [P,L]
 
 # Enable compression
