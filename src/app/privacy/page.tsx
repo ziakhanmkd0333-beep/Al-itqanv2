@@ -73,8 +73,8 @@ export default function PrivacyPage() {
               <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-4">Contact Us</h2>
               <p className="text-[var(--text-muted)] leading-relaxed">
                 If you have any questions about this Privacy Policy, please contact us at:{" "}
-                <a href="mailto:waqas@alnooronlineacademy.com" className="text-[var(--primary)] hover:underline">
-                  waqas@alnooronlineacademy.com
+                <a href="mailto:info@itqaninstitute.com" className="text-[var(--primary)] hover:underline">
+                  info@itqaninstitute.com
                 </a>
               </p>
             </section>

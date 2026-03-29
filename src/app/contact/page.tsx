@@ -48,7 +48,7 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: t("contact.emailUs"),
-      details: ["waqas@alnooronlineacademy.com"],
+      details: ["info@itqaninstitute.com"],
       color: "#1A7A4A"
     },
     {

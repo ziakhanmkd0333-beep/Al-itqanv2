@@ -192,8 +192,8 @@ export function Footer() {
                     </div>
                     <div>
                       <p className="text-white/40 text-xs mb-0.5">{t("footer.contactLabels.email")}</p>
-                      <a href="mailto:waqas@alnooronlineacademy.com" className="text-white/80 hover:text-[var(--gold)] transition-colors text-sm">
-                        waqas@alnooronlineacademy.com
+                      <a href="mailto:info@itqaninstitute.com" className="text-white/80 hover:text-[var(--gold)] transition-colors text-sm">
+                        info@itqaninstitute.com
                       </a>
                     </div>
                   </li>
