@@ -1,26 +1,19 @@
 # Hostinger Node.js Deployment Configuration
-# For Next.js standalone output
+# For Next.js with server-side rendering
 
+# Enable rewrite engine
 RewriteEngine On
-RewriteBase /
 
-# Serve static files from .next/static/ first
-RewriteCond %{REQUEST_URI} ^/_next/static/(.*)$
-RewriteCond %{DOCUMENT_ROOT}/.next/static/$1 -f
-RewriteRule ^_next/static/(.*)$ .next/static/$1 [L]
-
-# Fallback: serve from standalone folder
-RewriteCond %{REQUEST_URI} ^/_next/(.*)$
-RewriteCond %{DOCUMENT_ROOT}/.next/standalone/.next/$1 -f
-RewriteRule ^_next/(.*)$ .next/standalone/.next/$1 [L]
+# Don't rewrite static assets in _next directory
+RewriteRule ^_next/(.*)$ - [L]
 
 # Don't rewrite actual files or directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Proxy all requests to Node.js server on port 3000
-RewriteRule ^(.*)$ http://localhost:3000/$1 [P,L]
+# Proxy all other requests to Node.js server (port from environment)
+RewriteRule ^(.*)$ http://localhost:%{ENV:PORT}/$1 [P,L]
 
 # Enable compression
 <IfModule mod_deflate.c>
