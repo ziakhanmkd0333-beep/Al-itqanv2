@@ -4,15 +4,17 @@
 # Enable rewrite engine
 RewriteEngine On
 
-# Don't rewrite static assets in _next directory
-RewriteRule ^_next/(.*)$ - [L]
+# Serve static files directly from dist/static if they exist
+RewriteCond %{REQUEST_URI} ^/_next/static/(.*)$
+RewriteCond %{DOCUMENT_ROOT}/dist/static/$1 -f
+RewriteRule ^_next/static/(.*)$ /dist/static/$1 [L]
 
-# Don't rewrite actual files or directories
+# Don't rewrite static assets if they exist
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Proxy all other requests to Node.js server (port from environment)
+# Proxy all other requests to Node.js server
 RewriteRule ^(.*)$ http://localhost:%{ENV:PORT}/$1 [P,L]
 
 # Enable compression

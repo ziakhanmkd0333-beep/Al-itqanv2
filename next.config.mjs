@@ -4,10 +4,11 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  output: 'export',
+  output: 'standalone',
   distDir: 'dist',
-  assetPrefix: '.',
-  generateBuildId: () => 'build'
+  experimental: {
+    webpackBuildWorker: true
+  }
 };
 
 export default nextConfig;
