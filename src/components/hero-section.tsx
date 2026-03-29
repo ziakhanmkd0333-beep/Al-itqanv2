@@ -10,12 +10,18 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[40vh] md:min-h-[45vh] flex items-center justify-center overflow-hidden py-6 md:py-8">
-      {/* Static Background Image - No Video */}
+      {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/about-hero.png')" }}
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster="/about-hero.png"
+        >
+          <source src="/hero-bg.mp4" type="video/mp4" />
+        </video>
         <div 
           className="absolute inset-0"
           style={{
