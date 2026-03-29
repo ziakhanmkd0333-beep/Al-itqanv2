@@ -4,8 +4,9 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  output: 'standalone',
-  distDir: '.next'
+  output: 'export',
+  distDir: 'dist',
+  assetPrefix: '.'
 };
 
 export default nextConfig;
