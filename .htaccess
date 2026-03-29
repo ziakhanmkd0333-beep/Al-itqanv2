@@ -4,8 +4,8 @@
 # Enable rewrite engine
 RewriteEngine On
 
-# Don't rewrite static assets in _next directory
-RewriteRule ^_next/(.*)$ - [L]
+# Serve Next.js static files from .next/static folder
+RewriteRule ^_next/static/(.*)$ .next/static/$1 [L]
 
 # Don't rewrite actual files or directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
