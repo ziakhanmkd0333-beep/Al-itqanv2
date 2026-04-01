@@ -73,7 +73,7 @@ export function useRealtimeData<T>(
 
 // Admin Dashboard Hook with deferred real-time connection
 export function useAdminDashboard() {
-  const [stats, setStats] = useState<any>({
+  const [stats, setStats] = useState<Record<string, number>>({
     totalStudents: 0,
     totalTeachers: 0,
     activeCourses: 0,
@@ -81,9 +81,9 @@ export function useAdminDashboard() {
     totalEnrollments: 0,
     totalRevenue: 0
   });
-  const [recentAdmissions, setRecentAdmissions] = useState<any[]>([]);
-  const [recentPayments, setRecentPayments] = useState<any[]>([]);
-  const [upcomingSessions, setUpcomingSessions] = useState<any[]>([]);
+  const [recentAdmissions, setRecentAdmissions] = useState<Record<string, unknown>[]>([]);
+  const [recentPayments, setRecentPayments] = useState<Record<string, unknown>[]>([]);
+  const [upcomingSessions, setUpcomingSessions] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchDashboardData = useCallback(async () => {
@@ -142,7 +142,7 @@ export function useAdminDashboard() {
 
 // Admin Students Hook
 export function useAdminStudents(page = 1, limit = 10, search = '', status = '') {
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -187,7 +187,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
     };
   }, [fetchStudents]);
 
-  const createStudent = async (studentData: any) => {
+  const createStudent = async (studentData: Record<string, unknown>) => {
     const res = await fetch('/api/admin/students', {
       method: 'POST',
       credentials: 'include',
@@ -200,7 +200,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
     return data;
   };
 
-  const updateStudent = async (id: string, studentData: any) => {
+  const updateStudent = async (id: string, studentData: Record<string, unknown>) => {
     const res = await fetch(`/api/admin/students/${id}`, {
       method: 'PUT',
       credentials: 'include',
@@ -244,8 +244,8 @@ export function useTeacherDashboard(teacherId: string | null) {
     totalCourses: 0,
     hoursThisWeek: 0
   });
-  const [todaySchedule, setTodaySchedule] = useState<any[]>([]);
-  const [students, setStudents] = useState<any[]>([]);
+  const [todaySchedule, setTodaySchedule] = useState<Record<string, unknown>[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
@@ -308,7 +308,7 @@ export function useTeacherDashboard(teacherId: string | null) {
 
 // Teacher Students Hook
 export function useTeacherStudents(teacherId: string | null, courseId?: string) {
-  const [students, setStudents] = useState<any[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -353,7 +353,7 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
     };
   }, [teacherId, fetchStudents]);
 
-  const markAttendance = async (attendanceData: any) => {
+  const markAttendance = async (attendanceData: Record<string, unknown>) => {
     const res = await fetch('/api/teacher/students', {
       method: 'POST',
       credentials: 'include',
@@ -370,9 +370,9 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
 
 // Student Dashboard Hook with deferred real-time
 export function useStudentDashboard(studentId: string | null) {
-  const [enrollments, setEnrollments] = useState<any[]>([]);
-  const [upcomingSessions, setUpcomingSessions] = useState<any[]>([]);
-  const [certificates, setCertificates] = useState<any[]>([]);
+  const [enrollments, setEnrollments] = useState<Record<string, unknown>[]>([]);
+  const [upcomingSessions, setUpcomingSessions] = useState<Record<string, unknown>[]>([]);
+  const [certificates, setCertificates] = useState<Record<string, unknown>[]>([]);
   const [attendanceRate, setAttendanceRate] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -444,7 +444,7 @@ export function useStudentDashboard(studentId: string | null) {
 
 // Student Attendance Hook
 export function useStudentAttendance(studentId: string | null) {
-  const [records, setRecords] = useState<any[]>([]);
+  const [records, setRecords] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -544,7 +544,7 @@ interface RegistrationFilters {
 }
 
 export function useAdminRegistrations(page = 1, limit = 20, filters: RegistrationFilters = {}) {
-  const [registrations, setRegistrations] = useState<any[]>([]);
+  const [registrations, setRegistrations] = useState<Record<string, unknown>[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -604,7 +604,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     };
   }, [fetchRegistrations]);
 
-  const createRegistration = async (registrationData: any) => {
+  const createRegistration = async (registrationData: Record<string, unknown>) => {
     const storedUser = typeof window !== 'undefined' 
       ? localStorage.getItem('user') || sessionStorage.getItem('user') 
       : null;
@@ -624,7 +624,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     return data;
   };
 
-  const updateRegistration = async (id: string, registrationData: any) => {
+  const updateRegistration = async (id: string, registrationData: Record<string, unknown>) => {
     const storedUser = typeof window !== 'undefined' 
       ? localStorage.getItem('user') || sessionStorage.getItem('user') 
       : null;
