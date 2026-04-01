@@ -48,9 +48,10 @@ export default function TeacherDashboard() {
 function TeacherDashboardContent() {
   const { t, isRTL } = useTranslation();
   const [teacherId, setTeacherId] = useState<string | null>(null);
+  const [teacherName, setTeacherName] = useState<string>("");
   const [isConnected, setIsConnected] = useState(true);
   
-  // Get teacher ID from profile on mount
+  // Get teacher ID and name from profile on mount
   useEffect(() => {
     async function loadProfile() {
       const user = getCurrentUser();
@@ -60,10 +61,9 @@ function TeacherDashboardContent() {
           const profile = await getTeacherProfile(user.id);
           if (profile?.id) {
             setTeacherId(profile.id);
+            setTeacherName(profile.full_name || profile.name || "");
           }
         } else {
-          // If admin, maybe allow them to see a default teacher? 
-          // For now, just set as user.id if it's admin (they might be testing)
           setTeacherId(user.id);
         }
       }
@@ -102,7 +102,7 @@ function TeacherDashboardContent() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className={`text-[var(--text-primary)] text-3xl font-bold mb-2 ${isRTL ? "arabic-text" : ""}`}>
-                {t("dashboard.welcomeTeacher") || "Teacher Dashboard"}
+                {teacherName ? `${t("dashboard.welcome") || "Welcome"}, ${teacherName}!` : (t("dashboard.welcomeTeacher") || "Teacher Dashboard")}
               </h1>
               <p className={`text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>
                 {stats.todaysClasses > 0 
