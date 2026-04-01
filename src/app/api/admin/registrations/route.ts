@@ -31,10 +31,11 @@ export async function GET(request: Request) {
       totalPages: Math.ceil((count || 0) / limit)
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Admin registrations fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch registrations';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch registrations' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -53,10 +54,11 @@ export async function POST(request: Request) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, registration: data });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration creation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create registration';
     return NextResponse.json(
-      { error: error.message || 'Failed to create registration' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -85,10 +87,11 @@ export async function PUT(request: Request) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, registration: data });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration update error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update registration';
     return NextResponse.json(
-      { error: error.message || 'Failed to update registration' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -115,10 +118,11 @@ export async function DELETE(request: Request) {
     if (error) throw error;
 
     return NextResponse.json({ success: true, message: 'Registration deleted' });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration deletion error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to delete registration';
     return NextResponse.json(
-      { error: error.message || 'Failed to delete registration' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
