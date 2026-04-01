@@ -46,10 +46,11 @@ export async function GET(request: Request) {
       totalPages: Math.ceil((count || data?.length || 0) / limit)
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Admin students fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch students';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch students', details: error },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -79,10 +80,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, student });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Student creation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create student';
     return NextResponse.json(
-      { error: error.message || 'Failed to create student' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
