@@ -72,13 +72,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico', sizes: 'any' },
-      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: 'any' },
+      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: '32x32', type: 'image/jpeg' },
     ],
     apple: [
-      { url: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: '180x180', type: 'image/jpeg' },
     ],
-    shortcut: 'https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico',
+    shortcut: 'https://i.ibb.co/cc5SMSSs/favicon.jpg',
   },
   manifest: '/manifest.json',
   verification: {
