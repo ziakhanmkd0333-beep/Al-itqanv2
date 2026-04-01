@@ -46,6 +46,7 @@ interface Student {
   status: "active" | "inactive" | "suspended";
   enrolled_courses: string[];
   created_at: string;
+  updated_at?: string;
   avatar_url?: string;
 }
 
