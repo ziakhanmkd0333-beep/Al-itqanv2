@@ -90,7 +90,7 @@ export const subscribeToTable = (
 export const subscribeToUserData = (
   table: string,
   userId: string,
-  callback: (payload: any) => void
+  callback: (payload: Record<string, unknown>) => void
 ) => {
   return subscribeToTable(table, callback, `user_id=eq.${userId}`);
 };
@@ -98,7 +98,7 @@ export const subscribeToUserData = (
 // Subscribe to teacher's students
 export const subscribeToTeacherStudents = (
   teacherId: string,
-  callback: (payload: any) => void
+  callback: (payload: Record<string, unknown>) => void
 ) => {
   return subscribeToTable('enrollments', callback, `teacher_id=eq.${teacherId}`);
 };
@@ -106,7 +106,7 @@ export const subscribeToTeacherStudents = (
 // Subscribe to student's enrollments
 export const subscribeToStudentEnrollments = (
   studentId: string,
-  callback: (payload: any) => void
+  callback: (payload: Record<string, unknown>) => void
 ) => {
   return subscribeToTable('enrollments', callback, `student_id=eq.${studentId}`);
 };
