@@ -41,10 +41,11 @@ export async function POST(request: Request) {
       data 
     });
 
-  } catch (error: any) {
-    console.error('API Error:', error);
+  } catch (error: unknown) {
+    console.error('Contact submission error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
     return NextResponse.json(
-      { error: error.message || 'Failed to send message' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

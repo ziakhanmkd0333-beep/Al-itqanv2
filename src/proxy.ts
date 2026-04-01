@@ -42,7 +42,7 @@ export function proxy(request: NextRequest) {
     if (userCookie) {
       try {
         user = JSON.parse(decodeURIComponent(userCookie));
-      } catch (e) {
+      } catch (_e) {
         // Invalid cookie
       }
     }
@@ -98,6 +98,17 @@ export function proxy(request: NextRequest) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    try {
+      // API logic here
+    } catch (error: unknown) {
+      console.error('API Error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
+      return NextResponse.json(
+        { error: errorMessage },
+        { status: 500 }
       );
     }
 
