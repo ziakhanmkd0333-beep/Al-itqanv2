@@ -61,10 +61,11 @@ export async function GET(request: Request) {
       count: courses?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Teacher courses fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch courses';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch courses' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

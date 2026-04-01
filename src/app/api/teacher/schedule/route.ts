@@ -81,10 +81,11 @@ export async function GET(request: Request) {
       count: sessionsWithDetails?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Teacher schedule fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch schedule';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch schedule' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
