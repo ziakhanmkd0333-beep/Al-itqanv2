@@ -94,11 +94,9 @@ export async function GET(
       count: studentsWithStats.length 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Course students fetch error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to fetch students' },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

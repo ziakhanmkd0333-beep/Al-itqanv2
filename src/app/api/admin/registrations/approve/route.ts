@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     if (action === 'approve') {
       if (registration.user_type === 'student') {
         // Check if student record already exists
-        const { data: existingStudent } = await supabaseAdmin
+        const { data: existingStudent, error: existingStudentError } = await supabaseAdmin
           .from('students')
           .select('id')
           .eq('email', registration.email)
@@ -181,10 +181,11 @@ export async function POST(request: Request) {
       registration: updatedRegistration
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration approval error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

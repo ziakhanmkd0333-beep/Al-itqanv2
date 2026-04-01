@@ -86,7 +86,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Student registered successfully', student: { id: student.id, fullName: student.full_name, email: student.email } });
 
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message || 'An unexpected error occurred' }, { status: 500 });
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
