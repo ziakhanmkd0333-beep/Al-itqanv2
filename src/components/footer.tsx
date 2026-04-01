@@ -33,7 +33,7 @@ export function Footer() {
 
   const socialLinks = [
     { icon: Facebook, href: "#", label: "Facebook", color: "hover:bg-blue-600" },
-    { icon: Youtube, href: "#", label: "YouTube", color: "hover:bg-red-600" },
+    { icon: Youtube, href: "https://youtube.com/@al-itqaninstitute?si=yaSE2aOnS0KA0pHc", label: "YouTube", color: "hover:bg-red-600" },
     { icon: Instagram, href: "#", label: "Instagram", color: "hover:bg-pink-600" },
     { icon: MessageCircle, href: "#", label: "WhatsApp", color: "hover:bg-green-600" }
   ];
