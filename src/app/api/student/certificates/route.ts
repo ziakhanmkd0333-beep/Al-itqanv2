@@ -31,10 +31,11 @@ export async function GET(request: Request) {
       count: certificates?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Certificates fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch certificates';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch certificates' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

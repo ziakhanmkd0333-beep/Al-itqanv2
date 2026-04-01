@@ -40,10 +40,11 @@ export async function GET(request: Request) {
       count: attendance?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Attendance fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch attendance';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch attendance' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

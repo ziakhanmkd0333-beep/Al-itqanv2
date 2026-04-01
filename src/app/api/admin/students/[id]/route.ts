@@ -68,10 +68,11 @@ export async function DELETE(request: Request) {
       message: 'Student deleted successfully'
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Delete student error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -95,7 +96,7 @@ export async function PUT(request: Request) {
       );
     }
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     if (body.full_name !== undefined) updates.full_name = body.full_name;
     if (body.email !== undefined) updates.email = body.email;
     if (body.phone !== undefined) updates.phone = body.phone;
@@ -128,10 +129,11 @@ export async function PUT(request: Request) {
       message: 'Student updated successfully'
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Update student error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json(
-      { error: error.message || 'Internal server error' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

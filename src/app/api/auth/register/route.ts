@@ -88,10 +88,11 @@ export async function POST(request: Request) {
       message: 'Registration successful'
     });
 
-  } catch (error: any) {
+  } catch (error) {
     console.error('Registration error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An error occurred during registration';
     return NextResponse.json(
-      { error: error.message || 'An error occurred during registration' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

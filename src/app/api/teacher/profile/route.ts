@@ -30,10 +30,11 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ profile: teacher });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Profile fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch profile';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch profile' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -89,10 +90,11 @@ export async function PUT(request: Request) {
       message: 'Profile updated successfully'
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Profile update error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update profile';
     return NextResponse.json(
-      { error: error.message || 'Failed to update profile' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

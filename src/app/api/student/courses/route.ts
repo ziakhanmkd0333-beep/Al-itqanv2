@@ -41,10 +41,11 @@ export async function GET(request: Request) {
       count: enrollments?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Enrolled courses fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch enrolled courses';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch enrolled courses' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

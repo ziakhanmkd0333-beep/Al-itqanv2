@@ -77,10 +77,11 @@ export async function GET(request: Request) {
       attendanceRate: attendanceRate
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Student dashboard error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch dashboard data';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch dashboard data' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
