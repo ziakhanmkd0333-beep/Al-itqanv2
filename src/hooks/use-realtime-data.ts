@@ -7,7 +7,7 @@ import { adminDataService, studentDataService, teacherDataService } from '@/lib/
 // Generic hook for fetching and subscribing to data
 export function useRealtimeData<T>(
   tableName: string,
-  queryFn: () => Promise<{ data: T[] | null; error: any }>,
+  queryFn: () => Promise<{ data: T[] | null; error: Error | null }>,
   filter?: string
 ) {
   const [data, setData] = useState<T[]>([]);
@@ -24,8 +24,8 @@ export function useRealtimeData<T>(
         setData(result || []);
         setError(null);
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -50,13 +50,13 @@ export function useRealtimeData<T>(
             setData((prev) => [...prev, payload.new as T]);
           } else if (payload.eventType === 'UPDATE') {
             setData((prev) =>
-              prev.map((item: any) =>
-                item.id === payload.new.id ? (payload.new as T) : item
+              prev.map((item) =>
+                (item as T & { id: string }).id === payload.new.id ? (payload.new as T) : item
               )
             );
           } else if (payload.eventType === 'DELETE') {
             setData((prev) =>
-              prev.filter((item: any) => item.id !== payload.old.id)
+              prev.filter((item) => (item as T & { id: string }).id !== payload.old.id)
             );
           }
         }
@@ -165,8 +165,8 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
       setStudents(data.students || []);
       setTotal(data.total || 0);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -327,8 +327,8 @@ export function useTeacherStudents(teacherId: string | null, courseId?: string) 
       
       setStudents(data.students || []);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -460,8 +460,8 @@ export function useStudentAttendance(studentId: string | null) {
       
       setRecords(data.records || []);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -507,8 +507,8 @@ export function useStudentCertificates(studentId: string | null) {
       
       setCertificates(data.certificates || []);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -581,8 +581,8 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
       setRegistrations(data.registrations || []);
       setTotal(data.pagination?.total || 0);
       setError(null);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
