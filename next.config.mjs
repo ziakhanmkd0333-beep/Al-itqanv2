@@ -5,7 +5,6 @@ const nextConfig = {
   },
   trailingSlash: true,
   output: 'standalone',
-  distDir: 'dist',
   experimental: {
     webpackBuildWorker: true
   }
