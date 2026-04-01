@@ -93,10 +93,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, course: data }, { status: 201 });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Course creation error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create course';
     return NextResponse.json(
-      { error: error.message || 'Failed to create course' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -159,10 +160,11 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ success: true, course: data });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Course update error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update course';
     return NextResponse.json(
-      { error: error.message || 'Failed to update course' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -190,10 +192,11 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true, message: 'Course deleted successfully' });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Course deletion error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to delete course';
     return NextResponse.json(
-      { error: error.message || 'Failed to delete course' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

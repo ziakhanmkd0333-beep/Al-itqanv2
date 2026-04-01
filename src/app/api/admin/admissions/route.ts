@@ -50,7 +50,7 @@ export async function PATCH(request: Request) {
     const body = await request.json();
     const { id, status, notes, reviewed_by } = body;
 
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       status,
       reviewed_by,
       reviewed_at: new Date().toISOString()
@@ -78,10 +78,11 @@ export async function PATCH(request: Request) {
 
     return NextResponse.json({ success: true, admission: data });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Admission update error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update admission';
     return NextResponse.json(
-      { error: error.message || 'Failed to update admission' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

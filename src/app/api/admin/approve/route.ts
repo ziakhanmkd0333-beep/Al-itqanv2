@@ -194,7 +194,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const userType = searchParams.get('userType') || 'all';
 
-    const result: any = {};
+    const result: Record<string, unknown> = {};
 
     // Get pending students
     if (userType === 'all' || userType === 'student') {
