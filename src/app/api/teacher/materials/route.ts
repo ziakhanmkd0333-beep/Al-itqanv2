@@ -79,10 +79,11 @@ export async function GET(request: Request) {
 
     return NextResponse.json({ materials: materials || [] });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Materials fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch materials';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch materials' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -143,10 +144,11 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true, material });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Material upload error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to add material';
     return NextResponse.json(
-      { error: error.message || 'Failed to add material' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

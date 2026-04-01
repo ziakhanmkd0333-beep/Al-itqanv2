@@ -119,10 +119,11 @@ export async function GET(request: Request) {
       count: submissions?.length || 0
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Submissions fetch error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to fetch submissions';
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch submissions' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -199,10 +200,11 @@ export async function PUT(request: Request) {
       message: 'Submission graded successfully'
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Submission grading error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to grade submission';
     return NextResponse.json(
-      { error: error.message || 'Failed to grade submission' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
