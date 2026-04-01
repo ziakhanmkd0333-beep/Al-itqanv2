@@ -35,7 +35,7 @@ export default function StudentCertificatesPage() {
 function StudentCertificatesContent() {
   const { t, isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
-  const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
+  const [selectedCertificate, setSelectedCertificate] = useState<Record<string, unknown> | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
   // Get student ID from profile on mount
@@ -60,20 +60,20 @@ function StudentCertificatesContent() {
   const { certificates, loading: certsLoading } = useStudentCertificates(studentId);
   const { enrollments, loading: enrollmentsLoading } = useStudentDashboard(studentId);
 
-  const handleViewCertificate = (cert: any) => {
+  const handleViewCertificate = (cert: Record<string, unknown>) => {
     setSelectedCertificate(cert);
     setShowPreviewModal(true);
   };
 
-  const handleDownload = (cert: any) => {
+  const handleDownload = (cert: Record<string, unknown>) => {
     alert(`Downloading certificate: ${cert.title}`);
   };
 
-  const handlePrint = (cert: any) => {
+  const handlePrint = (cert: Record<string, unknown>) => {
     alert(`Printing certificate: ${cert.title}`);
   };
 
-  const handleShare = (cert: any) => {
+  const handleShare = (cert: Record<string, unknown>) => {
     alert(`Sharing certificate: ${cert.title}`);
   };
 
@@ -93,10 +93,10 @@ function StudentCertificatesContent() {
   }
 
   // Transform certificates data
-  const earnedCertificates = certificates.filter((c: any) => c.status === 'active' || c.status === 'completed');
+  const earnedCertificates = certificates.filter((c: { status: string }) => c.status === 'active' || c.status === 'completed');
   const inProgressCerts = enrollments
-    .filter((e: any) => e.progress > 0 && e.progress < 100)
-    .map((e: any) => ({
+    .filter((e: { progress: number }) => e.progress > 0 && e.progress < 100)
+    .map((e: { id: string; course_title: string; course?: { title: string }; progress: number; estimated_completion?: string }) => ({
       id: e.id,
       course: e.course_title || e.course?.title,
       progress: e.progress,
@@ -191,7 +191,7 @@ function StudentCertificatesContent() {
                   </h2>
                 </div>
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {earnedCertificates.map((cert: any, index: number) => (
+                  {earnedCertificates.map((cert: Record<string, unknown>, index: number) => (
                     <motion.div
                       key={cert.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -286,7 +286,7 @@ function StudentCertificatesContent() {
                   </h2>
                 </div>
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {inProgressCerts.map((cert: any, index: number) => (
+                  {inProgressCerts.map((cert: Record<string, unknown>, index: number) => (
                     <motion.div
                       key={cert.id}
                       initial={{ opacity: 0, y: 10 }}
