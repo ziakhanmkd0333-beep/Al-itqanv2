@@ -20,31 +20,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useStudentAttendance } from "@/hooks/use-realtime-data";
-import { supabaseBrowser, getCurrentUser } from "@/lib/supabase-browser";
-
-// Mock attendance data
-const attendanceRecords = [
-  { id: 1, date: "2025-03-14", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "Good progress on joining letters" },
-  { id: 2, date: "2025-03-13", course: "Quran with Tajweed", teacher: "Sheikh Ahmad", status: "present", notes: "Practiced Makharij" },
-  { id: 3, date: "2025-03-12", course: "Noorani Qaida", teacher: "Dr. Noor", status: "late", notes: "Arrived 10 mins late" },
-  { id: 4, date: "2025-03-11", course: "Quran with Tajweed", teacher: "Sheikh Ahmad", status: "present", notes: "Excellent recitation" },
-  { id: 5, date: "2025-03-10", course: "Noorani Qaida", teacher: "Dr. Noor", status: "absent", notes: "Sick leave" },
-  { id: 6, date: "2025-03-09", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "Completed lesson 22" },
-  { id: 7, date: "2025-03-08", course: "Quran with Tajweed", teacher: "Sheikh Ahmad", status: "present", notes: "Started Noon Sakinah rules" },
-  { id: 8, date: "2025-03-07", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "Good participation" },
-  { id: 9, date: "2025-03-06", course: "Noorani Qaida", teacher: "Dr. Noor", status: "late", notes: "Traffic delay" },
-  { id: 10, date: "2025-03-05", course: "Quran with Tajweed", teacher: "Sheikh Ahmad", status: "present", notes: "Great improvement" },
-  { id: 11, date: "2025-03-04", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "" },
-  { id: 12, date: "2025-03-03", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "Test on letters" },
-  { id: 13, date: "2025-03-02", course: "Quran with Tajweed", teacher: "Sheikh Ahmad", status: "absent", notes: "Family emergency" },
-  { id: 14, date: "2025-03-01", course: "Noorani Qaida", teacher: "Dr. Noor", status: "present", notes: "Started new chapter" }
-];
-
-const monthlyStats = [
-  { month: "March 2025", present: 10, absent: 2, late: 2, total: 14 },
-  { month: "February 2025", present: 18, absent: 1, late: 3, total: 22 },
-  { month: "January 2025", present: 20, absent: 0, late: 2, total: 22 }
-];
+import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
 
 export default function StudentAttendancePage() {
   return (
@@ -56,16 +32,37 @@ export default function StudentAttendancePage() {
 
 function StudentAttendanceContent() {
   const { t, isRTL } = useTranslation();
-  const [selectedMonth, setSelectedMonth] = useState("March 2025");
+  const [studentId, setStudentId] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
 
-  // Get unique courses
-  const courses = ["all", ...new Set(attendanceRecords.map(r => r.course))];
+  // Get student ID from profile on mount
+  useEffect(() => {
+    async function loadProfile() {
+      const user = getCurrentUser();
+      if (user?.id) {
+        if (user.role === 'student' || !user.role) {
+          const profile = await getStudentProfile(user.id);
+          if (profile?.id) {
+            setStudentId(profile.id);
+          }
+        } else {
+          setStudentId(user.id);
+        }
+      }
+    }
+    loadProfile();
+  }, []);
+
+  // Use real-time hook for attendance data
+  const { records: attendanceRecords, loading } = useStudentAttendance(studentId);
+
+  // Get unique courses from records
+  const courses = ["all", ...new Set(attendanceRecords.map(r => r.course_title || r.course).filter(Boolean))];
 
   // Filter records
   const filteredRecords = attendanceRecords.filter(record => {
-    const matchesCourse = selectedCourse === "all" || record.course === selectedCourse;
+    const matchesCourse = selectedCourse === "all" || (record.course_title || record.course) === selectedCourse;
     const matchesStatus = selectedStatus === "all" || record.status === selectedStatus;
     return matchesCourse && matchesStatus;
   });
@@ -96,11 +93,36 @@ function StudentAttendanceContent() {
     }
   };
 
-  // Calculate stats
+  // Calculate stats from real data
   const totalPresent = attendanceRecords.filter(r => r.status === "present").length;
   const totalAbsent = attendanceRecords.filter(r => r.status === "absent").length;
   const totalLate = attendanceRecords.filter(r => r.status === "late").length;
-  const attendanceRate = Math.round((totalPresent / attendanceRecords.length) * 100);
+  const attendanceRate = attendanceRecords.length > 0 ? Math.round((totalPresent / attendanceRecords.length) * 100) : 0;
+
+  // Calculate monthly stats from records
+  const monthlyStatsMap = attendanceRecords.reduce((acc: any, record: any) => {
+    const month = new Date(record.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    if (!acc[month]) {
+      acc[month] = { month, present: 0, absent: 0, late: 0, total: 0 };
+    }
+    acc[month][record.status]++;
+    acc[month].total++;
+    return acc;
+  }, {});
+  const monthlyStats = Object.values(monthlyStatsMap).slice(0, 3);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <DashboardSidebar userType="student" />
+        <main className={`p-6 ${isRTL ? "mr-64" : "ml-64"}`}>
+          <div className="flex items-center justify-center h-96">
+            <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

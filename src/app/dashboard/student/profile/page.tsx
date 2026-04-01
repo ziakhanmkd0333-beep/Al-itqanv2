@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
+import { StudentRoute } from "@/components/auth/ProtectedRoute";
 import {
   User,
   Mail,
@@ -18,26 +19,82 @@ import {
   Save,
   CheckCircle,
   Calendar,
-  BookOpen
+  BookOpen,
+  RefreshCw
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
+import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
+
+interface StudentProfile {
+  id: string;
+  full_name: string;
+  email: string;
+  phone?: string;
+  country?: string;
+  city?: string;
+  date_of_birth?: string;
+  language?: string;
+  timezone?: string;
+  created_at?: string;
+  courses_count?: number;
+  certificates_count?: number;
+}
 
 export default function StudentProfilePage() {
+  return (
+    <StudentRoute>
+      <StudentProfileContent />
+    </StudentRoute>
+  );
+}
+
+function StudentProfileContent() {
   const { t, isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState<StudentProfile | null>(null);
 
   const [profileForm, setProfileForm] = useState({
-    fullName: "Ahmed Khan",
-    email: "ahmed.khan@email.com",
-    phone: "+1-234-567-8901",
-    country: "United States",
-    city: "New York",
-    dateOfBirth: "1995-05-15",
+    fullName: "",
+    email: "",
+    phone: "",
+    country: "",
+    city: "",
+    dateOfBirth: "",
     language: "en",
     timezone: "UTC-5"
   });
+
+  useEffect(() => {
+    async function loadProfile() {
+      const user = getCurrentUser();
+      if (user?.id) {
+        try {
+          const profileData = await getStudentProfile(user.id);
+          if (profileData) {
+            setProfile(profileData);
+            setProfileForm({
+              fullName: profileData.full_name || "",
+              email: profileData.email || "",
+              phone: profileData.phone || "",
+              country: profileData.country || "",
+              city: profileData.city || "",
+              dateOfBirth: profileData.date_of_birth || "",
+              language: profileData.language || "en",
+              timezone: profileData.timezone || "UTC-5"
+            });
+          }
+        } catch (error) {
+          console.error('Error loading profile:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+    loadProfile();
+  }, []);
 
   const [notificationSettings, setNotificationSettings] = useState({
     classReminders: true,
@@ -76,6 +133,19 @@ export default function StudentProfilePage() {
     { id: "security", label: "Security", icon: Shield }
   ];
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <DashboardSidebar userType="student" />
+        <main className={`p-6 ${isRTL ? "mr-64" : "ml-64"}`}>
+          <div className="flex items-center justify-center h-96">
+            <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <DashboardSidebar userType="student" />
@@ -102,27 +172,29 @@ export default function StudentProfilePage() {
             <div className="flex flex-col md:flex-row items-center gap-6">
               <div className="relative">
                 <div className="w-24 h-24 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                  <span className="text-4xl text-emerald-600 dark:text-emerald-400 font-bold">A</span>
+                  <span className="text-4xl text-emerald-600 dark:text-emerald-400 font-bold">
+                  {(profileForm.fullName || 'S').charAt(0)}
+                </span>
                 </div>
                 <button className="absolute bottom-0 right-0 w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white hover:bg-emerald-700 transition-colors">
                   <Camera className="w-4 h-4" />
                 </button>
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{profileForm.fullName}</h2>
-                <p className="text-gray-500 dark:text-gray-400">{profileForm.email}</p>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{profileForm.fullName || 'Student'}</h2>
+                <p className="text-gray-500 dark:text-gray-400">{profileForm.email || 'No email'}</p>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-3">
                   <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                     <MapPin className="w-4 h-4" />
-                    {profileForm.city}, {profileForm.country}
+                    {profileForm.city || 'Unknown'}, {profileForm.country || 'Unknown'}
                   </div>
                   <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                     <BookOpen className="w-4 h-4" />
-                    2 Courses Enrolled
+                    {profile?.courses_count || 0} Courses Enrolled
                   </div>
                   <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                     <Calendar className="w-4 h-4" />
-                    Joined Jan 2025
+                    Joined {profile?.created_at ? new Date(profile.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Recently'}
                   </div>
                 </div>
               </div>
@@ -131,7 +203,7 @@ export default function StudentProfilePage() {
                   Active Student
                 </div>
                 <div className="px-4 py-2 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 rounded-lg text-sm font-medium text-center">
-                  2 Certificates
+                  {profile?.certificates_count || 0} Certificates
                 </div>
               </div>
             </div>

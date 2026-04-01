@@ -10,16 +10,22 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[40vh] md:min-h-[45vh] flex items-center justify-center overflow-hidden py-6 md:py-8">
-      {/* Static Background Image - No Video */}
+      {/* Video Background */}
       <div className="absolute inset-0 z-0">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/about-hero.png')" }}
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          poster="/about-hero.png"
+        >
+          <source src="/images/01.mp4" type="video/mp4" />
+        </video>
         <div 
           className="absolute inset-0"
           style={{
-            background: "linear-gradient(135deg, rgba(13, 77, 47, 0.92) 0%, rgba(26, 122, 74, 0.88) 30%, rgba(13, 77, 47, 0.92) 100%)"
+            background: "linear-gradient(135deg, rgba(13, 77, 47, 0.85) 0%, rgba(26, 122, 74, 0.80) 30%, rgba(13, 77, 47, 0.85) 100%)"
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />

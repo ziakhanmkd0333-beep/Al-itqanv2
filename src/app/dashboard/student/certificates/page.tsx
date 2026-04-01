@@ -14,8 +14,6 @@ import {
   CheckCircle,
   Clock,
   RefreshCw,
-  Wifi,
-  WifiOff,
   BookOpen,
   FileText,
   Calendar,
@@ -23,68 +21,8 @@ import {
   Lock
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
-import { useStudentCertificates } from "@/hooks/use-realtime-data";
-import { supabaseBrowser, getCurrentUser } from "@/lib/supabase-browser";
-
-// Mock certificates data
-const certificates = [
-  {
-    id: 1,
-    title: "Noorani Qaida - Level 1",
-    course: "Noorani Qaida",
-    issueDate: "2025-01-15",
-    expiryDate: null,
-    status: "active",
-    teacher: "Dr. Noor Ur Rahman",
-    grade: "A",
-    downloadUrl: "#",
-    certificateId: "CERT-NQ-2025-001",
-    description: "Successfully completed Noorani Qaida Level 1 with excellent performance in Arabic alphabet recognition and pronunciation."
-  },
-  {
-    id: 2,
-    title: "Arabic Alphabet Mastery",
-    course: "Beginner Arabic",
-    issueDate: "2025-02-01",
-    expiryDate: null,
-    status: "active",
-    teacher: "Sheikh Ahmad Ali",
-    grade: "A+",
-    downloadUrl: "#",
-    certificateId: "CERT-AA-2025-002",
-    description: "Demonstrated exceptional proficiency in Arabic alphabet reading and writing."
-  },
-  {
-    id: 3,
-    title: "Tajweed Fundamentals",
-    course: "Quran with Tajweed",
-    issueDate: null,
-    expiryDate: null,
-    status: "in_progress",
-    teacher: "Sheikh Ahmad Ali",
-    grade: null,
-    downloadUrl: null,
-    certificateId: null,
-    description: "Currently in progress - 45% complete"
-  }
-];
-
-const upcomingCertificates = [
-  {
-    id: 1,
-    course: "Quran with Tajweed",
-    progress: 45,
-    remaining: "55% remaining",
-    estimatedCompletion: "May 2025"
-  },
-  {
-    id: 2,
-    course: "Hifz-ul-Quran",
-    progress: 0,
-    remaining: "Not started",
-    estimatedCompletion: "Future"
-  }
-];
+import { useStudentCertificates, useStudentDashboard } from "@/hooks/use-realtime-data";
+import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
 
 export default function StudentCertificatesPage() {
   return (
@@ -96,28 +34,82 @@ export default function StudentCertificatesPage() {
 
 function StudentCertificatesContent() {
   const { t, isRTL } = useTranslation();
-  const [selectedCertificate, setSelectedCertificate] = useState<typeof certificates[0] | null>(null);
+  const [studentId, setStudentId] = useState<string | null>(null);
+  const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
 
-  const handleViewCertificate = (cert: typeof certificates[0]) => {
+  // Get student ID from profile on mount
+  useEffect(() => {
+    async function loadProfile() {
+      const user = getCurrentUser();
+      if (user?.id) {
+        if (user.role === 'student' || !user.role) {
+          const profile = await getStudentProfile(user.id);
+          if (profile?.id) {
+            setStudentId(profile.id);
+          }
+        } else {
+          setStudentId(user.id);
+        }
+      }
+    }
+    loadProfile();
+  }, []);
+
+  // Use real-time hooks for certificates and dashboard data
+  const { certificates, loading: certsLoading } = useStudentCertificates(studentId);
+  const { enrollments, loading: enrollmentsLoading } = useStudentDashboard(studentId);
+
+  const handleViewCertificate = (cert: any) => {
     setSelectedCertificate(cert);
     setShowPreviewModal(true);
   };
 
-  const handleDownload = (cert: typeof certificates[0]) => {
-    // Download logic would go here
+  const handleDownload = (cert: any) => {
     alert(`Downloading certificate: ${cert.title}`);
   };
 
-  const handlePrint = (cert: typeof certificates[0]) => {
-    // Print logic would go here
+  const handlePrint = (cert: any) => {
     alert(`Printing certificate: ${cert.title}`);
   };
 
-  const handleShare = (cert: typeof certificates[0]) => {
-    // Share logic would go here
+  const handleShare = (cert: any) => {
     alert(`Sharing certificate: ${cert.title}`);
   };
+
+  const loading = certsLoading || enrollmentsLoading;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <DashboardSidebar userType="student" />
+        <main className={`p-6 ${isRTL ? "mr-64" : "ml-64"}`}>
+          <div className="flex items-center justify-center h-96">
+            <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Transform certificates data
+  const earnedCertificates = certificates.filter((c: any) => c.status === 'active' || c.status === 'completed');
+  const inProgressCerts = enrollments
+    .filter((e: any) => e.progress > 0 && e.progress < 100)
+    .map((e: any) => ({
+      id: e.id,
+      course: e.course_title || e.course?.title,
+      progress: e.progress,
+      remaining: `${100 - e.progress}% remaining`,
+      estimatedCompletion: e.estimated_completion || 'TBD'
+    }));
+
+  // Calculate stats
+  const totalEarned = earnedCertificates.length;
+  const inProgress = inProgressCerts.length;
+  const avgGrade = earnedCertificates.length > 0 
+    ? earnedCertificates[0]?.grade || 'A'
+    : 'N/A';
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -148,9 +140,7 @@ function StudentCertificatesContent() {
                   <Award className="w-5 h-5 text-emerald-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {certificates.filter(c => c.status === "active").length}
-                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{totalEarned}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">Earned</p>
                 </div>
               </div>
@@ -161,9 +151,7 @@ function StudentCertificatesContent() {
                   <Clock className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {certificates.filter(c => c.status === "in_progress").length}
-                  </p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{inProgress}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">In Progress</p>
                 </div>
               </div>
@@ -174,8 +162,8 @@ function StudentCertificatesContent() {
                   <BookOpen className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">24</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">Available</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{enrollments.length}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Enrolled</p>
                 </div>
               </div>
             </div>
@@ -185,7 +173,7 @@ function StudentCertificatesContent() {
                   <FileText className="w-5 h-5 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">A</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{avgGrade}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">Avg Grade</p>
                 </div>
               </div>
@@ -203,7 +191,7 @@ function StudentCertificatesContent() {
                   </h2>
                 </div>
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {certificates.filter(c => c.status === "active").map((cert, index) => (
+                  {earnedCertificates.map((cert: any, index: number) => (
                     <motion.div
                       key={cert.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -221,25 +209,25 @@ function StudentCertificatesContent() {
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{cert.title}</h3>
+                              <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{cert.title || cert.course_title}</h3>
                               <p className="text-sm text-gray-500 dark:text-gray-400">{cert.course}</p>
                             </div>
                             <span className="px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
-                              Grade: {cert.grade}
+                              Grade: {cert.grade || 'A'}
                             </span>
                           </div>
                           <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
                             <div className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
-                              Issued: {cert.issueDate}
+                              Issued: {cert.issue_date || cert.issued_at || new Date().toLocaleDateString()}
                             </div>
                             <div className="flex items-center gap-1">
                               <User className="w-4 h-4" />
-                              {cert.teacher}
+                              {cert.teacher || 'Teacher'}
                             </div>
                             <div className="flex items-center gap-1">
                               <FileText className="w-4 h-4" />
-                              ID: {cert.certificateId}
+                              ID: {cert.certificate_id || `CERT-${cert.id}`}
                             </div>
                           </div>
                         </div>
@@ -280,7 +268,7 @@ function StudentCertificatesContent() {
                   ))}
                 </div>
 
-                {certificates.filter(c => c.status === "active").length === 0 && (
+                {earnedCertificates.length === 0 && (
                   <div className="p-8 text-center">
                     <Award className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                     <p className="text-gray-500 dark:text-gray-400">No certificates earned yet</p>
@@ -298,7 +286,7 @@ function StudentCertificatesContent() {
                   </h2>
                 </div>
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {upcomingCertificates.map((cert, index) => (
+                  {inProgressCerts.map((cert: any, index: number) => (
                     <motion.div
                       key={cert.id}
                       initial={{ opacity: 0, y: 10 }}
@@ -338,6 +326,11 @@ function StudentCertificatesContent() {
                     </motion.div>
                   ))}
                 </div>
+                {inProgressCerts.length === 0 && (
+                  <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                    No courses in progress
+                  </div>
+                )}
               </div>
             </div>
 

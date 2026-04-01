@@ -14,8 +14,6 @@ import {
   Video,
   Download,
   RefreshCw,
-  Wifi,
-  WifiOff,
   ArrowRight,
   User,
   Award,
@@ -24,78 +22,7 @@ import {
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
 import { useStudentDashboard } from "@/hooks/use-realtime-data";
-import { supabaseBrowser, getCurrentUser } from "@/lib/supabase-browser";
-
-// Mock data for student courses
-const enrolledCourses = [
-  {
-    id: 1,
-    title: "Noorani Qaida",
-    description: "Learn Arabic alphabet and basic Quran reading",
-    teacher: "Dr. Noor Ur Rahman",
-    progress: 75,
-    totalLessons: 30,
-    completedLessons: 22,
-    nextCourse: "Nazra Quran",
-    category: "Quran",
-    level: "Beginner",
-    lessons: [
-      { id: 1, title: "Introduction to Arabic Letters", duration: "15 min", completed: true, type: "video" },
-      { id: 2, title: "Alif to Jeem", duration: "20 min", completed: true, type: "video" },
-      { id: 3, title: "Haa to Khaa", duration: "18 min", completed: true, type: "video" },
-      { id: 4, title: "Practice Session 1", duration: "30 min", completed: true, type: "practice" },
-      { id: 5, title: "Daal to Raa", duration: "22 min", completed: true, type: "video" },
-      { id: 6, title: "Zaay to Seen", duration: "20 min", completed: true, type: "video" },
-      { id: 7, title: "Sheen to Taw", duration: "25 min", completed: false, type: "video" },
-      { id: 8, title: "Joining Letters", duration: "30 min", completed: false, type: "video" }
-    ],
-    materials: [
-      { id: 1, title: "Noorani Qaida PDF", type: "pdf", size: "2.5 MB" },
-      { id: 2, title: "Practice Worksheets", type: "pdf", size: "1.2 MB" },
-      { id: 3, title: "Audio Practice Files", type: "audio", size: "15 MB" }
-    ],
-    recordings: [
-      { id: 1, title: "Session 1 - Introduction", date: "2025-03-01", duration: "30 min" },
-      { id: 2, title: "Session 2 - Letters Practice", date: "2025-03-03", duration: "30 min" },
-      { id: 3, title: "Session 3 - Joining Letters", date: "2025-03-05", duration: "35 min" }
-    ]
-  },
-  {
-    id: 2,
-    title: "Quran with Tajweed",
-    description: "Master Quran recitation with proper Tajweed rules",
-    teacher: "Sheikh Ahmad Ali",
-    progress: 45,
-    totalLessons: 40,
-    completedLessons: 18,
-    nextCourse: "Advanced Tajweed",
-    category: "Quran",
-    level: "Intermediate",
-    lessons: [
-      { id: 1, title: "Introduction to Tajweed", duration: "25 min", completed: true, type: "video" },
-      { id: 2, title: "Makharij - Articulation Points", duration: "30 min", completed: true, type: "video" },
-      { id: 3, title: "Sifaat - Letter Attributes", duration: "28 min", completed: true, type: "video" },
-      { id: 4, title: "Noon Sakinah Rules", duration: "35 min", completed: true, type: "video" },
-      { id: 5, title: "Meem Sakinah Rules", duration: "30 min", completed: false, type: "video" },
-      { id: 6, title: "Madd Rules", duration: "40 min", completed: false, type: "video" }
-    ],
-    materials: [
-      { id: 1, title: "Tajweed Rules Guide", type: "pdf", size: "5 MB" },
-      { id: 2, title: "Makharij Chart", type: "pdf", size: "1 MB" }
-    ],
-    recordings: [
-      { id: 1, title: "Tajweed Practice Session", date: "2025-03-10", duration: "45 min" }
-    ]
-  }
-];
-
-const progressionPath = [
-  { course: "Noorani Qaida", status: "completed" },
-  { course: "Nazra Quran", status: "current" },
-  { course: "Quran with Tajweed", status: "in_progress" },
-  { course: "Advanced Tajweed", status: "locked" },
-  { course: "Hifz-ul-Quran", status: "locked" }
-];
+import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
 
 export default function StudentCoursesPage() {
   return (
@@ -107,8 +34,37 @@ export default function StudentCoursesPage() {
 
 function StudentCoursesContent() {
   const { t, isRTL } = useTranslation();
-  const [selectedCourse, setSelectedCourse] = useState(enrolledCourses[0]);
+  const [studentId, setStudentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"lessons" | "materials" | "recordings">("lessons");
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+
+  // Get student ID from profile on mount
+  useEffect(() => {
+    async function loadProfile() {
+      const user = getCurrentUser();
+      if (user?.id) {
+        if (user.role === 'student' || !user.role) {
+          const profile = await getStudentProfile(user.id);
+          if (profile?.id) {
+            setStudentId(profile.id);
+          }
+        } else {
+          setStudentId(user.id);
+        }
+      }
+    }
+    loadProfile();
+  }, []);
+
+  // Use real-time hook for student dashboard data
+  const { enrollments, loading } = useStudentDashboard(studentId);
+
+  // Set first course as selected when data loads
+  useEffect(() => {
+    if (enrollments.length > 0 && !selectedCourse) {
+      setSelectedCourse(enrollments[0]);
+    }
+  }, [enrollments, selectedCourse]);
 
   const getProgressColor = (progress: number) => {
     if (progress >= 70) return "bg-green-500";
@@ -116,18 +72,33 @@ function StudentCoursesContent() {
     return "bg-red-500";
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case "current":
-        return <Play className="w-5 h-5 text-emerald-500" />;
-      case "in_progress":
-        return <Clock className="w-5 h-5 text-yellow-500" />;
-      default:
-        return <Lock className="w-5 h-5 text-gray-400" />;
-    }
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <DashboardSidebar userType="student" />
+        <main className={`p-6 ${isRTL ? "mr-64" : "ml-64"}`}>
+          <div className="flex items-center justify-center h-96">
+            <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // Transform enrollment data to match expected format
+  const enrolledCourses = enrollments.map((enrollment: any) => ({
+    id: enrollment.id,
+    title: enrollment.course_title || enrollment.course?.title || 'Course',
+    description: enrollment.course?.description || 'Course description',
+    teacher: enrollment.teacher_name || enrollment.teacher?.full_name || 'Assigned Teacher',
+    progress: enrollment.progress || 0,
+    totalLessons: enrollment.total_lessons || 0,
+    completedLessons: enrollment.completed_lessons || 0,
+    nextCourse: enrollment.next_course || 'Next Level',
+    category: enrollment.course?.category || 'Quran',
+    level: enrollment.course?.level || 'Beginner',
+    course: enrollment.course
+  }));
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -182,47 +153,61 @@ function StudentCoursesContent() {
             {/* Course List */}
             <div className="lg:col-span-1 space-y-4">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Enrolled Courses</h2>
-              {enrolledCourses.map((course, index) => (
-                <motion.div
-                  key={course.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => setSelectedCourse(course)}
-                  className={`bg-white dark:bg-gray-800 rounded-xl p-4 border cursor-pointer transition-all ${
-                    selectedCourse.id === course.id
-                      ? "border-emerald-500 ring-2 ring-emerald-500/20"
-                      : "border-gray-200 dark:border-gray-700 hover:border-emerald-300"
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">{course.title}</h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">{course.category} • {course.level}</p>
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
+                </div>
+              ) : enrolledCourses.length > 0 ? (
+                enrolledCourses.map((course: any, index: number) => (
+                  <motion.div
+                    key={course.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    onClick={() => setSelectedCourse(course)}
+                    className={`bg-white dark:bg-gray-800 rounded-xl p-4 border cursor-pointer transition-all ${
+                      selectedCourse?.id === course.id
+                        ? "border-emerald-500 ring-2 ring-emerald-500/20"
+                        : "border-gray-200 dark:border-gray-700 hover:border-emerald-300"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{course.title}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{course.category} • {course.level}</p>
+                      </div>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        course.progress >= 70 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
+                        course.progress >= 40 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                        "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      }`}>
+                        {course.progress}%
+                      </span>
                     </div>
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      course.progress >= 70 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
-                      course.progress >= 40 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
-                      "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-                    }`}>
-                      {course.progress}%
-                    </span>
-                  </div>
-                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${getProgressColor(course.progress)} rounded-full transition-all`}
-                      style={{ width: `${course.progress}%` }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                    {course.completedLessons}/{course.totalLessons} lessons completed
-                  </p>
-                </motion.div>
-              ))}
+                    <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full ${getProgressColor(course.progress)} rounded-full transition-all`}
+                        style={{ width: `${course.progress}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      {course.completedLessons}/{course.totalLessons} lessons completed
+                    </p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center">
+                  <p className="text-gray-500 dark:text-gray-400">No courses enrolled yet</p>
+                  <Link href="/courses" className="text-emerald-600 hover:underline text-sm mt-2 inline-block">
+                    Browse courses
+                  </Link>
+                </div>
+              )}
             </div>
 
             {/* Course Details */}
             <div className="lg:col-span-2">
+              {selectedCourse ? (
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 {/* Course Header */}
                 <div className="p-6 border-b border-gray-200 dark:border-gray-700">
@@ -409,6 +394,13 @@ function StudentCoursesContent() {
                   </div>
                 </div>
               </div>
+              ) : (
+                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
+                  <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Select a Course</h3>
+                  <p className="text-gray-500 dark:text-gray-400">Choose a course from the list to view details</p>
+                </div>
+              )}
             </div>
           </div>
         </motion.div>

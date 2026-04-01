@@ -27,7 +27,8 @@ import {
   MoreVertical,
   RefreshCw,
   Wifi,
-  WifiOff
+  WifiOff,
+  Globe
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAdminStudents } from "@/hooks/use-realtime-data";
@@ -544,44 +545,107 @@ export default function StudentsManagementPage() {
                   {/* Student Avatar and Basic Info */}
                   <div className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
                     <div className="w-20 h-20 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-2xl font-bold">
-                      {selectedStudent.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2)}
+                      {selectedStudent.full_name?.split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase() || 'ST'}
                     </div>
                     <div className={isRTL ? "text-right" : "text-left"}>
                       <h3 className={`text-xl font-bold text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>
                         {selectedStudent.full_name}
                       </h3>
-                      <StatusBadge status={selectedStudent.status} />
+                      <p className="text-sm text-[var(--text-muted)]">ID: {selectedStudent.id}</p>
+                      <div className="mt-2">
+                        <StatusBadge status={selectedStudent.status} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Personal Information */}
+                  <div>
+                    <h4 className={`text-sm font-semibold text-[var(--text-muted)] mb-3 ${isRTL ? "arabic-text" : ""}`}>
+                      {t("admin.students.personalInfo") || "Personal Information"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <Calendar className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.age") || "Age"}</p>
+                          <p className="text-[var(--text-primary)] font-medium">{selectedStudent.age || 'N/A'} years</p>
+                        </div>
+                      </div>
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <Globe className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.language") || "Language"}</p>
+                          <p className="text-[var(--text-primary)] font-medium">
+                            {selectedStudent.language === 'en' ? 'English' : 
+                             selectedStudent.language === 'ar' ? 'Arabic' : 
+                             selectedStudent.language === 'ur' ? 'Urdu' : selectedStudent.language || 'English'}
+                          </p>
+                        </div>
+                      </div>
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <MapPin className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.country") || "Country"}</p>
+                          <p className={`text-[var(--text-primary)] font-medium ${isRTL ? "arabic-text" : ""}`}>{selectedStudent.country || 'N/A'}</p>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
                   {/* Contact Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <Mail className="w-5 h-5 text-[var(--primary)]" />
-                      <div className={isRTL ? "text-right" : "text-left"}>
-                        <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.email") || "Email"}</p>
-                        <p className="text-[var(--text-primary)]">{selectedStudent.email}</p>
+                  <div>
+                    <h4 className={`text-sm font-semibold text-[var(--text-muted)] mb-3 ${isRTL ? "arabic-text" : ""}`}>
+                      {t("admin.students.contactInfo") || "Contact Information"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <Mail className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.email") || "Email"}</p>
+                          <p className="text-[var(--text-primary)]">{selectedStudent.email}</p>
+                        </div>
+                      </div>
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <Phone className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.phone") || "Phone"}</p>
+                          <p className="text-[var(--text-primary)]">{selectedStudent.phone}</p>
+                        </div>
                       </div>
                     </div>
-                    <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <Phone className="w-5 h-5 text-[var(--primary)]" />
-                      <div className={isRTL ? "text-right" : "text-left"}>
-                        <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.phone") || "Phone"}</p>
-                        <p className="text-[var(--text-primary)]">{selectedStudent.phone}</p>
+                  </div>
+
+                  {/* Account Information */}
+                  <div>
+                    <h4 className={`text-sm font-semibold text-[var(--text-muted)] mb-3 ${isRTL ? "arabic-text" : ""}`}>
+                      {t("admin.students.accountInfo") || "Account Information"}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <Clock className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.joined") || "Joined"}</p>
+                          <p className="text-[var(--text-primary)]">
+                            {selectedStudent.created_at 
+                              ? new Date(selectedStudent.created_at).toLocaleDateString('en-US', { 
+                                  year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                                }) 
+                              : 'N/A'}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <MapPin className="w-5 h-5 text-[var(--primary)]" />
-                      <div className={isRTL ? "text-right" : "text-left"}>
-                        <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.country") || "Country"}</p>
-                        <p className={`text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>{selectedStudent.country}</p>
-                      </div>
-                    </div>
-                    <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
-                      <Calendar className="w-5 h-5 text-[var(--primary)]" />
-                      <div className={isRTL ? "text-right" : "text-left"}>
-                        <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.joined") || "Joined"}</p>
-                        <p className="text-[var(--text-primary)]">{selectedStudent.created_at}</p>
+                      <div className={`flex items-center gap-3 p-4 bg-[var(--background-green)] rounded-xl ${isRTL ? "flex-row-reverse" : ""}`}>
+                        <RefreshCw className="w-5 h-5 text-[var(--primary)]" />
+                        <div className={isRTL ? "text-right" : "text-left"}>
+                          <p className={`text-xs text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("admin.students.lastUpdated") || "Last Updated"}</p>
+                          <p className="text-[var(--text-primary)]">
+                            {selectedStudent.updated_at && selectedStudent.updated_at !== selectedStudent.created_at
+                              ? new Date(selectedStudent.updated_at).toLocaleDateString('en-US', { 
+                                  year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                                }) 
+                              : 'Never'}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -593,7 +657,7 @@ export default function StudentsManagementPage() {
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedStudent.enrolled_courses?.length > 0 ? (
-                        selectedStudent.enrolled_courses.map((course, index) => (
+                        selectedStudent.enrolled_courses.map((course: string, index: number) => (
                           <span
                             key={index}
                             className={`inline-flex items-center gap-2 px-3 py-2 bg-[var(--primary)]/10 text-[var(--primary)] rounded-lg text-sm ${isRTL ? "arabic-text flex-row-reverse" : ""}`}
