@@ -47,11 +47,11 @@ function StudentProgressContent() {
 
   // Calculate stats
   const totalCourses = enrollments.length;
-  const completedCourses = enrollments.filter((e: any) => e.progress === 100).length;
+  const completedCourses = enrollments.filter((e: { progress: number }) => e.progress === 100).length;
   const averageProgress = totalCourses > 0 
-    ? Math.round(enrollments.reduce((sum: number, e: any) => sum + (e.progress || 0), 0) / totalCourses)
+    ? Math.round(enrollments.reduce((sum: number, e: { progress: number }) => sum + (e.progress || 0), 0) / totalCourses)
     : 0;
-  const totalHours = enrollments.reduce((sum: number, e: any) => sum + (e.hours_learned || 0), 0);
+  const totalHours = enrollments.reduce((sum: number, e: { hours_learned: number }) => sum + (e.hours_learned || 0), 0);
 
   if (loading) {
     return (
