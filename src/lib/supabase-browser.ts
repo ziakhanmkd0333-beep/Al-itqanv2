@@ -50,7 +50,7 @@ export const getCurrentUser = () => {
 };
 
 // Helper to set current user
-export const setCurrentUser = (user: any) => {
+export const setCurrentUser = (user: Record<string, unknown>) => {
   if (typeof window === 'undefined') return;
   localStorage.setItem('currentUser', JSON.stringify(user));
 };
@@ -64,7 +64,7 @@ export const clearCurrentUser = () => {
 // Real-time subscription helpers
 export const subscribeToTable = (
   table: string,
-  callback: (payload: any) => void,
+  callback: (payload: Record<string, unknown>) => void,
   filter?: string
 ) => {
   const channel = supabaseBrowser
