@@ -44,10 +44,10 @@ export const clientAuth = {
           avatar_url: userData.avatar_url
         }
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.message || 'Login failed'
+        error: error instanceof Error ? error.message : 'Login failed'
       };
     }
   },
@@ -106,10 +106,10 @@ export const clientAuth = {
         success: true,
         user: userData
       };
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error: error.message || 'Registration failed'
+        error: error instanceof Error ? error.message : 'Registration failed'
       };
     }
   },
@@ -214,7 +214,7 @@ export const studentDataService = {
       ]);
 
       const attendanceRecords = attendance.status === 'fulfilled' ? attendance.value.data || [] : [];
-      const presentCount = attendanceRecords.filter((a: any) => a.status === 'present').length;
+      const presentCount = attendanceRecords.filter((a: { status: string }) => a.status === 'present').length;
       const attendanceRate = attendanceRecords.length > 0 
         ? Math.round((presentCount / attendanceRecords.length) * 100) 
         : 0;
