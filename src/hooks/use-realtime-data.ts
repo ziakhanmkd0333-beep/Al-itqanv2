@@ -497,7 +497,7 @@ export function useStudentAttendance(studentId: string | null) {
 
 // Student Certificates Hook
 export function useStudentCertificates(studentId: string | null) {
-  const [certificates, setCertificates] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
