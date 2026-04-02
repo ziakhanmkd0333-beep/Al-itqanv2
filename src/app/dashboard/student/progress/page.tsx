@@ -148,7 +148,7 @@ function StudentProgressContent() {
                   Course Progress
                 </h3>
                 <div className="space-y-4">
-                  {enrollments.map((enrollment: any, index: number) => (
+                  {enrollments.map((enrollment: { id: string; course_title?: string; course?: { title: string }; completed_lessons?: number; total_lessons?: number; progress?: number }, index: number) => (
                     <motion.div
                       key={enrollment.id}
                       initial={{ opacity: 0, x: -20 }}
@@ -201,19 +201,19 @@ function StudentProgressContent() {
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div className="text-center p-2 bg-green-500/10 rounded-lg">
                         <p className="text-lg font-bold text-green-600">
-                          {attendanceRecords.filter((r: any) => r.status === 'present').length}
+                          {attendanceRecords.filter((r: { status: string }) => r.status === 'present').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Present</p>
                       </div>
                       <div className="text-center p-2 bg-red-500/10 rounded-lg">
                         <p className="text-lg font-bold text-red-600">
-                          {attendanceRecords.filter((r: any) => r.status === 'absent').length}
+                          {attendanceRecords.filter((r: { status: string }) => r.status === 'absent').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Absent</p>
                       </div>
                       <div className="text-center p-2 bg-yellow-500/10 rounded-lg">
                         <p className="text-lg font-bold text-yellow-600">
-                          {attendanceRecords.filter((r: any) => r.status === 'late').length}
+                          {attendanceRecords.filter((r: { status: string }) => r.status === 'late').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Late</p>
                       </div>
