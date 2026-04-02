@@ -54,8 +54,8 @@ function TeacherNotesContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editingNote, setEditingNote] = useState<SessionNote | null>(null);
-  const [students, setStudents] = useState<any[]>([]);
-  const [courses, setCourses] = useState<any[]>([]);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
+  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
   const [expandedNote, setExpandedNote] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({

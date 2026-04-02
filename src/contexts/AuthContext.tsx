@@ -164,8 +164,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       setUser(data.user);
       return { success: true, user: data.user };
-    } catch (error: any) {
-      return { success: false, error: error.message || 'An error occurred' };
+    } catch (error: unknown) {
+      return { success: false, error: error instanceof Error ? error.message : 'An error occurred' };
     }
   }, []);
 

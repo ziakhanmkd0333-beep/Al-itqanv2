@@ -78,7 +78,7 @@ function TeacherCoursesContent() {
     }
   };
 
-  const handleCourseSelect = (course: any) => {
+  const handleCourseSelect = (course: { id: string; title?: string; description?: string; level?: string; category?: string; students_count?: number; status?: string }) => {
     setSelectedCourse(course);
     fetchStudents(course.id);
   };

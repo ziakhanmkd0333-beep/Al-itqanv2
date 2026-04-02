@@ -182,10 +182,10 @@ function TeacherStudentsContent() {
   const students = fetchedStudents.length > 0 ? fetchedStudents : mockStudents;
 
   // Get unique courses for filter
-  const courses = ["all", ...new Set(students.map((s: any) => s.course || s.courses?.title))];
+  const courses = ["all", ...new Set(students.map((s: { course?: string; courses?: { title?: string } }) => s.course || s.courses?.title))];
 
   // Filter students
-  const filteredStudents = students.filter((student: any) => {
+  const filteredStudents = students.filter((student: { name?: string; users?: { full_name?: string; email?: string }; email?: string; course?: string; courses?: { title?: string } }) => {
     const name = student.name || student.users?.full_name || '';
     const email = student.email || student.users?.email || '';
     const course = student.course || student.courses?.title || '';

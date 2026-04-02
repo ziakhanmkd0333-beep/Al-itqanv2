@@ -170,7 +170,7 @@ function TeacherAssignmentsContent() {
         setGradeData({ marks: 0, feedback: "" });
         fetchSubmissions(selectedAssignment.id);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Grade error:', error);
     }
   };

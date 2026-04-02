@@ -100,8 +100,8 @@ function TeacherProfileContent() {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
       }
-    } catch (error) {
-      console.error('Profile update error:', error);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile');
     } finally {
       setSaving(false);
     }

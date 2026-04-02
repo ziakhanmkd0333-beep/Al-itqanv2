@@ -46,14 +46,20 @@ export function useRealtimeData<T>(
           ...(filter && { filter })
         },
         (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setData((prev) => [...prev, payload.new as T]);
-          } else if (payload.eventType === 'UPDATE') {
-            setData((prev) =>
-              prev.map((item) =>
-                (item as T & { id: string }).id === payload.new.id ? (payload.new as T) : item
-              )
-            );
+          if (payload.new && (!filter || Object.entries(filter).every(([key, value]) => (payload.new as Record<string, unknown>)[key] === value))) {
+            if (payload.eventType === 'INSERT') {
+              setData((prev) => [...prev, payload.new as T]);
+            } else if (payload.eventType === 'UPDATE') {
+              setData((prev) =>
+                prev.map((item) =>
+                  (item as T & { id: string }).id === payload.new.id ? (payload.new as T) : item
+                )
+              );
+            } else if (payload.eventType === 'DELETE') {
+              setData((prev) =>
+                prev.filter((item) => (item as T & { id: string }).id !== payload.old.id)
+              );
+            }
           } else if (payload.eventType === 'DELETE') {
             setData((prev) =>
               prev.filter((item) => (item as T & { id: string }).id !== payload.old.id)
