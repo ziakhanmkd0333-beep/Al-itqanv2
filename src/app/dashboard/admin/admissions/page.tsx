@@ -109,7 +109,7 @@ export default function AdmissionsManagementPage() {
       if (!res.ok) throw new Error(data.error);
       
       // Transform API data to match Admission interface
-      const transformedAdmissions: Admission[] = (data.admissions || []).map((a: any) => ({
+      const transformedAdmissions: Admission[] = (data.admissions || []).map((a: Record<string, unknown>) => ({
         id: a.id,
         full_name: a.full_name,
         email: a.email,

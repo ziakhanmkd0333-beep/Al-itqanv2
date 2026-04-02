@@ -139,7 +139,7 @@ function AdminDashboardContent() {
     }
     
     if (realtimeSessions) {
-      setUpcomingSessions(realtimeSessions.map((s: any) => ({
+      setUpcomingSessions(realtimeSessions.map((s: { id: string; students?: { full_name: string }; teachers?: { full_name: string }; teacher_id?: string; courses?: { title: string }; course_id?: string; scheduled_time?: string; scheduled_date?: string }) => ({
         id: s.id,
         student: s.students?.full_name || 'Group',
         teacher: s.teachers?.full_name || s.teacher_id,

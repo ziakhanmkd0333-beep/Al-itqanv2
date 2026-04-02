@@ -254,9 +254,9 @@ export default function CoursesPage() {
       }
       
       setCourses(data.courses);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Fetch error:', err);
-      setError(err.message || "Failed to load courses");
+      setError(err instanceof Error ? err.message : "Failed to load courses");
     } finally {
       setLoading(false);
     }

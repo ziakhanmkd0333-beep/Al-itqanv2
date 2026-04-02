@@ -59,7 +59,7 @@ export async function GET(request: Request) {
     if (error) throw error;
 
     // Extract unique students
-    const students = enrollments?.map((e: any) => ({
+    const students = enrollments?.map((e: { students?: Record<string, unknown>; course_id?: string; courses?: { title?: string }; id?: string }) => ({
       ...e.students,
       course_id: e.course_id,
       course_title: e.courses?.title,

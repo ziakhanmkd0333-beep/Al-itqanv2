@@ -226,7 +226,7 @@ export default function PaymentsManagementPage() {
         const data = await response.json();
         
         // Transform backend data to match frontend interface
-        const transformedPayments: Payment[] = (data.payments || []).map((p: any) => ({
+        const transformedPayments: Payment[] = (data.payments || []).map((p: Record<string, unknown>) => ({
           id: p.id,
           student_id: p.student_id || '',
           student_name: p.student_name || 'Unknown',

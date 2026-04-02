@@ -110,9 +110,9 @@ function StudentAssignmentsContent() {
       setIsUploadModalOpen(false);
       setUploadFile(null);
       fetchAssignments(studentId);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error submitting assignment:', error);
-      toast.error(error.message || 'Failed to submit assignment');
+      toast.error(error instanceof Error ? error.message : 'Failed to submit assignment');
     } finally {
       setIsUploading(false);
     }
