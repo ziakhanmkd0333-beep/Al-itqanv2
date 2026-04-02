@@ -43,10 +43,10 @@ function StudentMaterialsContent() {
   const { enrollments, loading } = useStudentDashboard(studentId);
 
   // Extract materials from enrolled courses
-  const courseMaterials = enrollments.flatMap((enrollment: any) => {
+  const courseMaterials = enrollments.flatMap((enrollment: { course: { materials?: Array<{ id: string; title: string; type: string; size?: string }>; title: string; id: string } }) => {
     const course = enrollment.course;
     if (!course?.materials) return [];
-    return course.materials.map((m: any) => ({
+    return course.materials.map((m: { id: string; title: string; type: string; size?: string }) => ({
       ...m,
       courseTitle: course.title,
       courseId: course.id
@@ -94,7 +94,7 @@ function StudentMaterialsContent() {
           {courseMaterials.length > 0 ? (
             <div className="space-y-6">
               {/* Materials by Course */}
-              {enrollments.map((enrollment: any) => {
+              {enrollments.map((enrollment: { course: { id: string; title: string; materials?: Array<{ id: string; title: string; type: string; size?: string }> } }) => {
                 const course = enrollment.course;
                 if (!course?.materials?.length) return null;
                 
@@ -105,7 +105,7 @@ function StudentMaterialsContent() {
                       {course.title}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {course.materials.map((material: any) => (
+                      {course.materials.map((material: { id: string; title: string; type: string; size?: string }) => (
                         <motion.div
                           key={material.id}
                           initial={{ opacity: 0, y: 10 }}
