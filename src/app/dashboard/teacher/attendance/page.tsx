@@ -103,10 +103,10 @@ function TeacherAttendanceContent() {
   const students = fetchedStudents.length > 0 ? fetchedStudents : mockStudents;
 
   // Get unique courses
-  const courses = ["all", ...new Set(students.map((s: any) => s.course || s.courses?.title))];
+  const courses = ["all", ...new Set(students.map((s: { course?: string; courses?: { title: string } }) => s.course || s.courses?.title))];
 
   // Filter students
-  const filteredStudents = students.filter((student: any) => {
+  const filteredStudents = students.filter((student: { name?: string; users?: { full_name: string }; course?: string; courses?: { title: string } }) => {
     const name = student.name || student.users?.full_name || '';
     const course = student.course || student.courses?.title || '';
     const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -143,7 +143,7 @@ function TeacherAttendanceContent() {
     try {
       const attendanceData = studentIds.map(id => {
         const studentId = id; // This is a string from Object.keys
-        const student = students.find((s: any) => s.id === studentId || s.id === Number(studentId));
+        const student = students.find((s: { id: string | number }) => s.id === studentId || s.id === Number(studentId));
         return {
           student_id: studentId,
           teacher_id: teacherId,
