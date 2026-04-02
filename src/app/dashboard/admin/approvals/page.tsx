@@ -67,16 +67,16 @@ function ApprovalsContent() {
 
       // Combine students and teachers with type indicator
       const users: PendingUser[] = [
-        ...(data.pendingStudents || []).map((s: any) => ({ ...s, type: 'student' as const })),
-        ...(data.pendingTeachers || []).map((t: any) => ({ ...t, type: 'teacher' as const }))
+        ...(data.pendingStudents || []).map((s: Record<string, unknown>) => ({ ...s, type: 'student' as const })),
+        ...(data.pendingTeachers || []).map((t: Record<string, unknown>) => ({ ...t, type: 'teacher' as const }))
       ];
 
       // Sort by created_at
       users.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
 
       setPendingUsers(users);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load pending approvals');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to load pending approvals');
     } finally {
       setLoading(false);
     }
