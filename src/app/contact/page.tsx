@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle, CheckCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, MessageCircle, CheckCircle, ScrollText, FileUp, Upload } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 // Floating particles for background - generated client-side to avoid hydration mismatch
@@ -17,9 +17,29 @@ interface Particle {
   duration: number;
 }
 
+interface FatawaFormData {
+  name: string;
+  email: string;
+  subject: string;
+  question: string;
+  file: File | null;
+}
+
 export default function ContactPage() {
   const { t, isRTL } = useTranslation();
   const [particles, setParticles] = useState<Particle[]>([]);
+  
+  // Fatawa Hadessya form state
+  const [fatawaForm, setFatawaForm] = useState<FatawaFormData>({
+    name: "",
+    email: "",
+    subject: "",
+    question: "",
+    file: null
+  });
+  const [fatawaSubmitting, setFatawaSubmitting] = useState(false);
+  const [fatawaSubmitted, setFatawaSubmitted] = useState(false);
+  const [fatawaError, setFatawaError] = useState("");
   
   useEffect(() => {
     setParticles(
@@ -33,6 +53,55 @@ export default function ContactPage() {
     );
   }, []);
   
+  const handleFatawaChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFatawaForm(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleFatawaFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFatawaForm(prev => ({ ...prev, file }));
+  };
+
+  const handleFatawaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setFatawaSubmitting(true);
+    setFatawaError("");
+    
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", fatawaForm.name);
+      formDataToSend.append("email", fatawaForm.email);
+      formDataToSend.append("subject", fatawaForm.subject);
+      formDataToSend.append("question", fatawaForm.question);
+      formDataToSend.append("type", "fatawa");
+      if (fatawaForm.file) {
+        formDataToSend.append("file", fatawaForm.file);
+      }
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit question");
+      }
+      
+      setFatawaSubmitted(true);
+      setFatawaForm({ name: "", email: "", subject: "", question: "", file: null });
+    } catch (err: unknown) {
+      console.error("Submission error:", err);
+      setFatawaError(err instanceof Error ? err.message : "An error occurred. Please try again.");
+    } finally {
+      setFatawaSubmitting(false);
+    }
+  };
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -111,6 +180,239 @@ export default function ContactPage() {
     <main className="min-h-screen">
       <Navbar />
       
+      {/* Fatawa Hadessya Featured Section */}
+      <section className="relative pt-8 pb-12 bg-gradient-to-b from-[#E8F5E9] via-[#F1F8E9] to-[#FFF8E1] overflow-hidden">
+        {/* Decorative Islamic Pattern Background */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="fatawa-pattern" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <path
+                  d="M40 0L80 20L80 60L40 80L0 60L0 20Z"
+                  fill="none"
+                  stroke="#1A7A4A"
+                  strokeWidth="0.5"
+                />
+                <circle cx="40" cy="40" r="15" fill="none" stroke="#C9A84C" strokeWidth="0.3" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#fatawa-pattern)" />
+          </svg>
+        </div>
+
+        {/* Gold Accent Line */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#1A7A4A] via-[#C9A84C] to-[#1A7A4A]" />
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-10"
+          >
+            {/* Icon and Badge */}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#1A7A4A] to-[#27A862] shadow-lg mb-4"
+            >
+              <span className="text-2xl">🕌</span>
+            </motion.div>
+
+            {/* Main Heading */}
+            <h1 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-2 ${isRTL ? "arabic-text" : ""}`}>
+              <span className="bg-gradient-to-r from-[#1A7A4A] via-[#27A862] to-[#C9A84C] bg-clip-text text-transparent">
+                فتاویٰ حدیثیہ
+              </span>
+            </h1>
+            <p className="text-[#1A7A4A] text-lg md:text-xl font-semibold tracking-wide">
+              Fatawa Hadessya
+            </p>
+          </motion.div>
+
+          {/* Description Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border-2 border-[#C9A84C]/30 mb-8"
+          >
+            <div className={`flex items-start gap-4 ${isRTL ? "flex-row-reverse text-right" : ""}`}>
+              <div className="w-12 h-12 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center flex-shrink-0">
+                <ScrollText className="w-6 h-6 text-[#C9A84C]" />
+              </div>
+              <div>
+                <p className={`text-[var(--text-secondary)] leading-relaxed ${isRTL ? "arabic-text" : ""}`}>
+                  This section provides users the opportunity to submit their questions related to Hadith (حدیث), Islamic rulings, and scholarly matters. All queries are reviewed and answered by qualified scholars with authentic Hadith references.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Fatawa Form Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-white rounded-3xl p-6 md:p-10 shadow-2xl border border-[#1A7A4A]/20"
+          >
+            {fatawaSubmitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-center py-8"
+              >
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#1A7A4A] to-[#27A862] flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle className="w-10 h-10 text-white" />
+                </div>
+                <h3 className={`text-[var(--text-primary)] text-2xl font-bold mb-3 ${isRTL ? "arabic-text" : ""}`}>
+                  سوال کامیابی سے جمع ہو گیا
+                </h3>
+                <p className="text-[#1A7A4A] text-lg font-semibold mb-2">Question Submitted Successfully</p>
+                <p className={`text-[var(--text-muted)] max-w-md mx-auto ${isRTL ? "arabic-text" : ""}`}>
+                  Your question has been received. Our scholars will review it and respond within 24-72 hours.
+                </p>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleFatawaSubmit} className="space-y-6">
+                {/* Error Message */}
+                {fatawaError && (
+                  <div className={`p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl text-sm ${isRTL ? "text-right arabic-text" : ""}`}>
+                    {fatawaError}
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Full Name */}
+                  <div className={isRTL ? "text-right" : ""}>
+                    <label className={`block text-[var(--text-secondary)] text-sm font-medium mb-2 ${isRTL ? "arabic-text" : ""}`}>
+                      Full Name / پورا نام *
+                    </label>
+                    <input
+                      type="text"
+                      name="name"
+                      required
+                      value={fatawaForm.name}
+                      onChange={handleFatawaChange}
+                      className={`w-full px-4 py-3 rounded-xl border-2 border-[#E8F5E9] bg-white text-[var(--text-primary)] focus:outline-none focus:border-[#1A7A4A] transition-colors ${isRTL ? "text-right" : ""}`}
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className={isRTL ? "text-right" : ""}>
+                    <label className={`block text-[var(--text-secondary)] text-sm font-medium mb-2 ${isRTL ? "arabic-text" : ""}`}>
+                      Email Address / ای میل *
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      required
+                      value={fatawaForm.email}
+                      onChange={handleFatawaChange}
+                      className={`w-full px-4 py-3 rounded-xl border-2 border-[#E8F5E9] bg-white text-[var(--text-primary)] focus:outline-none focus:border-[#1A7A4A] transition-colors ${isRTL ? "text-right" : ""}`}
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+
+                {/* Subject */}
+                <div className={isRTL ? "text-right" : ""}>
+                  <label className={`block text-[var(--text-secondary)] text-sm font-medium mb-2 ${isRTL ? "arabic-text" : ""}`}>
+                    Subject / Topic / موضوع *
+                  </label>
+                  <select
+                    name="subject"
+                    required
+                    value={fatawaForm.subject}
+                    onChange={handleFatawaChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 border-[#E8F5E9] bg-white text-[var(--text-primary)] focus:outline-none focus:border-[#1A7A4A] transition-colors ${isRTL ? "text-right" : ""}`}
+                  >
+                    <option value="">Select a topic / موضوع منتخب کریں</option>
+                    <option value="hadith">Hadith (حدیث)</option>
+                    <option value="fiqh">Islamic Rulings (فقہ)</option>
+                    <option value="aqeedah">Aqeedah (عقیدہ)</option>
+                    <option value="seerah">Seerah (سیرت)</option>
+                    <option value="general">General Inquiry</option>
+                  </select>
+                </div>
+
+                {/* Question */}
+                <div className={isRTL ? "text-right" : ""}>
+                  <label className={`block text-[var(--text-secondary)] text-sm font-medium mb-2 ${isRTL ? "arabic-text" : ""}`}>
+                    Your Question / سوال *
+                  </label>
+                  <textarea
+                    name="question"
+                    required
+                    rows={6}
+                    value={fatawaForm.question}
+                    onChange={handleFatawaChange}
+                    className={`w-full px-4 py-3 rounded-xl border-2 border-[#E8F5E9] bg-white text-[var(--text-primary)] focus:outline-none focus:border-[#1A7A4A] transition-colors resize-none ${isRTL ? "text-right arabic-text" : ""}`}
+                    placeholder="تفصیل کے ساتھ سوال لکھیں... / Write your question in detail..."
+                  />
+                </div>
+
+                {/* File Upload */}
+                <div className={isRTL ? "text-right" : ""}>
+                  <label className={`block text-[var(--text-secondary)] text-sm font-medium mb-2 ${isRTL ? "arabic-text" : ""}`}>
+                    Attach File (Optional) / فائل منسلک کریں
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="file"
+                      name="file"
+                      onChange={handleFatawaFileChange}
+                      className="hidden"
+                      id="fatawa-file"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    />
+                    <label
+                      htmlFor="fatawa-file"
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-dashed border-[#C9A84C]/50 bg-[#FFF8E1]/30 cursor-pointer hover:bg-[#FFF8E1]/50 transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
+                    >
+                      <Upload className="w-5 h-5 text-[#C9A84C]" />
+                      <span className={`text-[var(--text-secondary)] text-sm ${isRTL ? "arabic-text" : ""}`}>
+                        {fatawaForm.file ? fatawaForm.file.name : "Click to upload file (PDF, DOC, Images)"}
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                {/* Note */}
+                <div className={`flex items-start gap-3 p-4 bg-[#E8F5E9]/50 rounded-xl ${isRTL ? "flex-row-reverse text-right" : ""}`}>
+                  <Clock className="w-5 h-5 text-[#1A7A4A] flex-shrink-0 mt-0.5" />
+                  <p className={`text-sm text-[#1A7A4A] ${isRTL ? "arabic-text" : ""}`}>
+                    Responses may take 24-72 hours. All queries will be kept confidential and secure. / جواب 24-72 گھنٹوں میں دیا جائے گا اور تمام سوالات خفیہ رکھے جائیں گے۔
+                  </p>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={fatawaSubmitting}
+                  className={`w-full bg-gradient-to-r from-[#1A7A4A] to-[#27A862] hover:from-[#145C38] hover:to-[#1A7A4A] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg ${isRTL ? "flex-row-reverse arabic-text" : ""}`}
+                >
+                  {fatawaSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      <span>Submit Your Question / سوال جمع کریں</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+          </motion.div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="relative pt-32 pb-16 min-h-[45vh] flex items-center overflow-hidden">
         {/* Background with Gradient */}
