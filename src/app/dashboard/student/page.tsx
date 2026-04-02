@@ -187,7 +187,7 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : enrollments.length > 0 ? (
-                  enrollments.map((course: any) => (
+                  enrollments.map((course: { id: string; course_title?: string; title?: string; teacher_name?: string; teacher?: string; progress?: number; completed_lessons?: number; total_lessons?: number; next_class?: string }) => (
                     <div key={course.id} className="p-6 hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <div className="flex-1">
@@ -253,7 +253,7 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : certificates.length > 0 ? (
-                  certificates.map((cert: any) => (
+                  certificates.map((cert: { id: string; title?: string; course_title?: string; issued_at?: string; date?: string }) => (
                     <div key={cert.id} className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}>
                       <div>
                         <p className="text-[var(--text-primary)] font-medium">{cert.title || cert.course_title || 'Certificate'}</p>
@@ -294,7 +294,7 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : upcomingSessions.length > 0 ? (
-                  upcomingSessions.map((session: any) => (
+                  upcomingSessions.map((session: { id: string; course_title?: string; course?: string; date?: string; time?: string; duration?: string }) => (
                     <div key={session.id} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <p className="text-[var(--text-primary)] font-medium">{session.course_title || session.course || 'Class'}</p>
                       <div className="flex items-center gap-4 mt-1 text-sm text-[var(--text-muted)]">
@@ -336,7 +336,7 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : enrollments.length > 0 ? (
-                  enrollments.slice(0, 3).map((enrollment: any, index: number) => (
+                  enrollments.slice(0, 3).map((enrollment: { id?: string; course_title?: string; title?: string; enrolled_at?: string; created_at?: string }, index: number) => (
                     <div key={enrollment.id || index} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <p className="text-[var(--text-secondary)] text-sm">
                         {t("dashboard.enrolledIn") || "Enrolled in"} {enrollment.course_title || enrollment.title || 'Course'}
