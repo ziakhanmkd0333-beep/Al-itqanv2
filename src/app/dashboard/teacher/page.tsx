@@ -200,7 +200,7 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : todaySchedule.length > 0 ? (
-                  todaySchedule.map((session: any) => (
+                  todaySchedule.map((session: { id: string; status?: string; student_name?: string; student?: string; course_title?: string; course?: string; time?: string; duration?: string }) => (
                     <div key={session.id} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
@@ -255,7 +255,7 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : students.length > 0 ? (
-                  students.map((student: any) => (
+                  students.map((student: { id: string; full_name?: string; name?: string; course_title?: string; course?: string; progress?: number; last_session?: string }) => (
                     <div key={student.id} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -353,7 +353,7 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : students.length > 0 ? (
-                  students.slice(0, 5).map((student: any) => (
+                  students.slice(0, 5).map((student: { id: string; attendance_status?: string; full_name?: string; name?: string; last_session?: string }) => (
                     <div key={student.id} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex items-center gap-3">
                         {getStatusIcon(student.attendance_status || 'present')}
