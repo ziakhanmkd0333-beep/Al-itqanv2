@@ -195,7 +195,7 @@ function TeacherAssignmentsContent() {
     }
   };
 
-  const viewSubmissions = (assignment: any) => {
+  const viewSubmissions = (assignment: { id?: string; title?: string; course?: string; course_title?: string; total_marks?: number; due_date?: string; status?: string }) => {
     setSelectedAssignment(assignment);
     fetchSubmissions(assignment.id);
     setShowSubmissionsModal(true);
