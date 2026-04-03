@@ -179,8 +179,8 @@ function AdminRegistrationsContent() {
       showNotification('success', 'Registration deleted successfully');
       setDeleteModal(false);
       setSelectedRegistration(null);
-    } catch (err: any) {
-      showNotification('error', err.message || 'Failed to delete registration');
+    } catch (err: unknown) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to delete registration');
     } finally {
       setIsSubmitting(false);
     }
