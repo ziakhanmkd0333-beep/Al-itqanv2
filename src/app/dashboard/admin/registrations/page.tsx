@@ -162,8 +162,8 @@ function AdminRegistrationsContent() {
       showNotification('success', 'Registration updated successfully');
       setEditModal(false);
       setSelectedRegistration(null);
-    } catch (err: any) {
-      showNotification('error', err.message || 'Failed to update registration');
+    } catch (err: unknown) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to update registration');
     } finally {
       setIsSubmitting(false);
     }

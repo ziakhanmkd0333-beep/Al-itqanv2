@@ -113,8 +113,9 @@ function ApprovalsContent() {
       
       // Remove the user from the list
       setPendingUsers(prev => prev.filter(u => u.id !== userId));
-    } catch (err: any) {
-      setError(err.message || `Failed to ${action} user`);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setError(errorMessage || `Failed to ${action} user`);
     } finally {
       setProcessing(null);
     }

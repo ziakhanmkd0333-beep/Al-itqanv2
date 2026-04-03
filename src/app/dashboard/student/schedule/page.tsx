@@ -44,7 +44,7 @@ function StudentScheduleContent() {
   const { upcomingSessions, loading } = useStudentDashboard(studentId);
 
   // Group sessions by date
-  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, Record<string, unknown>[]>, session: Record<string, unknown>) => {
+  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, { id: string; date: string; scheduled_at: string; course_title: string; course: string; time: string; duration: string; teacher_name: string }[]>, session: { id: string; date: string; scheduled_at: string; course_title: string; course: string; time: string; duration: string; teacher_name: string }) => {
     const date = new Date(session.date || session.scheduled_at).toDateString();
     if (!acc[date]) acc[date] = [];
     acc[date].push(session);

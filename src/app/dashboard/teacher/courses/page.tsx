@@ -51,8 +51,9 @@ function TeacherCoursesContent() {
         setCourses(data.courses || []);
       }
       setLoading(false);
-    } catch (error) {
-      console.error('Courses fetch error:', error);
+    } catch (error: unknown) {
+      console.error('Error fetching courses:', error);
+      toast.error(error instanceof Error ? error.message : 'Failed to load courses');
       setLoading(false);
     }
   };

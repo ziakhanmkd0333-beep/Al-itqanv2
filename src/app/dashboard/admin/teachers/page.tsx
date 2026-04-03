@@ -120,22 +120,22 @@ export default function TeachersManagementPage() {
       if (!res.ok) throw new Error(data.error);
       
       // Transform API data to match Teacher interface
-      const transformedTeachers: Teacher[] = (data.teachers || []).map((t: any) => ({
-        id: t.id,
-        full_name: t.full_name,
-        email: t.email,
-        phone: t.phone || '',
-        specialization: Array.isArray(t.specialization) ? t.specialization : 
-          typeof t.specialization === 'string' && t.specialization.includes(',')
-            ? t.specialization.split(',').map((s: string) => s.trim()).filter(Boolean)
-            : t.specialization ? [t.specialization] : [],
-        qualification: t.qualification || t.qualifications || '',
-        status: t.status || 'active',
-        assigned_courses: t.assigned_courses || [],
-        students_count: t.students_count || 0,
-        created_at: t.created_at,
-        avatar_url: t.avatar_url,
-        bio: t.bio || ''
+      const transformedTeachers: Teacher[] = (data.teachers || []).map((t: Record<string, unknown>) => ({
+        id: String(t.id || ''),
+        full_name: String(t.full_name || ''),
+        email: String(t.email || ''),
+        phone: String(t.phone || ''),
+        specialization: Array.isArray(t.specialization) ? t.specialization as string[] : 
+          typeof t.specialization === 'string' && (t.specialization as string).includes(',')
+            ? (t.specialization as string).split(',').map((s: string) => s.trim()).filter(Boolean)
+            : t.specialization ? [String(t.specialization)] : [],
+        qualification: String(t.qualification || t.qualifications || ''),
+        status: String(t.status || 'active') as Teacher["status"],
+        assigned_courses: Array.isArray(t.assigned_courses) ? t.assigned_courses as string[] : [],
+        students_count: Number(t.students_count || 0),
+        created_at: String(t.created_at || ''),
+        avatar_url: t.avatar_url ? String(t.avatar_url) : undefined,
+        bio: String(t.bio || '')
       }));
       
       setTeachers(transformedTeachers);
