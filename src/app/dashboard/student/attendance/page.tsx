@@ -100,7 +100,7 @@ function StudentAttendanceContent() {
   const attendanceRate = attendanceRecords.length > 0 ? Math.round((totalPresent / attendanceRecords.length) * 100) : 0;
 
   // Calculate monthly stats from records
-  const monthlyStatsMap = attendanceRecords.reduce((acc: any, record: any) => {
+  const monthlyStatsMap = attendanceRecords.reduce((acc: Record<string, Record<string, unknown>>, record: Record<string, unknown>) => {
     const month = new Date(record.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     if (!acc[month]) {
       acc[month] = { month, present: 0, absent: 0, late: 0, total: 0 };
