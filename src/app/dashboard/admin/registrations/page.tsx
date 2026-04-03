@@ -191,8 +191,8 @@ function AdminRegistrationsContent() {
     try {
       await approveRegistration(registration.id, user?.id || '', 'Approved by admin');
       showNotification('success', `${registration.user_type === 'student' ? 'Student' : 'Teacher'} approved successfully`);
-    } catch (err: any) {
-      showNotification('error', err.message || 'Failed to approve registration');
+    } catch (err: unknown) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to approve registration');
     }
   };
 
@@ -201,8 +201,8 @@ function AdminRegistrationsContent() {
     try {
       await rejectRegistration(registration.id, user?.id || '', 'Rejected by admin');
       showNotification('success', `${registration.user_type === 'student' ? 'Student' : 'Teacher'} rejected`);
-    } catch (err: any) {
-      showNotification('error', err.message || 'Failed to reject registration');
+    } catch (err: unknown) {
+      showNotification('error', err instanceof Error ? err.message : 'Failed to reject registration');
     }
   };
 
@@ -216,7 +216,7 @@ function AdminRegistrationsContent() {
       suspended: "bg-orange-100 text-orange-700 border-orange-200"
     };
     
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       approved: CheckCircle,
       rejected: XCircle,
       pending: Clock,
