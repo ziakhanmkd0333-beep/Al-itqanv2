@@ -109,25 +109,25 @@ export default function AdmissionsManagementPage() {
       if (!res.ok) throw new Error(data.error);
       
       // Transform API data to match Admission interface
-      const transformedAdmissions: Admission[] = (data.admissions || []).map((a: any) => ({
-        id: a.id,
-        full_name: a.full_name,
-        email: a.email,
-        phone: a.phone || '',
-        country: a.country || '',
-        age: a.age || 0,
-        language: a.language || 'en',
-        course_id: a.course_id || '',
-        course_name: a.courses?.title || 'Unknown Course',
-        preferred_timing: a.preferred_timing || '',
-        guardian_name: a.guardian_name,
-        guardian_phone: a.guardian_phone,
-        status: a.status || 'pending',
-        applied_at: a.applied_at || a.created_at,
-        reviewed_by: a.reviewed_by,
-        reviewed_at: a.reviewed_at,
-        notes: a.notes,
-        admin_notes: a.admin_notes
+      const transformedAdmissions: Admission[] = (data.admissions || []).map((a: Record<string, unknown>) => ({
+        id: String(a.id || ''),
+        full_name: String(a.full_name || ''),
+        email: String(a.email || ''),
+        phone: String(a.phone || ''),
+        country: String(a.country || ''),
+        age: Number(a.age || 0),
+        language: String(a.language || 'en'),
+        course_id: String(a.course_id || ''),
+        course_name: String((a.courses as Record<string, unknown>)?.title || 'Unknown Course'),
+        preferred_timing: String(a.preferred_timing || ''),
+        guardian_name: a.guardian_name ? String(a.guardian_name) : undefined,
+        guardian_phone: a.guardian_phone ? String(a.guardian_phone) : undefined,
+        status: String(a.status || 'pending') as Admission["status"],
+        applied_at: String(a.applied_at || a.created_at || ''),
+        reviewed_by: a.reviewed_by ? String(a.reviewed_by) : undefined,
+        reviewed_at: a.reviewed_at ? String(a.reviewed_at) : undefined,
+        notes: a.notes ? String(a.notes) : undefined,
+        admin_notes: a.admin_notes ? String(a.admin_notes) : undefined
       }));
       
       console.log("Fetched admissions:", transformedAdmissions.length, "records");
