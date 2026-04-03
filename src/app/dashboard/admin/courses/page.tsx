@@ -851,9 +851,9 @@ export default function CoursesManagementPage() {
         );
       }
       closeModal();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving course:", error);
-      alert("Failed to save course: " + error.message);
+      alert("Failed to save course: " + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
@@ -873,9 +873,9 @@ export default function CoursesManagementPage() {
       setCourses((prev) => prev.filter((c) => c.id !== courseToDelete));
       setShowDeleteConfirm(false);
       setCourseToDelete(null);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error deleting course:", error);
-      alert("Failed to delete course: " + error.message);
+      alert("Failed to delete course: " + (error instanceof Error ? error.message : 'Unknown error'));
     } finally {
       setLoading(false);
     }
