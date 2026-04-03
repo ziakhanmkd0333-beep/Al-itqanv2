@@ -30,8 +30,8 @@ export default function TeacherAnnouncementsPage() {
 
 function TeacherAnnouncementsContent() {
   const { t, isRTL } = useTranslation();
-  const [announcements, setAnnouncements] = useState<Record<string, unknown>[]>([]);
-  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [saving, setSaving] = useState(false);

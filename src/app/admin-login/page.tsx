@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Eye, EyeOff, Shield, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -59,8 +58,8 @@ export default function AdminLoginPage() {
         router.push('/dashboard/admin');
       }, 1000);
 
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred during login');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during login');
     } finally {
       setIsLoading(false);
     }
@@ -229,12 +228,12 @@ export default function AdminLoginPage() {
 
           {/* Back to Main Site */}
           <div className="mt-6 text-center">
-            <Link
+            <a
               href="/"
-              className="text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
             >
-              ← Back to Home
-            </Link>
+              ← Back to Main Site
+            </a>
           </div>
         </motion.div>
 

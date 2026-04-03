@@ -96,29 +96,6 @@ export default function RootLayout({
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Al-Itqan Institute for Islamic & Arabic Studies</title>
-        <meta name="description" content="Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences." />
-        <link rel="canonical" href="https://itqaninstitute.com" />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://itqaninstitute.com" />
-        <meta property="og:title" content="Al-Itqan Institute for Islamic & Arabic Studies" />
-        <meta property="og:description" content="Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences." />
-        <meta property="og:image" content="https://i.ibb.co/RGwjjCBj/logo-removebg-preview.png" />
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Al-Itqan Institute for Islamic & Arabic Studies" />
-        <meta name="twitter:description" content="Al-Itqan Institute for Islamic & Arabic Studies is a premier online academy offering a structured learning path from foundational Qur'an recitation to advanced studies in Arabic, Fiqh, and Hadith sciences." />
-        <meta name="twitter:image" content="https://i.ibb.co/RGwjjCBj/logo-removebg-preview.png" />
-        <meta name="twitter:url" content="https://itqaninstitute.com" />
-        
-        {/* Favicons */}
-        <link rel="icon" href="https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="32x32" href="https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/favicon-32x32.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="https://uksptkeroneiqfcqzsgh.supabase.co/storage/v1/object/public/assets/apple-touch-icon.png" />
-        
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="theme-color" content="#0D4D2F" />

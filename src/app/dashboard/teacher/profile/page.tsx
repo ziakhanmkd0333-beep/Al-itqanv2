@@ -32,7 +32,7 @@ function TeacherProfileContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [teacher, setTeacher] = useState<Record<string, unknown> | null>(null);
+  const [teacher, setTeacher] = useState<any>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -100,8 +100,8 @@ function TeacherProfileContent() {
         setSuccess(true);
         setTimeout(() => setSuccess(false), 3000);
       }
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update profile');
+    } catch (error) {
+      console.error('Profile update error:', error);
     } finally {
       setSaving(false);
     }

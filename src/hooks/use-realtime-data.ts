@@ -46,20 +46,14 @@ export function useRealtimeData<T>(
           ...(filter && { filter })
         },
         (payload) => {
-          if (payload.new && (!filter || Object.entries(filter).every(([key, value]) => (payload.new as Record<string, unknown>)[key] === value))) {
-            if (payload.eventType === 'INSERT') {
-              setData((prev) => [...prev, payload.new as T]);
-            } else if (payload.eventType === 'UPDATE') {
-              setData((prev) =>
-                prev.map((item) =>
-                  (item as T & { id: string }).id === payload.new.id ? (payload.new as T) : item
-                )
-              );
-            } else if (payload.eventType === 'DELETE') {
-              setData((prev) =>
-                prev.filter((item) => (item as T & { id: string }).id !== payload.old.id)
-              );
-            }
+          if (payload.eventType === 'INSERT') {
+            setData((prev) => [...prev, payload.new as T]);
+          } else if (payload.eventType === 'UPDATE') {
+            setData((prev) =>
+              prev.map((item) =>
+                (item as T & { id: string }).id === payload.new.id ? (payload.new as T) : item
+              )
+            );
           } else if (payload.eventType === 'DELETE') {
             setData((prev) =>
               prev.filter((item) => (item as T & { id: string }).id !== payload.old.id)
@@ -497,7 +491,7 @@ export function useStudentAttendance(studentId: string | null) {
 
 // Student Certificates Hook
 export function useStudentCertificates(studentId: string | null) {
-  const [certificates, setCertificates] = useState<Record<string, unknown>[]>([]);
+  const [certificates, setCertificates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

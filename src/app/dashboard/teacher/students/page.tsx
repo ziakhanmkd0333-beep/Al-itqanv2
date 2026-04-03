@@ -8,26 +8,36 @@ import {
   Users,
   Search,
   Filter,
-  Phone,
   Mail,
   MessageCircle,
   Eye,
-  ChevronRight,
   BookOpen,
   Calendar,
   TrendingUp,
   Clock,
-  X,
-  RefreshCw,
-  Wifi,
-  WifiOff
+  X
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useTeacherStudents } from "@/hooks/use-realtime-data";
 import { supabaseBrowser, getCurrentUser } from "@/lib/supabase-browser";
 
 // Mock data for teacher's students
-const mockStudents = [
+type Attendance = { present: number; absent: number; late: number };
+type Student = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  course: string;
+  progress: number;
+  lastSession: string;
+  nextSession: string;
+  attendance: Attendance;
+  status: string;
+  avatar: string;
+};
+
+const mockStudents: Student[] = [
   {
     id: 1,
     name: "Ahmed Khan",
@@ -182,13 +192,14 @@ function TeacherStudentsContent() {
   const students = fetchedStudents.length > 0 ? fetchedStudents : mockStudents;
 
   // Get unique courses for filter
-  const courses = ["all", ...new Set(students.map((s: { course?: string; courses?: { title?: string } }) => s.course || s.courses?.title))];
+  const courses = ["all", ...new Set(students.map((s: Student | Record<string, unknown>) => (s as Student).course || (s as { courses?: { title: string } }).courses?.title))];
 
   // Filter students
-  const filteredStudents = students.filter((student: { name?: string; users?: { full_name?: string; email?: string }; email?: string; course?: string; courses?: { title?: string } }) => {
-    const name = student.name || student.users?.full_name || '';
-    const email = student.email || student.users?.email || '';
-    const course = student.course || student.courses?.title || '';
+  const filteredStudents = students.filter((student: Student | Record<string, unknown>) => {
+    const s = student as Student & { users?: { full_name: string; email: string }; courses?: { title: string } };
+    const name = s.name || s.users?.full_name || '';
+    const email = s.email || s.users?.email || '';
+    const course = s.course || s.courses?.title || '';
     const matchesSearch = name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          email.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCourse = selectedCourse === "all" || course === selectedCourse;
@@ -212,8 +223,8 @@ function TeacherStudentsContent() {
     return "bg-red-500";
   };
 
-  const handleViewStudent = (student: typeof mockStudents[0]) => {
-    setSelectedStudent(student);
+  const handleViewStudent = (student: Student | Record<string, unknown>) => {
+    setSelectedStudent(student as Student);
     setShowStudentModal(true);
   };
 

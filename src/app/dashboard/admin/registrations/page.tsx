@@ -91,7 +91,7 @@ function AdminRegistrationsContent() {
   const [editModal, setEditModal] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const [selectedRegistration, setSelectedRegistration] = useState<Registration | null>(null);
-  const [editForm, setEditForm] = useState<Record<string, unknown>>({});
+  const [editForm, setEditForm] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
@@ -162,8 +162,8 @@ function AdminRegistrationsContent() {
       showNotification('success', 'Registration updated successfully');
       setEditModal(false);
       setSelectedRegistration(null);
-    } catch (err: unknown) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to update registration');
+    } catch (err: any) {
+      showNotification('error', err.message || 'Failed to update registration');
     } finally {
       setIsSubmitting(false);
     }
@@ -179,8 +179,8 @@ function AdminRegistrationsContent() {
       showNotification('success', 'Registration deleted successfully');
       setDeleteModal(false);
       setSelectedRegistration(null);
-    } catch (err: unknown) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to delete registration');
+    } catch (err: any) {
+      showNotification('error', err.message || 'Failed to delete registration');
     } finally {
       setIsSubmitting(false);
     }
@@ -191,8 +191,8 @@ function AdminRegistrationsContent() {
     try {
       await approveRegistration(registration.id, user?.id || '', 'Approved by admin');
       showNotification('success', `${registration.user_type === 'student' ? 'Student' : 'Teacher'} approved successfully`);
-    } catch (err: unknown) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to approve registration');
+    } catch (err: any) {
+      showNotification('error', err.message || 'Failed to approve registration');
     }
   };
 
@@ -201,8 +201,8 @@ function AdminRegistrationsContent() {
     try {
       await rejectRegistration(registration.id, user?.id || '', 'Rejected by admin');
       showNotification('success', `${registration.user_type === 'student' ? 'Student' : 'Teacher'} rejected`);
-    } catch (err: unknown) {
-      showNotification('error', err instanceof Error ? err.message : 'Failed to reject registration');
+    } catch (err: any) {
+      showNotification('error', err.message || 'Failed to reject registration');
     }
   };
 
@@ -216,7 +216,7 @@ function AdminRegistrationsContent() {
       suspended: "bg-orange-100 text-orange-700 border-orange-200"
     };
     
-    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
+    const icons: Record<string, any> = {
       approved: CheckCircle,
       rejected: XCircle,
       pending: Clock,

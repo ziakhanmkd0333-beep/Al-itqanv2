@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { courses } from "@/lib/courses-data";
@@ -221,8 +220,8 @@ export default function AdmissionPage() {
       }
 
       setIsSubmitted(true);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred during registration');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during registration');
     } finally {
       setIsSubmitting(false);
     }
@@ -272,8 +271,8 @@ export default function AdmissionPage() {
       }
 
       setIsSubmitted(true);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'An error occurred during registration');
+    } catch (err: any) {
+      setError(err.message || 'An error occurred during registration');
     } finally {
       setIsSubmitting(false);
     }

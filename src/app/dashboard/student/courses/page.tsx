@@ -36,7 +36,7 @@ function StudentCoursesContent() {
   const { t, isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"lessons" | "materials" | "recordings">("lessons");
-  const [selectedCourse, setSelectedCourse] = useState<{ id?: string; course_title?: string; course?: { title?: string } } | null>(null);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
 
   // Get student ID from profile on mount
   useEffect(() => {
@@ -86,7 +86,7 @@ function StudentCoursesContent() {
   }
 
   // Transform enrollment data to match expected format
-  const enrolledCourses = enrollments.map((enrollment: { id?: string; course_title?: string; course?: { title?: string; description?: string; category?: string; level?: string }; teacher_name?: string; teacher?: { full_name?: string }; progress?: number; total_lessons?: number; completed_lessons?: number; next_course?: string }) => ({
+  const enrolledCourses = enrollments.map((enrollment: any) => ({
     id: enrollment.id,
     title: enrollment.course_title || enrollment.course?.title || 'Course',
     description: enrollment.course?.description || 'Course description',
@@ -158,7 +158,7 @@ function StudentCoursesContent() {
                   <RefreshCw className="w-6 h-6 animate-spin text-emerald-600" />
                 </div>
               ) : enrolledCourses.length > 0 ? (
-                enrolledCourses.map((course: { id?: string; title?: string; category?: string; level?: string; progress?: number; completedLessons?: number; totalLessons?: number }, index: number) => (
+                enrolledCourses.map((course: any, index: number) => (
                   <motion.div
                     key={course.id}
                     initial={{ opacity: 0, x: -20 }}

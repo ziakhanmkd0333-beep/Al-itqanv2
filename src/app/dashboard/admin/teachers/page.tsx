@@ -120,7 +120,7 @@ export default function TeachersManagementPage() {
       if (!res.ok) throw new Error(data.error);
       
       // Transform API data to match Teacher interface
-      const transformedTeachers: Teacher[] = (data.teachers || []).map((t: Record<string, unknown>) => ({
+      const transformedTeachers: Teacher[] = (data.teachers || []).map((t: any) => ({
         id: t.id,
         full_name: t.full_name,
         email: t.email,

@@ -27,10 +27,10 @@ export default function TeacherCoursesPage() {
 
 function TeacherCoursesContent() {
   const { t, isRTL } = useTranslation();
-  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCourse, setSelectedCourse] = useState<Record<string, unknown> | null>(null);
-  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<any>(null);
+  const [students, setStudents] = useState<any[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function TeacherCoursesContent() {
     }
   };
 
-  const handleCourseSelect = (course: { id: string; title?: string; description?: string; level?: string; category?: string; students_count?: number; status?: string }) => {
+  const handleCourseSelect = (course: any) => {
     setSelectedCourse(course);
     fetchStudents(course.id);
   };
