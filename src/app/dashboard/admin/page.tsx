@@ -139,7 +139,7 @@ function AdminDashboardContent() {
     }
     
     if (realtimeSessions) {
-      setUpcomingSessions(realtimeSessions.map((s: any) => ({
+      setUpcomingSessions(realtimeSessions.map((s: Record<string, unknown>) => ({
         id: s.id,
         student: s.students?.full_name || 'Group',
         teacher: s.teachers?.full_name || s.teacher_id,
@@ -550,7 +550,7 @@ function AdminDashboardContent() {
                   <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                 </div>
               ) : recentAdmissions.length > 0 ? (
-                recentAdmissions.map((admission: any) => (
+                recentAdmissions.map((admission: Record<string, unknown>) => (
                   <div
                     key={admission.id}
                     className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
