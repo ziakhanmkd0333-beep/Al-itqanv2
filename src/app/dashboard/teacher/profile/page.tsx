@@ -32,7 +32,7 @@ function TeacherProfileContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [teacher, setTeacher] = useState<any>(null);
+  const [teacher, setTeacher] = useState<Record<string, unknown> | null>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",

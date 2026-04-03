@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Eye, EyeOff, Shield, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -228,12 +229,12 @@ export default function AdminLoginPage() {
 
           {/* Back to Main Site */}
           <div className="mt-6 text-center">
-            <a
+            <Link
               href="/"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+              className="text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
             >
-              ← Back to Main Site
-            </a>
+              ← Back to Home
+            </Link>
           </div>
         </motion.div>
 

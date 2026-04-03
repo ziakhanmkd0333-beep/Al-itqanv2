@@ -30,15 +30,15 @@ export default function TeacherAssignmentsPage() {
 
 function TeacherAssignmentsContent() {
   const { t, isRTL } = useTranslation();
-  const [assignments, setAssignments] = useState<any[]>([]);
-  const [courses, setCourses] = useState<any[]>([]);
+  const [assignments, setAssignments] = useState<Record<string, unknown>[]>([]);
+  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showSubmissionsModal, setShowSubmissionsModal] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState<any>(null);
-  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [selectedAssignment, setSelectedAssignment] = useState<Record<string, unknown> | null>(null);
+  const [submissions, setSubmissions] = useState<Record<string, unknown>[]>([]);
   const [saving, setSaving] = useState(false);
-  const [gradingSubmission, setGradingSubmission] = useState<any>(null);
+  const [gradingSubmission, setGradingSubmission] = useState<Record<string, unknown> | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",

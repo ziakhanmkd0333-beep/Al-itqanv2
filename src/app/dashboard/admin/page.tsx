@@ -550,7 +550,7 @@ function AdminDashboardContent() {
                   <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                 </div>
               ) : recentAdmissions.length > 0 ? (
-                recentAdmissions.map((admission: any) => (
+                recentAdmissions.map((admission: { id: string; status: string; name?: string; users?: { full_name?: string; email?: string }; email?: string; course?: string; courses?: { title?: string }; created_at?: string }) => (
                   <div
                     key={admission.id}
                     className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}

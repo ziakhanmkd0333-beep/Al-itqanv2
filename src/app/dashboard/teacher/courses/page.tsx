@@ -27,10 +27,10 @@ export default function TeacherCoursesPage() {
 
 function TeacherCoursesContent() {
   const { t, isRTL } = useTranslation();
-  const [courses, setCourses] = useState<any[]>([]);
+  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
-  const [students, setStudents] = useState<any[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<Record<string, unknown> | null>(null);
+  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
   const [loadingStudents, setLoadingStudents] = useState(false);
 
   useEffect(() => {

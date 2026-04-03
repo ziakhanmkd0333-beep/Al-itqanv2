@@ -156,7 +156,7 @@ function StudentNotificationsContent() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, React.ComponentType<{ className?: string }>> = {
       announcement: Info,
       message: MessageSquare,
       update: Calendar,

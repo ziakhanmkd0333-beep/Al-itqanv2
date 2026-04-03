@@ -127,7 +127,7 @@ function StudentScheduleContent() {
                   <Clock className="w-5 h-5 text-[var(--primary)]" />
                   Upcoming Sessions ({upcomingSessions.length})
                 </h3>
-                {upcomingSessions.map((session: any, index: number) => (
+                {upcomingSessions.map((session: { id?: string; course_title?: string; courses?: { title?: string }; teacher_name?: string; scheduled_date?: string; scheduled_time?: string; status?: string; course?: string }, index: number) => (
                   <motion.div
                     key={session.id}
                     initial={{ opacity: 0, x: -20 }}
