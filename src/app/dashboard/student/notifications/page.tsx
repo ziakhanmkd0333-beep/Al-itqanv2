@@ -19,6 +19,7 @@ import {
   X
 } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { LucideIcon } from "lucide-react";
 
 interface Notification {
   id: string;
@@ -156,7 +157,7 @@ function StudentNotificationsContent() {
   };
 
   const getTypeIcon = (type: string) => {
-    const icons: Record<string, any> = {
+    const icons: Record<string, LucideIcon> = {
       announcement: Info,
       message: MessageSquare,
       update: Calendar,

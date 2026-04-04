@@ -44,7 +44,7 @@ function StudentScheduleContent() {
   const { upcomingSessions, loading } = useStudentDashboard(studentId);
 
   // Group sessions by date
-  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, { id: string; date: string; scheduled_at: string; course_title: string; course: string; time: string; duration: string; teacher_name: string }[]>, session: { id: string; date: string; scheduled_at: string; course_title: string; course: string; time: string; duration: string; teacher_name: string }) => {
+  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, typeof upcomingSessions[0][]>, session: typeof upcomingSessions[0]) => {
     const date = new Date(session.date || session.scheduled_at).toDateString();
     if (!acc[date]) acc[date] = [];
     acc[date].push(session);
@@ -127,7 +127,7 @@ function StudentScheduleContent() {
                   <Clock className="w-5 h-5 text-[var(--primary)]" />
                   Upcoming Sessions ({upcomingSessions.length})
                 </h3>
-                {upcomingSessions.map((session: any, index: number) => (
+                {upcomingSessions.map((session: Record<string, unknown>, index: number) => (
                   <motion.div
                     key={session.id}
                     initial={{ opacity: 0, x: -20 }}

@@ -30,8 +30,8 @@ export default function TeacherMaterialsPage() {
 
 function TeacherMaterialsContent() {
   const { t, isRTL } = useTranslation();
-  const [materials, setMaterials] = useState<any[]>([]);
-  const [courses, setCourses] = useState<any[]>([]);
+  const [materials, setMaterials] = useState<Record<string, unknown>[]>([]);
+  const [courses, setCourses] = useState<Record<string, unknown>[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploading, setUploading] = useState(false);

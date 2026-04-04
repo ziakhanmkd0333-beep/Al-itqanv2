@@ -3,6 +3,13 @@ import { supabaseAdmin } from '@/lib/supabase-admin';
 
 export const dynamic = 'force-dynamic';
 
+interface EnrollmentRecord {
+  id: string;
+  course_id: string;
+  students: Record<string, unknown>;
+  courses?: { title?: string };
+}
+
 // GET /api/teacher/students/all - Get all students for a teacher
 export async function GET(request: Request) {
   try {
@@ -59,7 +66,7 @@ export async function GET(request: Request) {
     if (error) throw error;
 
     // Extract unique students
-    const students = enrollments?.map((e: any) => ({
+    const students = enrollments?.map((e: EnrollmentRecord) => ({
       ...e.students,
       course_id: e.course_id,
       course_title: e.courses?.title,

@@ -92,9 +92,9 @@ export default function ContactPage() {
       }
       
       setIsSubmitted(true);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Submission error:", err);
-      setError(err.message || "An error occurred. Please try again.");
+      setError(err instanceof Error ? err.message : "An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
