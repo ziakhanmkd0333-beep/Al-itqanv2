@@ -354,9 +354,9 @@ function TeacherStudentsContent() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {filteredStudents.map((student, index) => (
+                  {filteredStudents.map((student: Record<string, unknown>, index: number) => (
                     <motion.tr
-                      key={student.id}
+                      key={String(student.id)}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
@@ -365,38 +365,38 @@ function TeacherStudentsContent() {
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{student.avatar}</span>
+                            <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{String(student.avatar)}</span>
                           </div>
                           <div>
-                            <p className="font-medium text-gray-900 dark:text-white">{student.name}</p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">{student.email}</p>
+                            <p className="font-medium text-gray-900 dark:text-white">{String(student.name)}</p>
+                            <p className="text-sm text-gray-500 dark:text-gray-400">{String(student.email)}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <span className="px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                          {student.course}
+                          {String(student.course)}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
                           <div className="w-24 h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                             <div
-                              className={`h-full ${getProgressColor(student.progress)} rounded-full transition-all`}
-                              style={{ width: `${student.progress}%` }}
+                              className={`h-full ${getProgressColor(Number(student.progress))} rounded-full transition-all`}
+                              style={{ width: `${Number(student.progress) || 0}%` }}
                             />
                           </div>
-                          <span className="text-sm font-medium text-gray-900 dark:text-white">{student.progress}%</span>
+                          <span className="text-sm font-medium text-gray-900 dark:text-white">{Number(student.progress) || 0}%</span>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                        {student.lastSession}
+                        {String(student.lastSession)}
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-green-600 dark:text-green-400 text-sm">{student.attendance.present}P</span>
-                          <span className="text-red-600 dark:text-red-400 text-sm">{student.attendance.absent}A</span>
-                          <span className="text-yellow-600 dark:text-yellow-400 text-sm">{student.attendance.late}L</span>
+                          <span className="text-green-600 dark:text-green-400 text-sm">{Number((student.attendance as Record<string, unknown>)?.present) || 0}P</span>
+                          <span className="text-red-600 dark:text-red-400 text-sm">{Number((student.attendance as Record<string, unknown>)?.absent) || 0}A</span>
+                          <span className="text-yellow-600 dark:text-yellow-400 text-sm">{Number((student.attendance as Record<string, unknown>)?.late) || 0}L</span>
                         </div>
                       </td>
                       <td className="px-6 py-4">
@@ -416,7 +416,7 @@ function TeacherStudentsContent() {
                             <Mail className="w-5 h-5" />
                           </a>
                           <a
-                            href={`https://wa.me/${student.phone.replace(/[^0-9]/g, '')}`}
+                            href={`https://wa.me/${String(student.phone || '').replace(/[^0-9]/g, '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-2 text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors"
