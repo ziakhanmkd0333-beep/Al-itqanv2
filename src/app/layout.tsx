@@ -72,13 +72,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: 'any' },
-      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: '32x32', type: 'image/jpeg' },
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
     ],
     apple: [
-      { url: 'https://i.ibb.co/cc5SMSSs/favicon.jpg', sizes: '180x180', type: 'image/jpeg' },
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: 'https://i.ibb.co/cc5SMSSs/favicon.jpg',
+    shortcut: '/favicon.ico',
   },
   manifest: '/manifest.json',
   verification: {
