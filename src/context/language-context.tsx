@@ -9,22 +9,36 @@ interface LanguageContextType {
   setLanguage: (lang: Language) => void;
   isRTL: boolean;
   dir: "ltr" | "rtl";
+  isMounted: boolean;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 const RTL_LANGUAGES: Language[] = ["ar", "ur"];
 
+// Get initial language from localStorage (for client-side only)
+const getInitialLanguage = (): Language => {
+  if (typeof window === 'undefined') return 'en';
+  const stored = localStorage.getItem("alnoor-language") as Language;
+  if (stored && ["en", "ar", "ur"].includes(stored)) {
+    return stored;
+  }
+  return 'en';
+};
+
 interface LanguageProviderProps {
   children: ReactNode;
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+    // Re-validate language after mount to ensure sync
     const stored = localStorage.getItem("alnoor-language") as Language;
-    if (stored && ["en", "ar", "ur"].includes(stored)) {
+    if (stored && ["en", "ar", "ur"].includes(stored) && stored !== language) {
       setLanguageState(stored);
     }
   }, []);
@@ -45,7 +59,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
   }, [language, dir]);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, isRTL, dir }}>
+    <LanguageContext.Provider value={{ language, setLanguage, isRTL, dir, isMounted }}>
       {children}
     </LanguageContext.Provider>
   );
