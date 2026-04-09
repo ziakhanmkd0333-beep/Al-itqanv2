@@ -54,7 +54,7 @@ export default function ContactPage() {
     {
       icon: Phone,
       title: t("contact.callWhatsApp"),
-      details: ["+923434487450", "+923434487450"],
+      details: ["+923434487450", "03332101512 (Mulana Dr. Noor ur Rahman Hazarvi)"],
       color: "#C9A84C"
     },
     {
@@ -445,15 +445,26 @@ export default function ContactPage() {
                 <p className={`text-white/90 mb-6 ${isRTL ? "arabic-text text-right" : ""}`}>
                   {t("contact.whatsAppDesc")}
                 </p>
-                <a
-                  href="https://wa.me/92XXXXXXXXXX"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
-                >
-                  <MessageCircle className="w-5 h-5" />
-                  {t("contact.startChat")}
-                </a>
+                <div className="space-y-3">
+                  <a
+                    href="https://wa.me/9233434487450"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 bg-white text-green-600 px-6 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    {t("contact.startChat")}
+                  </a>
+                  <a
+                    href="https://wa.me/923332101512"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 bg-white/90 text-green-700 px-6 py-3 rounded-xl font-semibold hover:bg-white transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    WhatsApp: Mulana Dr. Noor ur Rahman Hazarvi
+                  </a>
+                </div>
               </div>
 
               {/* FAQ Section */}
