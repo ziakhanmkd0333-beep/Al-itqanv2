@@ -225,15 +225,13 @@ export default function RootLayout({
           }}
         />
         {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVJ0MFTMY6"></script>
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-RVJ0MFTMY6');
-          `
-        }} />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-JKKWV7MKJ5" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">{`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-JKKWV7MKJ5');
+        `}</Script>
       </head>
       <body className="antialiased">
         <ThemeProvider

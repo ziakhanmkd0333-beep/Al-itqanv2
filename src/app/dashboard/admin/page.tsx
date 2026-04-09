@@ -140,12 +140,12 @@ function AdminDashboardContent() {
     
     if (realtimeSessions) {
       setUpcomingSessions(realtimeSessions.map((s: Record<string, unknown>) => ({
-        id: s.id,
-        student: s.students?.full_name || 'Group',
-        teacher: s.teachers?.full_name || s.teacher_id,
-        course: s.courses?.title || s.course_id,
-        time: s.scheduled_time,
-        date: s.scheduled_date
+        id: String(s.id || ''),
+        student: String((s.students as Record<string, string>)?.full_name || 'Group'),
+        teacher: String((s.teachers as Record<string, string>)?.full_name || s.teacher_id || ''),
+        course: String((s.courses as Record<string, string>)?.title || s.course_id || ''),
+        time: String(s.scheduled_time || ''),
+        date: String(s.scheduled_date || '')
       })));
     }
   }, [realtimeStats, realtimeSessions]);
@@ -552,20 +552,20 @@ function AdminDashboardContent() {
               ) : recentAdmissions.length > 0 ? (
                 recentAdmissions.map((admission: Record<string, unknown>) => (
                   <div
-                    key={admission.id}
+                    key={String(admission.id)}
                     className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
                   >
                     <div className={`flex items-center gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>
-                      {getStatusIcon(admission.status)}
+                      {getStatusIcon(String(admission.status))}
                       <div className={isRTL ? "text-right" : "text-left"}>
-                        <p className={`font-medium text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>{admission.student_name || admission.full_name || 'Student'}</p>
-                        <p className={`text-[var(--text-muted)] text-sm ${isRTL ? "arabic-text" : ""}`}>{admission.course_title || admission.courses?.title || 'Course'}</p>
+                        <p className={`font-medium text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>{String(admission.student_name || admission.full_name || 'Student')}</p>
+                        <p className={`text-[var(--text-muted)] text-sm ${isRTL ? "arabic-text" : ""}`}>{String(admission.course_title || (admission.courses as Record<string, string>)?.title || 'Course')}</p>
                       </div>
                     </div>
                     <div className={isRTL ? "text-left" : "text-right"}>
-                      {getStatusBadge(admission.status)}
+                      {getStatusBadge(String(admission.status))}
                       <p className={`text-[var(--text-muted)] text-xs mt-1 ${isRTL ? "arabic-text" : ""}`}>
-                        {new Date(admission.applied_at || admission.created_at).toLocaleDateString()}
+                        {new Date(String(admission.applied_at || admission.created_at)).toLocaleDateString()}
                       </p>
                     </div>
                   </div>

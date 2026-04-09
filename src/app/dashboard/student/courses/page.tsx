@@ -59,6 +59,12 @@ function StudentCoursesContent() {
   // Use real-time hook for student dashboard data
   const { enrollments, loading } = useStudentDashboard(studentId);
 
+  // Build progression path from enrollments
+  const progressionPath = enrollments.map((e: Record<string, unknown>, index: number) => ({
+    course: String(e.course_title || (e.course as Record<string, unknown>)?.title || `Course ${index + 1}`),
+    status: Number(e.progress) >= 100 ? "completed" : Number(e.progress) > 0 ? "in_progress" : "locked"
+  }));
+
   // Set first course as selected when data loads
   useEffect(() => {
     if (enrollments.length > 0 && !selectedCourse) {
@@ -70,6 +76,21 @@ function StudentCoursesContent() {
     if (progress >= 70) return "bg-green-500";
     if (progress >= 40) return "bg-yellow-500";
     return "bg-red-500";
+  };
+
+  // Status icon helper for progression path
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "completed":
+        return <CheckCircle className="w-4 h-4 text-green-500" />;
+      case "in_progress":
+      case "current":
+        return <ArrowRight className="w-4 h-4 text-emerald-500" />;
+      case "locked":
+        return <Lock className="w-4 h-4 text-gray-400" />;
+      default:
+        return <ArrowRight className="w-4 h-4 text-gray-400" />;
+    }
   };
 
   if (loading) {
@@ -88,15 +109,15 @@ function StudentCoursesContent() {
   // Transform enrollment data to match expected format
   const enrolledCourses = enrollments.map((enrollment: Record<string, unknown>) => ({
     id: enrollment.id,
-    title: enrollment.course_title || enrollment.course?.title || 'Course',
-    description: enrollment.course?.description || 'Course description',
-    teacher: enrollment.teacher_name || enrollment.teacher?.full_name || 'Assigned Teacher',
-    progress: enrollment.progress || 0,
-    totalLessons: enrollment.total_lessons || 0,
-    completedLessons: enrollment.completed_lessons || 0,
-    nextCourse: enrollment.next_course || 'Next Level',
-    category: enrollment.course?.category || 'Quran',
-    level: enrollment.course?.level || 'Beginner',
+    title: String(enrollment.course_title || (enrollment.course as Record<string, unknown>)?.title || 'Course'),
+    description: String((enrollment.course as Record<string, unknown>)?.description || 'Course description'),
+    teacher: String(enrollment.teacher_name || (enrollment.teacher as Record<string, unknown>)?.full_name || 'Assigned Teacher'),
+    progress: Number(enrollment.progress || 0),
+    totalLessons: Number(enrollment.total_lessons || 0),
+    completedLessons: Number(enrollment.completed_lessons || 0),
+    nextCourse: String(enrollment.next_course || 'Next Level'),
+    category: String((enrollment.course as Record<string, unknown>)?.category || 'Quran'),
+    level: String((enrollment.course as Record<string, unknown>)?.level || 'Beginner'),
     course: enrollment.course
   }));
 
@@ -160,7 +181,7 @@ function StudentCoursesContent() {
               ) : enrolledCourses.length > 0 ? (
                 enrolledCourses.map((course: Record<string, unknown>, index: number) => (
                   <motion.div
-                    key={course.id}
+                    key={String(course.id)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
@@ -173,25 +194,25 @@ function StudentCoursesContent() {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white">{course.title}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">{course.category} • {course.level}</p>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">{String(course.title)}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">{String(course.category)} • {String(course.level)}</p>
                       </div>
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        course.progress >= 70 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
-                        course.progress >= 40 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
+                        Number(course.progress) >= 70 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
+                        Number(course.progress) >= 40 ? "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" :
                         "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                       }`}>
-                        {course.progress}%
+                        {Number(course.progress)}%
                       </span>
                     </div>
                     <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                       <div
-                        className={`h-full ${getProgressColor(course.progress)} rounded-full transition-all`}
-                        style={{ width: `${course.progress}%` }}
+                        className={`h-full ${getProgressColor(Number(course.progress))} rounded-full transition-all`}
+                        style={{ width: `${Number(course.progress)}%` }}
                       />
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                      {course.completedLessons}/{course.totalLessons} lessons completed
+                      {Number(course.completedLessons)}/{Number(course.totalLessons)} lessons completed
                     </p>
                   </motion.div>
                 ))
@@ -213,21 +234,21 @@ function StudentCoursesContent() {
                 <div className="p-6 border-b border-gray-200 dark:border-gray-700">
                   <div className="flex items-start justify-between">
                     <div>
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{selectedCourse.title}</h2>
-                      <p className="text-gray-600 dark:text-gray-400 mb-4">{selectedCourse.description}</p>
+                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{String(selectedCourse.title)}</h2>
+                      <p className="text-gray-600 dark:text-gray-400 mb-4">{String(selectedCourse.description)}</p>
                       <div className="flex items-center gap-4 text-sm">
                         <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                           <User className="w-4 h-4" />
-                          {selectedCourse.teacher}
+                          {String(selectedCourse.teacher)}
                         </div>
                         <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400">
                           <Clock className="w-4 h-4" />
-                          {selectedCourse.totalLessons} lessons
+                          {Number(selectedCourse.totalLessons)} lessons
                         </div>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-3xl font-bold text-emerald-600">{selectedCourse.progress}%</div>
+                      <div className="text-3xl font-bold text-emerald-600">{Number(selectedCourse.progress)}%</div>
                       <p className="text-sm text-gray-500 dark:text-gray-400">Complete</p>
                     </div>
                   </div>
@@ -262,9 +283,9 @@ function StudentCoursesContent() {
                   {/* Lessons Tab */}
                   {activeTab === "lessons" && (
                     <div className="space-y-3">
-                      {selectedCourse.lessons.map((lesson, index) => (
+                      {(selectedCourse.lessons as Record<string, unknown>[] || []).map((lesson, index) => (
                         <motion.div
-                          key={lesson.id}
+                          key={String(lesson.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
@@ -287,9 +308,9 @@ function StudentCoursesContent() {
                               )}
                             </div>
                             <div>
-                              <h4 className="font-medium text-gray-900 dark:text-white">{lesson.title}</h4>
+                              <h4 className="font-medium text-gray-900 dark:text-white">{String(lesson.title)}</h4>
                               <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {lesson.duration} • {lesson.type}
+                                {String(lesson.duration)} • {String(lesson.type)}
                               </p>
                             </div>
                           </div>
@@ -308,9 +329,9 @@ function StudentCoursesContent() {
                   {/* Materials Tab */}
                   {activeTab === "materials" && (
                     <div className="space-y-3">
-                      {selectedCourse.materials.map((material, index) => (
+                      {(selectedCourse.materials as Record<string, unknown>[] || []).map((material, index) => (
                         <motion.div
-                          key={material.id}
+                          key={String(material.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
@@ -318,19 +339,19 @@ function StudentCoursesContent() {
                         >
                           <div className="flex items-center gap-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              material.type === "pdf" ? "bg-red-100 dark:bg-red-900/30" :
-                              material.type === "audio" ? "bg-purple-100 dark:bg-purple-900/30" :
+                              String(material.type) === "pdf" ? "bg-red-100 dark:bg-red-900/30" :
+                              String(material.type) === "audio" ? "bg-purple-100 dark:bg-purple-900/30" :
                               "bg-blue-100 dark:bg-blue-900/30"
                             }`}>
                               <FileText className={`w-5 h-5 ${
-                                material.type === "pdf" ? "text-red-600" :
-                                material.type === "audio" ? "text-purple-600" :
+                                String(material.type) === "pdf" ? "text-red-600" :
+                                String(material.type) === "audio" ? "text-purple-600" :
                                 "text-blue-600"
                               }`} />
                             </div>
                             <div>
-                              <h4 className="font-medium text-gray-900 dark:text-white">{material.title}</h4>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">{material.size}</p>
+                              <h4 className="font-medium text-gray-900 dark:text-white">{String(material.title)}</h4>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{String(material.size)}</p>
                             </div>
                           </div>
                           <button className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors">
@@ -345,9 +366,9 @@ function StudentCoursesContent() {
                   {/* Recordings Tab */}
                   {activeTab === "recordings" && (
                     <div className="space-y-3">
-                      {selectedCourse.recordings.map((recording, index) => (
+                      {(selectedCourse.recordings as Record<string, unknown>[] || []).map((recording, index) => (
                         <motion.div
-                          key={recording.id}
+                          key={String(recording.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
@@ -358,9 +379,9 @@ function StudentCoursesContent() {
                               <Video className="w-5 h-5 text-blue-600" />
                             </div>
                             <div>
-                              <h4 className="font-medium text-gray-900 dark:text-white">{recording.title}</h4>
+                              <h4 className="font-medium text-gray-900 dark:text-white">{String(recording.title)}</h4>
                               <p className="text-sm text-gray-500 dark:text-gray-400">
-                                {recording.date} • {recording.duration}
+                                {String(recording.date)} • {String(recording.duration)}
                               </p>
                             </div>
                           </div>
@@ -381,7 +402,7 @@ function StudentCoursesContent() {
                       <Award className="w-6 h-6 text-emerald-600" />
                       <div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">Recommended Next Course</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">{selectedCourse.nextCourse}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">{String(selectedCourse.nextCourse || 'Next Level')}</p>
                       </div>
                     </div>
                     <Link

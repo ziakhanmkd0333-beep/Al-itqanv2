@@ -43,13 +43,17 @@ function StudentMaterialsContent() {
   const { enrollments, loading } = useStudentDashboard(studentId);
 
   // Extract materials from enrolled courses
-  const courseMaterials = enrollments.flatMap((enrollment: { course: { materials?: Array<{ id: string; title: string; type: string; size?: string }>; title: string; id: string } }) => {
-    const course = enrollment.course;
+  const courseMaterials = enrollments.flatMap((enrollment: Record<string, unknown>) => {
+    const course = enrollment.course as Record<string, unknown>;
     if (!course?.materials) return [];
-    return course.materials.map((m: { id: string; title: string; type: string; size?: string }) => ({
-      ...m,
-      courseTitle: course.title,
-      courseId: course.id
+    const materials = course.materials as Array<Record<string, unknown>>;
+    return materials.map((m: Record<string, unknown>) => ({
+      id: String(m.id),
+      title: String(m.title),
+      type: String(m.type),
+      size: String(m.size),
+      courseTitle: String(course.title),
+      courseId: String(course.id)
     }));
   });
 
@@ -94,35 +98,36 @@ function StudentMaterialsContent() {
           {courseMaterials.length > 0 ? (
             <div className="space-y-6">
               {/* Materials by Course */}
-              {enrollments.map((enrollment: { course: { id: string; title: string; materials?: Array<{ id: string; title: string; type: string; size?: string }> } }) => {
-                const course = enrollment.course;
-                if (!course?.materials?.length) return null;
+              {enrollments.map((enrollment: Record<string, unknown>) => {
+                const course = enrollment.course as Record<string, unknown>;
+                const materials = course?.materials as Array<Record<string, unknown>> | undefined;
+                if (!materials?.length) return null;
                 
                 return (
-                  <div key={course.id} className="border-b border-[var(--border)] last:border-0 pb-6 last:pb-0">
+                  <div key={String(course.id)} className="border-b border-[var(--border)] last:border-0 pb-6 last:pb-0">
                     <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-4 flex items-center gap-2">
                       <Folder className="w-5 h-5 text-[var(--primary)]" />
-                      {course.title}
+                      {String(course.title)}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {course.materials.map((material: { id: string; title: string; type: string; size?: string }) => (
+                      {materials.map((material: Record<string, unknown>) => (
                         <motion.div
-                          key={material.id}
+                          key={String(material.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           className="p-4 bg-[var(--background)] rounded-xl border border-[var(--border)] hover:border-[var(--primary)] transition-colors"
                         >
                           <div className="flex items-start gap-3">
                             <div className="w-12 h-12 rounded-xl bg-[var(--primary)]/10 flex items-center justify-center flex-shrink-0">
-                              {material.type === 'video' ? (
+                              {String(material.type) === 'video' ? (
                                 <Video className="w-6 h-6 text-[var(--primary)]" />
                               ) : (
                                 <FileText className="w-6 h-6 text-[var(--primary)]" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-[var(--text-primary)] truncate">{material.title}</h4>
-                              <p className="text-xs text-[var(--text-muted)] mt-1">{material.type} • {material.size || 'Unknown size'}</p>
+                              <h4 className="font-medium text-[var(--text-primary)] truncate">{String(material.title)}</h4>
+                              <p className="text-xs text-[var(--text-muted)] mt-1">{String(material.type)} • {String(material.size) || 'Unknown size'}</p>
                               <button className="mt-2 text-sm text-[var(--primary)] hover:underline flex items-center gap-1">
                                 <Download className="w-4 h-4" />
                                 Download

@@ -200,8 +200,8 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : todaySchedule.length > 0 ? (
-                  todaySchedule.map((session: { id: string; status?: string; student_name?: string; student?: string; course_title?: string; course?: string; time?: string; duration?: string }) => (
-                    <div key={session.id} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
+                  todaySchedule.map((session: Record<string, unknown>) => (
+                    <div key={String(session.id)} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
                           session.status === "completed" ? "bg-green-100" : "bg-[var(--primary)]/10"
@@ -213,13 +213,13 @@ function TeacherDashboardContent() {
                           )}
                         </div>
                         <div>
-                          <p className="text-[var(--text-primary)] font-medium">{session.student_name || session.student || 'Student'}</p>
-                          <p className="text-[var(--text-muted)] text-sm">{session.course_title || session.course || 'Course'}</p>
+                          <p className="text-[var(--text-primary)] font-medium">{String(session.student_name || session.student || 'Student')}</p>
+                          <p className="text-[var(--text-muted)] text-sm">{String(session.course_title || session.course || 'Course')}</p>
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-[var(--text-primary)] font-semibold">{session.time || 'TBD'}</p>
-                        <p className="text-[var(--text-muted)] text-sm">{session.duration || '30 min'}</p>
+                        <p className="text-[var(--text-primary)] font-semibold">{String(session.time || 'TBD')}</p>
+                        <p className="text-[var(--text-muted)] text-sm">{String(session.duration || '30 min')}</p>
                       </div>
                     </div>
                   ))
@@ -255,16 +255,16 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : students.length > 0 ? (
-                  students.map((student: { id: string; full_name?: string; name?: string; course_title?: string; course?: string; progress?: number; last_session?: string }) => (
-                    <div key={student.id} className="p-4 hover:bg-[var(--background-green)] transition-colors">
+                  students.map((student: Record<string, unknown>) => (
+                    <div key={String(student.id)} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-[var(--primary)]/10 flex items-center justify-center">
-                            <span className="text-[var(--primary)] font-semibold">{(student.full_name || student.name || 'S').charAt(0)}</span>
+                            <span className="text-[var(--primary)] font-semibold">{String(student.full_name || student.name || 'S').charAt(0)}</span>
                           </div>
                           <div>
-                            <p className="text-[var(--text-primary)] font-medium">{student.full_name || student.name}</p>
-                            <p className="text-[var(--text-muted)] text-sm">{student.course_title || student.course || 'Course'}</p>
+                            <p className="text-[var(--text-primary)] font-medium">{String(student.full_name || student.name)}</p>
+                            <p className="text-[var(--text-muted)] text-sm">{String(student.course_title || student.course || 'Course')}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-6">
@@ -274,15 +274,15 @@ function TeacherDashboardContent() {
                               <div className="w-20 h-2 bg-[var(--background-green)] rounded-full overflow-hidden">
                                 <div
                                   className="h-full bg-[var(--primary)] rounded-full"
-                                  style={{ width: `${student.progress || 0}%` }}
+                                  style={{ width: `${Number(student.progress) || 0}%` }}
                                 />
                               </div>
-                              <span className="text-[var(--text-primary)] text-sm font-medium">{student.progress || 0}%</span>
+                              <span className="text-[var(--text-primary)] text-sm font-medium">{Number(student.progress) || 0}%</span>
                             </div>
                           </div>
                           <div className={`text-right ${isRTL ? "text-left" : ""}`}>
                             <p className={`text-[var(--text-muted)] text-xs ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.lastSession") || "Last Session"}</p>
-                            <p className="text-[var(--text-primary)] text-sm">{student.last_session || 'N/A'}</p>
+                            <p className="text-[var(--text-primary)] text-sm">{String(student.last_session || 'N/A')}</p>
                           </div>
                           <button className="text-[var(--primary)] hover:bg-[var(--primary)]/10 p-2 rounded-lg transition-colors">
                             <ChevronRight className="w-5 h-5" />
@@ -353,13 +353,13 @@ function TeacherDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : students.length > 0 ? (
-                  students.slice(0, 5).map((student: { id: string; attendance_status?: string; full_name?: string; name?: string; last_session?: string }) => (
-                    <div key={student.id} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
+                  students.slice(0, 5).map((student: Record<string, unknown>) => (
+                    <div key={String(student.id)} className="p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex items-center gap-3">
-                        {getStatusIcon(student.attendance_status || 'present')}
+                        {getStatusIcon(String(student.attendance_status || 'present'))}
                         <div>
-                          <p className="text-[var(--text-primary)] font-medium">{student.full_name || student.name}</p>
-                          <p className="text-[var(--text-muted)] text-sm">{student.last_session || 'Today'}</p>
+                          <p className="text-[var(--text-primary)] font-medium">{String(student.full_name || student.name)}</p>
+                          <p className="text-[var(--text-muted)] text-sm">{String(student.last_session || 'Today')}</p>
                         </div>
                       </div>
                     </div>

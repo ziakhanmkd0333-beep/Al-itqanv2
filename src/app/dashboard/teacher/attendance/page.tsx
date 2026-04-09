@@ -143,11 +143,11 @@ function TeacherAttendanceContent() {
     try {
       const attendanceData = studentIds.map(id => {
         const studentId = id; // This is a string from Object.keys
-        const student = students.find((s: { id: string | number }) => s.id === studentId || s.id === Number(studentId));
+        const student = students.find((s: Record<string, unknown>) => String(s.id) === studentId || Number(s.id) === Number(studentId));
         return {
           student_id: studentId,
           teacher_id: teacherId,
-          course_id: student?.course_id || student?.course || students[0]?.course_id,
+          course_id: String((student as Record<string, unknown>)?.course_id || (student as Record<string, unknown>)?.course || (students[0] as Record<string, unknown>)?.course_id || ''),
           date: selectedDate,
           status: attendance[Number(id)].status,
           notes: attendance[Number(id)].notes || null
@@ -372,9 +372,9 @@ function TeacherAttendanceContent() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                      {filteredStudents.map((student, index) => (
+                      {filteredStudents.map((student: Record<string, unknown>, index: number) => (
                         <motion.tr
-                          key={student.id}
+                          key={String(student.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.05 }}
@@ -383,35 +383,35 @@ function TeacherAttendanceContent() {
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
                               <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center">
-                                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{student.avatar}</span>
+                                <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{String(student.avatar)}</span>
                               </div>
-                              <span className="font-medium text-gray-900 dark:text-white">{student.name}</span>
+                              <span className="font-medium text-gray-900 dark:text-white">{String(student.name)}</span>
                             </div>
                           </td>
                           <td className="px-6 py-4">
                             <span className="px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
-                              {student.course}
+                              {String(student.course)}
                             </span>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center justify-center gap-2">
                               <button
-                                onClick={() => handleAttendanceChange(student.id, 'present')}
-                                className={getStatusButtonClass(student.id, 'present')}
+                                onClick={() => handleAttendanceChange(Number(student.id), 'present')}
+                                className={getStatusButtonClass(Number(student.id), 'present')}
                               >
                                 <CheckCircle className="w-4 h-4" />
                                 Present
                               </button>
                               <button
-                                onClick={() => handleAttendanceChange(student.id, 'absent')}
-                                className={getStatusButtonClass(student.id, 'absent')}
+                                onClick={() => handleAttendanceChange(Number(student.id), 'absent')}
+                                className={getStatusButtonClass(Number(student.id), 'absent')}
                               >
                                 <XCircle className="w-4 h-4" />
                                 Absent
                               </button>
                               <button
-                                onClick={() => handleAttendanceChange(student.id, 'late')}
-                                className={getStatusButtonClass(student.id, 'late')}
+                                onClick={() => handleAttendanceChange(Number(student.id), 'late')}
+                                className={getStatusButtonClass(Number(student.id), 'late')}
                               >
                                 <Clock className="w-4 h-4" />
                                 Late
@@ -422,14 +422,14 @@ function TeacherAttendanceContent() {
                             <input
                               type="text"
                               placeholder="Add notes..."
-                              value={attendance[student.id]?.notes || ''}
-                              onChange={(e) => handleNotesChange(student.id, e.target.value)}
+                              value={attendance[Number(student.id)]?.notes || ''}
+                              onChange={(e) => handleNotesChange(Number(student.id), e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
                             />
                           </td>
                           <td className="px-6 py-4 text-center">
                             <button
-                              onClick={() => handleUploadMaterial(student.id)}
+                              onClick={() => handleUploadMaterial(Number(student.id))}
                               className="p-2 text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-colors"
                               title="Upload Materials"
                             >

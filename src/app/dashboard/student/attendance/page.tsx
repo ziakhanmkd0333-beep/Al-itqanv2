@@ -58,7 +58,7 @@ function StudentAttendanceContent() {
   const { records: attendanceRecords, loading } = useStudentAttendance(studentId);
 
   // Get unique courses from records
-  const courses = ["all", ...new Set(attendanceRecords.map(r => r.course_title || r.course).filter(Boolean))];
+  const courses = ["all", ...new Set(attendanceRecords.map(r => String(r.course_title || r.course)).filter(Boolean))];
 
   // Filter records
   const filteredRecords = attendanceRecords.filter(record => {
@@ -101,12 +101,12 @@ function StudentAttendanceContent() {
 
   // Calculate monthly stats from records
   const monthlyStatsMap = attendanceRecords.reduce((acc: Record<string, Record<string, unknown>>, record: Record<string, unknown>) => {
-    const month = new Date(record.date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const month = new Date(String(record.date)).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
     if (!acc[month]) {
       acc[month] = { month, present: 0, absent: 0, late: 0, total: 0 };
     }
-    acc[month][record.status]++;
-    acc[month].total++;
+    acc[month][String(record.status)] = (acc[month][String(record.status)] as number || 0) + 1;
+    acc[month].total = (acc[month].total as number || 0) + 1;
     return acc;
   }, {});
   const monthlyStats = Object.values(monthlyStatsMap).slice(0, 3);
@@ -252,7 +252,7 @@ function StudentAttendanceContent() {
                     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                       {filteredRecords.map((record, index) => (
                         <motion.tr
-                          key={record.id}
+                          key={String(record.id)}
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.03 }}
@@ -262,29 +262,29 @@ function StudentAttendanceContent() {
                             <div className="flex items-center gap-2">
                               <Calendar className="w-4 h-4 text-gray-400" />
                               <span className="text-gray-900 dark:text-white">
-                                {new Date(record.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                                {new Date(String(record.date)).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                               </span>
                             </div>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
                               <BookOpen className="w-4 h-4 text-emerald-500" />
-                              <span className="text-gray-900 dark:text-white">{record.course}</span>
+                              <span className="text-gray-900 dark:text-white">{String(record.course)}</span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-gray-600 dark:text-gray-300">
-                            {record.teacher}
+                            {String(record.teacher)}
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              {getStatusIcon(record.status)}
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusBadge(record.status)}`}>
-                                {record.status}
+                              {getStatusIcon(String(record.status))}
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${getStatusBadge(String(record.status))}`}>
+                                {String(record.status)}
                               </span>
                             </div>
                           </td>
                           <td className="px-6 py-4 text-gray-500 dark:text-gray-400 text-sm">
-                            {record.notes || "-"}
+                            {String(record.notes) || "-"}
                           </td>
                         </motion.tr>
                       ))}
@@ -311,24 +311,24 @@ function StudentAttendanceContent() {
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {monthlyStats.map((stat, index) => (
                     <motion.div
-                      key={stat.month}
+                      key={String(stat.month)}
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
                       className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
                     >
-                      <p className="font-medium text-gray-900 dark:text-white mb-2">{stat.month}</p>
+                      <p className="font-medium text-gray-900 dark:text-white mb-2">{String(stat.month)}</p>
                       <div className="grid grid-cols-3 gap-2 text-center text-sm">
                         <div className="p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                          <p className="font-bold text-green-600">{stat.present}</p>
+                          <p className="font-bold text-green-600">{String(stat.present)}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">Present</p>
                         </div>
                         <div className="p-2 bg-red-50 dark:bg-red-900/20 rounded">
-                          <p className="font-bold text-red-600">{stat.absent}</p>
+                          <p className="font-bold text-red-600">{String(stat.absent)}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">Absent</p>
                         </div>
                         <div className="p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                          <p className="font-bold text-yellow-600">{stat.late}</p>
+                          <p className="font-bold text-yellow-600">{String(stat.late)}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">Late</p>
                         </div>
                       </div>
@@ -385,7 +385,7 @@ function StudentAttendanceContent() {
                 <h2 className="text-lg font-bold mb-3">Attendance Tips</h2>
                 <ul className="space-y-2 text-sm text-white/90">
                   <li>• Maintain at least 90% attendance for best results</li>
-                  <li>• Notify your teacher in advance if you'll be absent</li>
+                  <li>• Notify your teacher in advance if you&apos;ll be absent</li>
                   <li>• Join classes on time to maximize learning</li>
                   <li>• Review recorded sessions if you miss a class</li>
                 </ul>

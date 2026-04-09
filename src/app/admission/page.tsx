@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { courses } from "@/lib/courses-data";
@@ -316,18 +317,18 @@ export default function AdmissionPage() {
                 </ol>
               </div>
               <div className={`flex flex-col sm:flex-row gap-4 justify-center ${isRTL ? "flex-row-reverse" : ""}`}>
-                <a
+                <Link
                   href="/auth/login"
                   className="inline-block bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white px-8 py-3 rounded-xl font-semibold transition-colors"
                 >
                   {t("admission.success.login")}
-                </a>
-                <a
+                </Link>
+                <Link
                   href="/"
                   className="inline-block bg-[var(--background-green)] hover:bg-[var(--primary)]/10 text-[var(--primary)] px-8 py-3 rounded-xl font-semibold transition-colors border border-[var(--primary)]"
                 >
                   {t("admission.success.home")}
-                </a>
+                </Link>
               </div>
             </motion.div>
           </div>

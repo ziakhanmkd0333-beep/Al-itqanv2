@@ -168,7 +168,9 @@ function TeacherAssignmentsContent() {
       if (response.ok) {
         setGradingSubmission(null);
         setGradeData({ marks: 0, feedback: "" });
-        fetchSubmissions(selectedAssignment.id);
+        if (selectedAssignment) {
+          fetchSubmissions(String(selectedAssignment.id));
+        }
       }
     } catch (error) {
       console.error('Grade error:', error);
@@ -197,7 +199,7 @@ function TeacherAssignmentsContent() {
 
   const viewSubmissions = (assignment: Record<string, unknown>) => {
     setSelectedAssignment(assignment);
-    fetchSubmissions(assignment.id);
+    fetchSubmissions(String(assignment.id));
     setShowSubmissionsModal(true);
   };
 
@@ -275,9 +277,9 @@ function TeacherAssignmentsContent() {
               </button>
             </div>
           ) : (
-            assignments.map((assignment) => (
+            assignments.map((assignment: Record<string, unknown>) => (
               <div
-                key={assignment.id}
+                key={String(assignment.id)}
                 className="bg-card rounded-2xl border border-[var(--border)] p-6 hover:shadow-lg transition-shadow"
               >
                 <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
@@ -287,17 +289,17 @@ function TeacherAssignmentsContent() {
                     </div>
                     <div>
                       <div className={`flex items-center gap-2 mb-1 ${isRTL ? "flex-row-reverse" : ""}`}>
-                        <h3 className="font-bold text-[var(--text-primary)]">{assignment.title}</h3>
-                        {getStatusBadge(assignment.status)}
+                        <h3 className="font-bold text-[var(--text-primary)]">{String(assignment.title)}</h3>
+                        {getStatusBadge(String(assignment.status))}
                       </div>
-                      <p className="text-sm text-[var(--text-muted)] mb-2">{assignment.courses?.title}</p>
+                      <p className="text-sm text-[var(--text-muted)] mb-2">{String((assignment.courses as Record<string, unknown>)?.title)}</p>
                       <div className={`flex items-center gap-4 text-xs text-[var(--text-muted)] ${isRTL ? "flex-row-reverse" : ""}`}>
                         <span className={`flex items-center gap-1 ${isRTL ? "flex-row-reverse" : ""}`}>
                           <Calendar className="w-3 h-3" />
-                          {t("teacher.assignments.due") || "Due"}: {new Date(assignment.due_date).toLocaleDateString()}
+                          {t("teacher.assignments.due") || "Due"}: {new Date(String(assignment.due_date || Date.now())).toLocaleDateString()}
                         </span>
                         <span>•</span>
-                        <span>{assignment.max_marks} {t("teacher.assignments.marks") || "marks"}</span>
+                        <span>{Number(assignment.max_marks) || 0} {t("teacher.assignments.marks") || "marks"}</span>
                       </div>
                     </div>
                   </div>
@@ -308,10 +310,10 @@ function TeacherAssignmentsContent() {
                       className={`flex items-center gap-2 px-4 py-2 bg-[var(--background-green)] text-[var(--primary)] rounded-xl hover:bg-[var(--primary)]/10 transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
                     >
                       <Users className="w-4 h-4" />
-                      <span>{assignment.submissions_count || 0} {t("teacher.assignments.submissions") || "submissions"}</span>
+                      <span>{Number(assignment.submissions_count) || 0} {t("teacher.assignments.submissions") || "submissions"}</span>
                     </button>
                     <button
-                      onClick={() => handleDelete(assignment.id)}
+                      onClick={() => handleDelete(String(assignment.id))}
                       className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
                     >
                       <Trash2 className="w-5 h-5" />
@@ -350,7 +352,7 @@ function TeacherAssignmentsContent() {
                     className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)]"
                   >
                     <option value="">{t("teacher.assignments.selectCourse") || "Select course"}</option>
-                    {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                    {courses.map((c: Record<string, unknown>) => <option key={String(c.id)} value={String(c.id)}>{String(c.title)}</option>)}
                   </select>
                 </div>
 
@@ -436,7 +438,7 @@ function TeacherAssignmentsContent() {
               <div className={`flex items-center justify-between mb-6 ${isRTL ? "flex-row-reverse" : ""}`}>
                 <div>
                   <h2 className={`text-xl font-bold text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>
-                    {selectedAssignment.title}
+                    {String(selectedAssignment.title)}
                   </h2>
                   <p className="text-sm text-[var(--text-muted)]">{submissions.length} {t("teacher.assignments.submissions") || "submissions"}</p>
                 </div>
@@ -448,20 +450,20 @@ function TeacherAssignmentsContent() {
               {gradingSubmission ? (
                 <form onSubmit={handleGrade} className="space-y-4">
                   <div className="p-4 bg-[var(--background-green)] rounded-xl">
-                    <p className="font-medium">{gradingSubmission.students?.full_name}</p>
-                    <p className="text-sm text-[var(--text-muted)]">{gradingSubmission.students?.email}</p>
-                    {gradingSubmission.submission_text && (
-                      <p className="mt-2 text-sm">{gradingSubmission.submission_text}</p>
+                    <p className="font-medium">{String((gradingSubmission.students as Record<string, unknown>)?.full_name)}</p>
+                    <p className="text-sm text-[var(--text-muted)]">{String((gradingSubmission.students as Record<string, unknown>)?.email)}</p>
+                    {Boolean(gradingSubmission.submission_text) && (
+                      <p className="mt-2 text-sm">{String(gradingSubmission.submission_text)}</p>
                     )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-[var(--text-secondary)] mb-2">
-                      {t("teacher.assignments.marks") || "Marks"} (0-{selectedAssignment.max_marks})
+                      {t("teacher.assignments.marks") || "Marks"} (0-{Number(selectedAssignment.max_marks) || 0})
                     </label>
                     <input
                       type="number"
                       min="0"
-                      max={selectedAssignment.max_marks}
+                      max={Number(selectedAssignment.max_marks) || 0}
                       value={gradeData.marks}
                       onChange={(e) => setGradeData({ ...gradeData, marks: parseInt(e.target.value) })}
                       className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)]"
@@ -491,21 +493,21 @@ function TeacherAssignmentsContent() {
                   {submissions.length === 0 ? (
                     <p className="text-center text-[var(--text-muted)] py-8">{t("teacher.assignments.noSubmissions") || "No submissions yet"}</p>
                   ) : (
-                    submissions.map((sub) => (
-                      <div key={sub.id} className="p-4 border border-[var(--border)] rounded-xl">
+                    submissions.map((sub: Record<string, unknown>) => (
+                      <div key={String(sub.id)} className="p-4 border border-[var(--border)] rounded-xl">
                         <div className={`flex items-center justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
                           <div>
-                            <p className="font-medium">{sub.students?.full_name}</p>
-                            <p className="text-sm text-[var(--text-muted)]">{sub.students?.email}</p>
+                            <p className="font-medium">{String((sub.students as Record<string, unknown>)?.full_name)}</p>
+                            <p className="text-sm text-[var(--text-muted)]">{String((sub.students as Record<string, unknown>)?.email)}</p>
                             <p className="text-xs text-[var(--text-muted)] mt-1">
-                              {t("teacher.assignments.submitted") || "Submitted"}: {new Date(sub.submitted_at).toLocaleString()}
+                              {t("teacher.assignments.submitted") || "Submitted"}: {new Date(String(sub.submitted_at || Date.now())).toLocaleString()}
                             </p>
                           </div>
                           <div className="text-right">
-                            {sub.status === 'graded' ? (
+                            {String(sub.status) === 'graded' ? (
                               <div>
                                 <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">{t("teacher.assignments.graded") || "Graded"}</span>
-                                <p className="font-bold text-[var(--primary)] mt-1">{sub.marks}/{selectedAssignment.max_marks}</p>
+                                <p className="font-bold text-[var(--primary)] mt-1">{Number(sub.marks) || 0}/{Number(selectedAssignment.max_marks) || 0}</p>
                               </div>
                             ) : (
                               <button
@@ -521,9 +523,9 @@ function TeacherAssignmentsContent() {
                             )}
                           </div>
                         </div>
-                        {sub.feedback && (
+                        {Boolean(sub.feedback) && (
                           <div className="mt-3 p-3 bg-[var(--background-green)] rounded-lg">
-                            <p className="text-sm text-[var(--text-muted)]">{t("teacher.assignments.feedback") || "Feedback"}: {sub.feedback}</p>
+                            <p className="text-sm text-[var(--text-muted)]">{t("teacher.assignments.feedback") || "Feedback"}: {String(sub.feedback)}</p>
                           </div>
                         )}
                       </div>

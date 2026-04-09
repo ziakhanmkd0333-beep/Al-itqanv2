@@ -47,11 +47,11 @@ function StudentProgressContent() {
 
   // Calculate stats
   const totalCourses = enrollments.length;
-  const completedCourses = enrollments.filter((e: { progress: number }) => e.progress === 100).length;
+  const completedCourses = enrollments.filter((e: Record<string, unknown>) => Number(e.progress) === 100).length;
   const averageProgress = totalCourses > 0 
-    ? Math.round(enrollments.reduce((sum: number, e: { progress: number }) => sum + (e.progress || 0), 0) / totalCourses)
+    ? Math.round(enrollments.reduce((sum: number, e: Record<string, unknown>) => sum + (Number(e.progress) || 0), 0) / totalCourses)
     : 0;
-  const totalHours = enrollments.reduce((sum: number, e: { hours_learned: number }) => sum + (e.hours_learned || 0), 0);
+  const totalHours = enrollments.reduce((sum: number, e: Record<string, unknown>) => sum + (Number(e.hours_learned) || 0), 0);
 
   if (loading) {
     return (
@@ -148,9 +148,9 @@ function StudentProgressContent() {
                   Course Progress
                 </h3>
                 <div className="space-y-4">
-                  {enrollments.map((enrollment: { id: string; course_title?: string; course?: { title: string }; completed_lessons?: number; total_lessons?: number; progress?: number }, index: number) => (
+                  {enrollments.map((enrollment: Record<string, unknown>, index: number) => (
                     <motion.div
-                      key={enrollment.id}
+                      key={String(enrollment.id)}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -162,18 +162,18 @@ function StudentProgressContent() {
                             <BookOpen className="w-5 h-5 text-[var(--primary)]" />
                           </div>
                           <div>
-                            <h4 className="font-medium text-[var(--text-primary)]">{enrollment.course_title || enrollment.course?.title}</h4>
+                            <h4 className="font-medium text-[var(--text-primary)]">{String(enrollment.course_title || (enrollment.course as Record<string, unknown>)?.title)}</h4>
                             <p className="text-xs text-[var(--text-muted)]">
-                              {enrollment.completed_lessons || 0} of {enrollment.total_lessons || 0} lessons completed
+                              {Number(enrollment.completed_lessons) || 0} of {Number(enrollment.total_lessons) || 0} lessons completed
                             </p>
                           </div>
                         </div>
-                        <span className="text-lg font-bold text-[var(--primary)]">{enrollment.progress || 0}%</span>
+                        <span className="text-lg font-bold text-[var(--primary)]">{Number(enrollment.progress) || 0}%</span>
                       </div>
                       <div className="w-full h-3 bg-[var(--background)] rounded-full overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-[var(--primary)] to-[var(--gold)] rounded-full transition-all"
-                          style={{ width: `${enrollment.progress || 0}%` }}
+                          style={{ width: `${Number(enrollment.progress) || 0}%` }}
                         />
                       </div>
                     </motion.div>
@@ -201,19 +201,19 @@ function StudentProgressContent() {
                     <div className="grid grid-cols-3 gap-4 mt-4">
                       <div className="text-center p-2 bg-green-500/10 rounded-lg">
                         <p className="text-lg font-bold text-green-600">
-                          {attendanceRecords.filter((r: { status: string }) => r.status === 'present').length}
+                          {attendanceRecords.filter((r: Record<string, unknown>) => String(r.status) === 'present').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Present</p>
                       </div>
                       <div className="text-center p-2 bg-red-500/10 rounded-lg">
                         <p className="text-lg font-bold text-red-600">
-                          {attendanceRecords.filter((r: { status: string }) => r.status === 'absent').length}
+                          {attendanceRecords.filter((r: Record<string, unknown>) => String(r.status) === 'absent').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Absent</p>
                       </div>
                       <div className="text-center p-2 bg-yellow-500/10 rounded-lg">
                         <p className="text-lg font-bold text-yellow-600">
-                          {attendanceRecords.filter((r: { status: string }) => r.status === 'late').length}
+                          {attendanceRecords.filter((r: Record<string, unknown>) => String(r.status) === 'late').length}
                         </p>
                         <p className="text-xs text-[var(--text-muted)]">Late</p>
                       </div>

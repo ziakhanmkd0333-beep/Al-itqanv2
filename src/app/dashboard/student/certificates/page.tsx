@@ -93,22 +93,22 @@ function StudentCertificatesContent() {
   }
 
   // Transform certificates data
-  const earnedCertificates = certificates.filter((c: { status: string }) => c.status === 'active' || c.status === 'completed');
+  const earnedCertificates = certificates.filter((c) => String((c as Record<string, unknown>).status) === 'active' || String((c as Record<string, unknown>).status) === 'completed');
   const inProgressCerts = enrollments
-    .filter((e: { progress: number }) => e.progress > 0 && e.progress < 100)
-    .map((e: { id: string; course_title: string; course?: { title: string }; progress: number; estimated_completion?: string }) => ({
-      id: e.id,
-      course: e.course_title || e.course?.title,
-      progress: e.progress,
-      remaining: `${100 - e.progress}% remaining`,
-      estimatedCompletion: e.estimated_completion || 'TBD'
+    .filter((e) => Number((e as Record<string, unknown>).progress) > 0 && Number((e as Record<string, unknown>).progress) < 100)
+    .map((e) => ({
+      id: String((e as Record<string, unknown>).id),
+      course: String((e as Record<string, unknown>).course_title || ((e as Record<string, unknown>).course as Record<string, string>)?.title),
+      progress: (e as Record<string, unknown>).progress as number,
+      remaining: `${100 - ((e as Record<string, unknown>).progress as number)}% remaining`,
+      estimatedCompletion: String((e as Record<string, unknown>).estimated_completion || 'TBD')
     }));
 
   // Calculate stats
   const totalEarned = earnedCertificates.length;
   const inProgress = inProgressCerts.length;
   const avgGrade = earnedCertificates.length > 0 
-    ? earnedCertificates[0]?.grade || 'A'
+    ? String((earnedCertificates[0] as Record<string, unknown>)?.grade || 'A')
     : 'N/A';
 
   return (
@@ -193,7 +193,7 @@ function StudentCertificatesContent() {
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {earnedCertificates.map((cert: Record<string, unknown>, index: number) => (
                     <motion.div
-                      key={cert.id}
+                      key={String(cert.id)}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -209,25 +209,25 @@ function StudentCertificatesContent() {
                         <div className="flex-1">
                           <div className="flex items-start justify-between">
                             <div>
-                              <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{cert.title || cert.course_title}</h3>
-                              <p className="text-sm text-gray-500 dark:text-gray-400">{cert.course}</p>
+                              <h3 className="font-semibold text-gray-900 dark:text-white text-lg">{String(cert.title || cert.course_title)}</h3>
+                              <p className="text-sm text-gray-500 dark:text-gray-400">{String(cert.course)}</p>
                             </div>
                             <span className="px-3 py-1 rounded-full text-sm font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
-                              Grade: {cert.grade || 'A'}
+                              Grade: {String(cert.grade || 'A')}
                             </span>
                           </div>
                           <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
                             <div className="flex items-center gap-1">
                               <Calendar className="w-4 h-4" />
-                              Issued: {cert.issue_date || cert.issued_at || new Date().toLocaleDateString()}
+                              Issued: {String(cert.issue_date || cert.issued_at || new Date().toLocaleDateString())}
                             </div>
                             <div className="flex items-center gap-1">
                               <User className="w-4 h-4" />
-                              {cert.teacher || 'Teacher'}
+                              {String(cert.teacher || 'Teacher')}
                             </div>
                             <div className="flex items-center gap-1">
                               <FileText className="w-4 h-4" />
-                              ID: {cert.certificate_id || `CERT-${cert.id}`}
+                              ID: {String(cert.certificate_id || `CERT-${cert.id}`)}
                             </div>
                           </div>
                         </div>
@@ -288,7 +288,7 @@ function StudentCertificatesContent() {
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   {inProgressCerts.map((cert: Record<string, unknown>, index: number) => (
                     <motion.div
-                      key={cert.id}
+                      key={String(cert.id)}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -296,29 +296,29 @@ function StudentCertificatesContent() {
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-14 h-14 rounded-xl bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                          {cert.progress > 0 ? (
+                          {Number(cert.progress) > 0 ? (
                             <Clock className="w-6 h-6 text-gray-400" />
                           ) : (
                             <Lock className="w-6 h-6 text-gray-400" />
                           )}
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-medium text-gray-900 dark:text-white">{cert.course}</h3>
+                          <h3 className="font-medium text-gray-900 dark:text-white">{String(cert.course)}</h3>
                           <div className="flex items-center gap-4 mt-2">
                             <div className="flex-1">
                               <div className="flex justify-between text-sm mb-1">
                                 <span className="text-gray-500 dark:text-gray-400">Progress</span>
-                                <span className="text-gray-700 dark:text-gray-300 font-medium">{cert.progress}%</span>
+                                <span className="text-gray-700 dark:text-gray-300 font-medium">{Number(cert.progress)}%</span>
                               </div>
                               <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                 <div
                                   className="h-full bg-yellow-500 rounded-full"
-                                  style={{ width: `${cert.progress}%` }}
+                                  style={{ width: `${Number(cert.progress)}%` }}
                                 />
                               </div>
                             </div>
                             <span className="text-sm text-gray-500 dark:text-gray-400">
-                              Est. {cert.estimatedCompletion}
+                              Est. {String(cert.estimatedCompletion)}
                             </span>
                           </div>
                         </div>
@@ -354,7 +354,7 @@ function StudentCertificatesContent() {
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
-                      <span>Teacher's signature and credentials</span>
+                      <span>Teacher&apos;s signature and credentials</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
@@ -427,27 +427,27 @@ function StudentCertificatesContent() {
                   <p className="text-gray-600 dark:text-gray-400">This is to certify that</p>
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">Ahmed Khan</p>
                   <p className="text-gray-600 dark:text-gray-400">has successfully completed the course</p>
-                  <p className="text-2xl font-semibold text-emerald-600">{selectedCertificate.title}</p>
+                  <p className="text-2xl font-semibold text-emerald-600">{String(selectedCertificate.title)}</p>
                   
                   <div className="py-4">
                     <p className="text-gray-600 dark:text-gray-400">with grade</p>
-                    <p className="text-4xl font-bold text-emerald-600">{selectedCertificate.grade}</p>
+                    <p className="text-4xl font-bold text-emerald-600">{String(selectedCertificate.grade)}</p>
                   </div>
 
                   <div className="flex justify-center gap-8 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <div className="text-center">
                       <p className="text-xs text-gray-500 dark:text-gray-400">Issue Date</p>
-                      <p className="font-medium text-gray-900 dark:text-white">{selectedCertificate.issueDate}</p>
+                      <p className="font-medium text-gray-900 dark:text-white">{String(selectedCertificate.issueDate)}</p>
                     </div>
                     <div className="text-center">
                       <p className="text-xs text-gray-500 dark:text-gray-400">Certificate ID</p>
-                      <p className="font-mono text-sm text-gray-900 dark:text-white">{selectedCertificate.certificateId}</p>
+                      <p className="font-mono text-sm text-gray-900 dark:text-white">{String(selectedCertificate.certificateId)}</p>
                     </div>
                   </div>
 
                   <div className="pt-6">
                     <p className="text-sm text-gray-500 dark:text-gray-400">Instructor</p>
-                    <p className="font-semibold text-gray-900 dark:text-white">{selectedCertificate.teacher}</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{String(selectedCertificate.teacher)}</p>
                     <p className="text-xs text-gray-400 mt-1">Scholar Supervisor</p>
                   </div>
                 </div>

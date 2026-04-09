@@ -235,14 +235,14 @@ export default function PaymentsManagementPage() {
           course_name: p.course_name || 'Unknown Course',
           amount: p.amount || 0,
           currency: 'USD',
-          payment_method: (p.method || 'other').toLowerCase(),
-          status: (p.status || 'pending').toLowerCase(),
+          payment_method: String(p.method || 'other').toLowerCase(),
+          status: String(p.status || 'pending').toLowerCase(),
           transaction_id: p.transaction_id,
           payment_date: p.paid_at || p.created_at,
           due_date: p.due_date || p.created_at,
           created_at: p.created_at,
           receipt_sent: p.status === 'paid',
-          invoice_number: p.id ? `INV-${p.id.slice(0, 8).toUpperCase()}` : `INV-${Date.now()}`,
+          invoice_number: p.id ? `INV-${String(p.id).slice(0, 8).toUpperCase()}` : `INV-${Date.now()}`,
           notes: p.notes
         }));
         

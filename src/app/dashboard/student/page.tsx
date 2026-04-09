@@ -187,36 +187,36 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : enrollments.length > 0 ? (
-                  enrollments.map((course: { id: string; course_title?: string; title?: string; teacher_name?: string; teacher?: string; progress?: number; completed_lessons?: number; total_lessons?: number; next_class?: string }) => (
-                    <div key={course.id} className="p-6 hover:bg-[var(--background-green)] transition-colors">
+                  enrollments.map((course: Record<string, unknown>) => (
+                    <div key={String(course.id)} className="p-6 hover:bg-[var(--background-green)] transition-colors">
                       <div className="flex flex-col md:flex-row md:items-center gap-4">
                         <div className="flex-1">
-                          <h3 className="text-[var(--text-primary)] font-bold text-lg mb-1">{course.course_title || course.title || 'Course'}</h3>
-                          <p className={`text-[var(--text-muted)] text-sm mb-3 ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.teacher") || "Teacher"}: {course.teacher_name || course.teacher || 'Assigned Teacher'}</p>
+                          <h3 className="text-[var(--text-primary)] font-bold text-lg mb-1">{String(course.course_title || course.title || 'Course')}</h3>
+                          <p className={`text-[var(--text-muted)] text-sm mb-3 ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.teacher") || "Teacher"}: {String(course.teacher_name || course.teacher || 'Assigned Teacher')}</p>
                           
                           {/* Progress Bar */}
                           <div className="mb-2">
                             <div className={`flex items-center justify-between text-sm mb-1 ${isRTL ? "flex-row-reverse" : ""}`}>
                               <span className={`text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.progress") || "Progress"}</span>
-                              <span className="text-[var(--primary)] font-semibold">{course.progress || 0}%</span>
+                              <span className="text-[var(--primary)] font-semibold">{Number(course.progress || 0)}%</span>
                             </div>
                             <div className="h-2 bg-[var(--background-green)] rounded-full overflow-hidden">
                               <div
                                 className="h-full bg-[var(--primary)] rounded-full transition-all duration-500"
-                                style={{ width: `${course.progress || 0}%` }}
+                                style={{ width: `${Number(course.progress || 0)}%` }}
                               />
                             </div>
                           </div>
                           
                           <p className={`text-[var(--text-muted)] text-xs ${isRTL ? "arabic-text" : ""}`}>
-                            {course.completed_lessons || 0} {t("dashboard.of") || "of"} {course.total_lessons || 0} {t("dashboard.lessonsCompleted") || "lessons completed"}
+                            {Number(course.completed_lessons || 0)} {t("dashboard.of") || "of"} {Number(course.total_lessons || 0)} {t("dashboard.lessonsCompleted") || "lessons completed"}
                           </p>
                         </div>
                         
                         <div className="flex flex-col gap-2">
                           <div className={`flex items-center gap-2 text-sm text-[var(--text-secondary)] ${isRTL ? "flex-row-reverse" : ""}`}>
                             <Calendar className="w-4 h-4" />
-                            <span>{course.next_class || 'Schedule TBD'}</span>
+                            <span>{String(course.next_class || 'Schedule TBD')}</span>
                           </div>
                           <button className={`flex items-center gap-2 bg-[var(--primary)] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-[var(--primary-dark)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}>
                             <Play className="w-4 h-4" />
@@ -253,11 +253,11 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : certificates.length > 0 ? (
-                  certificates.map((cert: { id: string; title?: string; course_title?: string; issued_at?: string; date?: string }) => (
-                    <div key={cert.id} className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}>
+                  certificates.map((cert: Record<string, unknown>) => (
+                    <div key={String(cert.id)} className={`p-4 flex items-center justify-between hover:bg-[var(--background-green)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}>
                       <div>
-                        <p className="text-[var(--text-primary)] font-medium">{cert.title || cert.course_title || 'Certificate'}</p>
-                        <p className={`text-[var(--text-muted)] text-sm ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.earnedOn") || "Earned on"} {new Date(cert.issued_at || cert.date).toLocaleDateString()}</p>
+                        <p className="text-[var(--text-primary)] font-medium">{String(cert.title || cert.course_title || 'Certificate')}</p>
+                        <p className={`text-[var(--text-muted)] text-sm ${isRTL ? "arabic-text" : ""}`}>{t("dashboard.earnedOn") || "Earned on"} {new Date(String(cert.issued_at || cert.date)).toLocaleDateString()}</p>
                       </div>
                       <button className={`text-[var(--primary)] hover:underline text-sm font-medium ${isRTL ? "arabic-text" : ""}`}>
                         {t("dashboard.downloadPDF") || "Download PDF"}
@@ -294,13 +294,13 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : upcomingSessions.length > 0 ? (
-                  upcomingSessions.map((session: { id: string; course_title?: string; course?: string; date?: string; time?: string; duration?: string }) => (
-                    <div key={session.id} className="p-4 hover:bg-[var(--background-green)] transition-colors">
-                      <p className="text-[var(--text-primary)] font-medium">{session.course_title || session.course || 'Class'}</p>
+                  upcomingSessions.map((session: Record<string, unknown>) => (
+                    <div key={String(session.id)} className="p-4 hover:bg-[var(--background-green)] transition-colors">
+                      <p className="text-[var(--text-primary)] font-medium">{String(session.course_title || session.course || 'Class')}</p>
                       <div className="flex items-center gap-4 mt-1 text-sm text-[var(--text-muted)]">
-                        <span>{session.date || 'Today'}</span>
-                        <span>{session.time || 'TBD'}</span>
-                        <span>({session.duration || '30 min'})</span>
+                        <span>{String(session.date || 'Today')}</span>
+                        <span>{String(session.time || 'TBD')}</span>
+                        <span>({String(session.duration || '30 min')})</span>
                       </div>
                     </div>
                   ))
@@ -336,13 +336,13 @@ function StudentDashboardContent() {
                     <RefreshCw className="w-6 h-6 animate-spin text-[var(--primary)]" />
                   </div>
                 ) : enrollments.length > 0 ? (
-                  enrollments.slice(0, 3).map((enrollment: { id?: string; course_title?: string; title?: string; enrolled_at?: string; created_at?: string }, index: number) => (
-                    <div key={enrollment.id || index} className="p-4 hover:bg-[var(--background-green)] transition-colors">
+                  enrollments.slice(0, 3).map((enrollment: Record<string, unknown>, index: number) => (
+                    <div key={String(enrollment.id || index)} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <p className="text-[var(--text-secondary)] text-sm">
-                        {t("dashboard.enrolledIn") || "Enrolled in"} {enrollment.course_title || enrollment.title || 'Course'}
+                        {t("dashboard.enrolledIn") || "Enrolled in"} {String(enrollment.course_title || enrollment.title || 'Course')}
                       </p>
                       <p className="text-[var(--text-muted)] text-xs mt-1">
-                        {new Date(enrollment.enrolled_at || enrollment.created_at).toLocaleDateString()}
+                        {new Date(String(enrollment.enrolled_at || enrollment.created_at || Date.now())).toLocaleDateString()}
                       </p>
                     </div>
                   ))

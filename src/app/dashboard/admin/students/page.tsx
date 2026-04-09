@@ -195,7 +195,7 @@ export default function StudentsManagementPage() {
           password: 'temp123' // Default password for new students
         });
       } else if (modalMode === "edit" && selectedStudent) {
-        await updateStudent(selectedStudent.id, formData);
+        await updateStudent(selectedStudent.id, formData as unknown as Record<string, unknown>);
       }
       closeModal();
     } catch (error) {

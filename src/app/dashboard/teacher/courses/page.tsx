@@ -16,6 +16,7 @@ import {
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
 import { supabase } from "@/lib/supabase";
+import { toast } from "react-hot-toast";
 
 export default function TeacherCoursesPage() {
   return (
@@ -81,7 +82,7 @@ function TeacherCoursesContent() {
 
   const handleCourseSelect = (course: Record<string, unknown>) => {
     setSelectedCourse(course);
-    fetchStudents(course.id);
+    fetchStudents(String(course.id));
   };
 
   if (loading) {
@@ -132,9 +133,9 @@ function TeacherCoursesContent() {
                   </p>
                 </div>
               ) : (
-                courses.map((course) => (
+                courses.map((course: Record<string, unknown>) => (
                   <div
-                    key={course.id}
+                    key={String(course.id)}
                     onClick={() => handleCourseSelect(course)}
                     className={`bg-card rounded-2xl border-2 p-6 cursor-pointer transition-all hover:shadow-lg ${
                       selectedCourse?.id === course.id
@@ -148,9 +149,9 @@ function TeacherCoursesContent() {
                           <GraduationCap className="w-8 h-8 text-[var(--primary)]" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-[var(--text-primary)]">{course.title}</h3>
+                          <h3 className="font-bold text-[var(--text-primary)]">{String(course.title)}</h3>
                           <p className="text-sm text-[var(--text-muted)]">
-                            {course.category} • {course.level}
+                            {String(course.category)} • {String(course.level)}
                           </p>
                         </div>
                       </div>
@@ -161,16 +162,16 @@ function TeacherCoursesContent() {
                       <div className={`flex items-center gap-2 ${isRTL ? "flex-row-reverse" : ""}`}>
                         <Users className="w-4 h-4 text-[var(--primary)]" />
                         <span className="text-sm text-[var(--text-muted)]">
-                          {course.students_count || 0} {t("teacher.courses.students") || "students"}
+                          {Number(course.students_count) || 0} {t("teacher.courses.students") || "students"}
                         </span>
                       </div>
                       <div className={`flex items-center gap-2 ${isRTL ? "flex-row-reverse" : ""}`}>
                         <Clock className="w-4 h-4 text-[var(--primary)]" />
-                        <span className="text-sm text-[var(--text-muted)]">{course.duration}</span>
+                        <span className="text-sm text-[var(--text-muted)]">{String(course.duration)}</span>
                       </div>
                       <div className={`flex items-center gap-2 ${isRTL ? "flex-row-reverse" : ""}`}>
                         <Calendar className="w-4 h-4 text-[var(--primary)]" />
-                        <span className="text-sm text-[var(--text-muted)]">{course.schedule}</span>
+                        <span className="text-sm text-[var(--text-muted)]">{String(course.schedule)}</span>
                       </div>
                     </div>
                   </div>
@@ -212,21 +213,21 @@ function TeacherCoursesContent() {
             ) : (
               <div className="bg-card rounded-2xl border border-[var(--border)] overflow-hidden">
                 <div className="divide-y divide-[var(--border)]">
-                  {students.map((enrollment) => (
-                    <div key={enrollment.id} className="p-4 hover:bg-[var(--background-green)] transition-colors">
+                  {students.map((enrollment: Record<string, unknown>) => (
+                    <div key={String(enrollment.id)} className="p-4 hover:bg-[var(--background-green)] transition-colors">
                       <div className={`flex items-center justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-[var(--primary)]/10 flex items-center justify-center">
                             <span className="text-[var(--primary)] font-semibold">
-                              {(enrollment.student?.full_name || 'S').charAt(0)}
+                              {String((enrollment.student as Record<string, unknown>)?.full_name || 'S').charAt(0)}
                             </span>
                           </div>
                           <div>
                             <p className="font-medium text-[var(--text-primary)]">
-                              {enrollment.student?.full_name || 'Unknown'}
+                              {String((enrollment.student as Record<string, unknown>)?.full_name) || 'Unknown'}
                             </p>
                             <p className="text-sm text-[var(--text-muted)]">
-                              {enrollment.student?.email}
+                              {String((enrollment.student as Record<string, unknown>)?.email)}
                             </p>
                           </div>
                         </div>
@@ -235,7 +236,7 @@ function TeacherCoursesContent() {
                             {t("teacher.students.attendance") || "Attendance"}
                           </p>
                           <p className="font-medium text-[var(--primary)]">
-                            {enrollment.attendance_rate || 0}%
+                            {Number(enrollment.attendance_rate) || 0}%
                           </p>
                         </div>
                       </div>

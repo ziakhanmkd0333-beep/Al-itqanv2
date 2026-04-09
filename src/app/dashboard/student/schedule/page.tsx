@@ -44,8 +44,8 @@ function StudentScheduleContent() {
   const { upcomingSessions, loading } = useStudentDashboard(studentId);
 
   // Group sessions by date
-  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, typeof upcomingSessions[0][]>, session: typeof upcomingSessions[0]) => {
-    const date = new Date(session.date || session.scheduled_at).toDateString();
+  const sessionsByDate = upcomingSessions.reduce((acc: Record<string, Record<string, unknown>[]>, session: Record<string, unknown>) => {
+    const date = new Date(String(session.date || session.scheduled_at || Date.now())).toDateString();
     if (!acc[date]) acc[date] = [];
     acc[date].push(session);
     return acc;
@@ -129,7 +129,7 @@ function StudentScheduleContent() {
                 </h3>
                 {upcomingSessions.map((session: Record<string, unknown>, index: number) => (
                   <motion.div
-                    key={session.id}
+                    key={String(session.id)}
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
@@ -139,13 +139,13 @@ function StudentScheduleContent() {
                       <Video className="w-6 h-6 text-[var(--primary)]" />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-[var(--text-primary)]">{session.course_title || session.course}</h4>
+                      <h4 className="font-semibold text-[var(--text-primary)]">{String(session.course_title || session.course)}</h4>
                       <p className="text-sm text-[var(--text-muted)]">
-                        {new Date(session.date || session.scheduled_at).toLocaleDateString()} • {session.time || 'TBD'} ({session.duration || '30 min'})
+                        {new Date(String(session.date || session.scheduled_at || Date.now())).toLocaleDateString()} • {String(session.time || 'TBD')} ({String(session.duration || '30 min')})
                       </p>
-                      {session.teacher_name && (
+                      {Boolean(session.teacher_name) && (
                         <p className="text-xs text-[var(--text-muted)] mt-1">
-                          with {session.teacher_name}
+                          with {String(session.teacher_name)}
                         </p>
                       )}
                     </div>

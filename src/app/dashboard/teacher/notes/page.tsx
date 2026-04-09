@@ -452,8 +452,8 @@ function TeacherNotesContent() {
                       className={`w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-[var(--background)] text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}
                     >
                       <option value="">{t("teacher.notes.selectStudent") || "Select Student"}</option>
-                      {students.map((student) => (
-                        <option key={student.id} value={student.id}>{student.full_name}</option>
+                      {students.map((student: Record<string, unknown>) => (
+                        <option key={String(student.id)} value={String(student.id)}>{String(student.full_name)}</option>
                       ))}
                     </select>
                   </div>
@@ -469,8 +469,8 @@ function TeacherNotesContent() {
                       className={`w-full px-4 py-2 border border-[var(--border)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] bg-[var(--background)] text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}
                     >
                       <option value="">{t("teacher.notes.selectCourse") || "Select Course"}</option>
-                      {courses.map((course) => (
-                        <option key={course.id} value={course.id}>{course.title}</option>
+                      {courses.map((course: Record<string, unknown>) => (
+                        <option key={String(course.id)} value={String(course.id)}>{String(course.title)}</option>
                       ))}
                     </select>
                   </div>

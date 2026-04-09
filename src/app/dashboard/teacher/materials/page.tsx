@@ -224,8 +224,8 @@ function TeacherMaterialsContent() {
             className="px-4 py-2 rounded-xl border border-[var(--border)] bg-card text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
           >
             <option value="">{t("teacher.materials.allCourses") || "All Courses"}</option>
-            {courses.map((course) => (
-              <option key={course.id} value={course.id}>{course.title}</option>
+            {courses.map((course: Record<string, unknown>) => (
+              <option key={String(course.id)} value={String(course.id)}>{String(course.title)}</option>
             ))}
           </select>
         </motion.div>
@@ -253,44 +253,44 @@ function TeacherMaterialsContent() {
               </button>
             </div>
           ) : (
-            materials.map((material) => (
+            materials.map((material: Record<string, unknown>) => (
               <div
-                key={material.id}
+                key={String(material.id)}
                 className="bg-card rounded-2xl border border-[var(--border)] overflow-hidden hover:shadow-lg transition-shadow"
               >
                 <div className="p-6">
                   <div className={`flex items-start justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
-                    {getFileIcon(material.file_type)}
+                    {getFileIcon(String(material.file_type))}
                     <button
-                      onClick={() => handleDelete(material.id)}
+                      onClick={() => handleDelete(String(material.id))}
                       className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                   
-                  <h3 className="font-bold text-[var(--text-primary)] mt-4 mb-2">{material.title}</h3>
-                  <p className="text-sm text-[var(--text-muted)] line-clamp-2">{material.description}</p>
+                  <h3 className="font-bold text-[var(--text-primary)] mt-4 mb-2">{String(material.title)}</h3>
+                  <p className="text-sm text-[var(--text-muted)] line-clamp-2">{String(material.description)}</p>
                   
                   <div className={`flex items-center gap-4 mt-4 text-xs text-[var(--text-muted)] ${isRTL ? "flex-row-reverse" : ""}`}>
-                    <span>{material.courses?.title}</span>
+                    <span>{String((material.courses as Record<string, unknown>)?.title)}</span>
                     <span>•</span>
-                    <span>{formatFileSize(material.file_size || 0)}</span>
+                    <span>{formatFileSize(Number(material.file_size) || 0)}</span>
                   </div>
                   
                   <div className={`flex items-center justify-between mt-4 pt-4 border-t border-[var(--border)] ${isRTL ? "flex-row-reverse" : ""}`}>
                     <button
-                      onClick={() => setExpandedMaterial(expandedMaterial === material.id ? null : material.id)}
+                      onClick={() => setExpandedMaterial(expandedMaterial === String(material.id) ? null : String(material.id))}
                       className="text-[var(--primary)] text-sm hover:underline flex items-center gap-1"
                     >
-                      {expandedMaterial === material.id ? (
+                      {expandedMaterial === String(material.id) ? (
                         <><ChevronUp className="w-4 h-4" /> Less</>
                       ) : (
                         <><ChevronDown className="w-4 h-4" /> More</>
                       )}
                     </button>
                     <a
-                      href={material.file_url}
+                      href={String(material.file_url)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-[var(--primary)] hover:underline text-sm"
@@ -300,14 +300,14 @@ function TeacherMaterialsContent() {
                     </a>
                   </div>
                   
-                  {expandedMaterial === material.id && (
+                  {expandedMaterial === String(material.id) && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       className="mt-4 pt-4 border-t border-[var(--border)]"
                     >
                       <p className="text-sm text-[var(--text-muted)]">
-                        {t("teacher.materials.uploaded") || "Uploaded"}: {new Date(material.uploaded_at).toLocaleDateString()}
+                        {t("teacher.materials.uploaded") || "Uploaded"}: {new Date(String(material.uploaded_at)).toLocaleDateString()}
                       </p>
                     </motion.div>
                   )}
@@ -349,8 +349,8 @@ function TeacherMaterialsContent() {
                     className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                   >
                     <option value="">{t("teacher.materials.selectCourse") || "Select a course"}</option>
-                    {courses.map((course) => (
-                      <option key={course.id} value={course.id}>{course.title}</option>
+                    {courses.map((course: Record<string, unknown>) => (
+                      <option key={String(course.id)} value={String(course.id)}>{String(course.title)}</option>
                     ))}
                   </select>
                 </div>

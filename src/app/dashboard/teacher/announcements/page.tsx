@@ -35,6 +35,7 @@ function TeacherAnnouncementsContent() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -218,46 +219,46 @@ function TeacherAnnouncementsContent() {
               </button>
             </div>
           ) : (
-            announcements.map((announcement) => (
+            announcements.map((announcement: Record<string, unknown>) => (
               <div
-                key={announcement.id}
-                className={`rounded-2xl border p-6 ${getPriorityClass(announcement.priority)}`}
+                key={String(announcement.id)}
+                className={`rounded-2xl border p-6 ${getPriorityClass(String(announcement.priority))}`}
               >
                 <div className={`flex items-start justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
                   <div className={`flex items-start gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
                     <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
-                      {getPriorityIcon(announcement.priority)}
+                      {getPriorityIcon(String(announcement.priority))}
                     </div>
                     <div className={isRTL ? "text-right" : "text-left"}>
                       <div className={`flex items-center gap-2 mb-1 ${isRTL ? "flex-row-reverse" : ""}`}>
-                        <h3 className="font-bold text-[var(--text-primary)]">{announcement.title}</h3>
+                        <h3 className="font-bold text-[var(--text-primary)]">{String(announcement.title)}</h3>
                         <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                          announcement.priority === 'urgent' ? 'bg-red-100 text-red-700' :
-                          announcement.priority === 'high' ? 'bg-orange-100 text-orange-700' :
-                          announcement.priority === 'low' ? 'bg-blue-100 text-blue-700' :
+                          String(announcement.priority) === 'urgent' ? 'bg-red-100 text-red-700' :
+                          String(announcement.priority) === 'high' ? 'bg-orange-100 text-orange-700' :
+                          String(announcement.priority) === 'low' ? 'bg-blue-100 text-blue-700' :
                           'bg-gray-100 text-gray-700'
                         }`}>
-                          {announcement.priority}
+                          {String(announcement.priority)}
                         </span>
                       </div>
-                      <p className="text-[var(--text-primary)] whitespace-pre-wrap">{announcement.message}</p>
+                      <p className="text-[var(--text-primary)] whitespace-pre-wrap">{String(announcement.message)}</p>
                       <div className={`flex items-center gap-4 mt-3 text-xs text-[var(--text-muted)] ${isRTL ? "flex-row-reverse" : ""}`}>
                         <span className={`flex items-center gap-1 ${isRTL ? "flex-row-reverse" : ""}`}>
                           <Calendar className="w-3 h-3" />
-                          {new Date(announcement.created_at).toLocaleDateString()}
+                          {new Date(String(announcement.created_at || Date.now())).toLocaleDateString()}
                         </span>
-                        {announcement.courses?.title && (
+                        {Boolean((announcement.courses as Record<string, unknown>)?.title) && (
                           <>
                             <span>•</span>
-                            <span>{announcement.courses.title}</span>
+                            <span>{String((announcement.courses as Record<string, unknown>)?.title)}</span>
                           </>
                         )}
-                        {announcement.expires_at && (
+                        {Boolean(announcement.expires_at) && (
                           <>
                             <span>•</span>
                             <span className={`flex items-center gap-1 ${isRTL ? "flex-row-reverse" : ""}`}>
                               <Clock className="w-3 h-3" />
-                              {t("teacher.announcements.expires") || "Expires"}: {new Date(announcement.expires_at).toLocaleDateString()}
+                              {t("teacher.announcements.expires") || "Expires"}: {new Date(String(announcement.expires_at)).toLocaleDateString()}
                             </span>
                           </>
                         )}
@@ -265,7 +266,7 @@ function TeacherAnnouncementsContent() {
                     </div>
                   </div>
                   <button
-                    onClick={() => handleDelete(announcement.id)}
+                    onClick={() => handleDelete(String(announcement.id))}
                     className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                   >
                     <Trash2 className="w-5 h-5" />
@@ -302,7 +303,7 @@ function TeacherAnnouncementsContent() {
                     className="w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)]"
                   >
                     <option value="">{t("teacher.announcements.allStudents") || "All Students"}</option>
-                    {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                    {courses.map((c: Record<string, unknown>) => <option key={String(c.id)} value={String(c.id)}>{String(c.title)}</option>)}
                   </select>
                 </div>
 

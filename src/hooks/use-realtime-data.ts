@@ -141,8 +141,23 @@ export function useAdminDashboard() {
 }
 
 // Admin Students Hook
+interface Student {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  country: string;
+  age: number;
+  language: string;
+  status: "active" | "inactive" | "suspended";
+  enrolled_courses: string[];
+  created_at: string;
+  updated_at?: string;
+  avatar_url?: string;
+}
+
 export function useAdminStudents(page = 1, limit = 10, search = '', status = '') {
-  const [students, setStudents] = useState<Record<string, unknown>[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -162,7 +177,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
       
       if (!res.ok) throw new Error(data.error);
       
-      setStudents(data.students || []);
+      setStudents((data.students || []) as Student[]);
       setTotal(data.total || 0);
       setError(null);
     } catch (err: unknown) {
@@ -537,6 +552,37 @@ export function useStudentCertificates(studentId: string | null) {
 }
 
 // Admin Registrations Hook with real-time updates
+interface Registration {
+  id: string;
+  user_type: 'student' | 'teacher';
+  full_name: string;
+  email: string;
+  phone: string;
+  country: string;
+  age?: number;
+  language?: string;
+  guardian_name?: string;
+  guardian_phone?: string;
+  course_id?: string;
+  preferred_timing?: string;
+  start_date?: string;
+  specialization?: string;
+  qualifications?: string;
+  experience_years?: number;
+  bio?: string;
+  cv_url?: string;
+  certification_url?: string;
+  languages_known?: string[];
+  status: 'pending' | 'approved' | 'rejected' | 'inactive' | 'suspended';
+  reviewed_by?: string;
+  reviewed_at?: string;
+  admin_notes?: string;
+  original_id: string;
+  created_at: string;
+  updated_at: string;
+  courses?: { title: string };
+}
+
 interface RegistrationFilters {
   status?: string;
   userType?: string;
@@ -544,7 +590,7 @@ interface RegistrationFilters {
 }
 
 export function useAdminRegistrations(page = 1, limit = 20, filters: RegistrationFilters = {}) {
-  const [registrations, setRegistrations] = useState<Record<string, unknown>[]>([]);
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -578,7 +624,7 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
 
       if (!res.ok) throw new Error(data.error);
 
-      setRegistrations(data.registrations || []);
+      setRegistrations((data.registrations || []) as Registration[]);
       setTotal(data.pagination?.total || 0);
       setError(null);
     } catch (err: unknown) {
