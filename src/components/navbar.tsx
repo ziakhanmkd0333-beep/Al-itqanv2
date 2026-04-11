@@ -88,11 +88,11 @@ export function Navbar() {
             </motion.div>
             <div className="hidden md:block">
               <motion.h1
-                className={`text-[var(--text-primary)] font-brand font-bold text-sm md:text-base leading-tight group-hover:text-[var(--gold)] transition-colors duration-300 ${isRTL ? "arabic-text" : ""}`}
+                className={`text-white drop-shadow-md font-brand font-bold text-sm md:text-base leading-tight group-hover:text-[var(--gold)] transition-colors duration-300 ${isRTL ? "arabic-text" : ""}`}
               >
                 {isMounted ? t("nav.brandName") : "Al-Itqan Institute"}
               </motion.h1>
-              <p className={`text-[var(--text-muted)] text-xs flex items-center gap-1 ${isRTL ? "arabic-text" : ""}`}>
+              <p className={`text-white/80 drop-shadow-md text-xs flex items-center gap-1 ${isRTL ? "arabic-text" : ""}`}>
                 <Sparkles className="w-3 h-3 text-[var(--gold)]" />
                 {isMounted ? t("nav.brandTagline") : "Excellence in Learning"}
               </p>
@@ -108,10 +108,10 @@ export function Navbar() {
                 onMouseEnter={() => setActiveLink(link.href)}
                 className="relative px-4 py-2 text-sm font-medium group"
               >
-                <span className={`relative z-10 transition-colors duration-300 ${
+                <span className={`relative z-10 transition-colors duration-300 drop-shadow-md ${
                   activeLink === link.href
-                    ? "text-[var(--primary)]"
-                    : "text-[var(--text-secondary)] group-hover:text-[var(--primary)]"
+                    ? "text-[var(--gold)]"
+                    : "text-white/90 group-hover:text-[var(--gold)]"
                 }`}>
                   {link.label}
                 </span>
@@ -143,7 +143,7 @@ export function Navbar() {
             {/* Login Button */}
             <Link
               href="/auth/login"
-              className="hidden md:flex items-center gap-1.5 px-4 py-2 text-[var(--text-secondary)] hover:text-[var(--primary)] text-sm font-medium transition-all duration-300 hover:bg-[var(--primary)]/5 rounded-xl"
+              className="hidden md:flex items-center gap-1.5 px-4 py-2 text-white/90 hover:text-[var(--gold)] text-sm font-medium transition-all duration-300 hover:bg-white/10 rounded-xl drop-shadow-md"
             >
               {t("nav.login")}
             </Link>
