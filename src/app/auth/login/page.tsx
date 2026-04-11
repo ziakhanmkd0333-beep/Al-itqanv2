@@ -65,7 +65,8 @@ function LoginForm() {
   // Redirect if already logged in - use useEffect to avoid setState during render
   useEffect(() => {
     if (isAuthenticated && user) {
-      const redirectPath = searchParams.get('redirect') || `/dashboard/${user.role}`;
+      const userRole = user?.role || 'student';
+      const redirectPath = searchParams.get('redirect') || `/dashboard/${userRole}`;
       router.push(redirectPath);
     }
   }, [isAuthenticated, user, router, searchParams]);
@@ -81,7 +82,8 @@ function LoginForm() {
     if (result.success && result.user) {
       setSuccess(true);
       // Get the redirect path from URL or default to role-based dashboard using returned user data
-      const redirectPath = searchParams.get('redirect') || `/dashboard/${result.user.role}`;
+      const userRole = result.user?.role || 'student';
+      const redirectPath = searchParams.get('redirect') || `/dashboard/${userRole}`;
       
       setTimeout(() => {
         router.push(redirectPath);
