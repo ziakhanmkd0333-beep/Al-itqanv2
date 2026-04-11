@@ -68,6 +68,11 @@ export function middleware(request: NextRequest) {
     const isAllowed = allowedPaths.some(path => pathname.startsWith(path));
 
     if (!isAllowed) {
+      // Don't redirect if already on login page (prevent loop)
+      if (pathname === '/auth/login' || pathname.startsWith('/auth/')) {
+        return NextResponse.next();
+      }
+      
       // Redirect to appropriate dashboard
       const dashboardPath = userRole === 'teacher' 
         ? '/dashboard/teacher' 
