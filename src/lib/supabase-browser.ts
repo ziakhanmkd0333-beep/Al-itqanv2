@@ -22,15 +22,6 @@ export function getSupabaseBrowser(): SupabaseClient {
     _supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
       realtime: { params: { eventsPerSecond: 10 } },
-      global: {
-        fetch: (url: string, options: RequestInit = {}) => {
-          const headers = new Headers(options.headers);
-          headers.set('Accept', 'application/json');
-          headers.set('Content-Type', 'application/json');
-          headers.set('apikey', supabaseAnonKey);
-          return fetch(url, { ...options, headers });
-        },
-      },
     });
   }
   return _supabaseBrowser;
