@@ -131,7 +131,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
           
           // Also set cookie for middleware/proxy compatibility
-          document.cookie = `user=${encodeURIComponent(userJson)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+          const cookieValue = `user=${encodeURIComponent(userJson)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+          document.cookie = cookieValue;
+          console.log('[AuthContext] Cookie set, length:', cookieValue.length);
           
           setUser(safeUser as User);
           return { success: true, user: safeUser as User };
@@ -160,7 +162,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       // Also set cookie for middleware/proxy compatibility
-      document.cookie = `user=${encodeURIComponent(userDataStr)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+      const fallbackCookieValue = `user=${encodeURIComponent(userDataStr)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+      document.cookie = fallbackCookieValue;
+      console.log('[AuthContext] Fallback cookie set, length:', fallbackCookieValue.length);
 
       setUser(data.user);
       return { success: true, user: data.user };
