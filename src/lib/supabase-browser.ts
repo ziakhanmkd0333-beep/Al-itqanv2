@@ -22,15 +22,13 @@ export function getSupabaseBrowser(): SupabaseClient {
     _supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
       realtime: { params: { eventsPerSecond: 10 } },
-      db: {
-        schema: 'public',
-      },
       global: {
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Accept-Profile': 'public',
-          'X-Client-Info': 'supabase-js/2.x',
+        fetch: (url: string, options: RequestInit = {}) => {
+          const headers = new Headers(options.headers);
+          headers.set('Accept', 'application/json');
+          headers.set('Content-Type', 'application/json');
+          headers.set('apikey', supabaseAnonKey);
+          return fetch(url, { ...options, headers });
         },
       },
     });
@@ -120,14 +118,22 @@ export const subscribeToStudentEnrollments = (
 
 // Helper to get student profile from user ID
 export const getStudentProfile = async (userId: string) => {
-  const { data, error } = await supabaseBrowser
-    .from('students')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  try {
+    const { data, error } = await supabaseBrowser
+      .from('students')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
     
-  if (error) return null;
-  return data;
+    if (error) {
+      console.error('[getStudentProfile] Error:', error.message, error.code);
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.error('[getStudentProfile] Exception:', err);
+    return null;
+  }
 };
 
 // Helper to get teacher profile from user ID
