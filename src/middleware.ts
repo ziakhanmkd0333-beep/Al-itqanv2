@@ -13,22 +13,11 @@ const publicPaths = [
   '/admin-login',
 ];
 
-// Role-based path access
-const rolePaths: Record<string, string[]> = {
-  admin: ['/dashboard/admin'],
-  teacher: ['/dashboard/teacher'],
-  student: ['/dashboard/student'],
-};
-
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   
   // Allow public paths
   if (publicPaths.some(path => pathname === path || pathname.startsWith(path + '/'))) {
-    // For course pages, allow access
-    if (pathname.startsWith('/courses/')) {
-      return NextResponse.next();
-    }
     return NextResponse.next();
   }
 
@@ -37,7 +26,7 @@ export function middleware(request: NextRequest) {
     // Get user from cookies
     const userCookie = request.cookies.get('user')?.value;
     
-    let user = null;
+    let user: { role?: string } | null = null;
     
     if (userCookie) {
       try {
@@ -47,42 +36,11 @@ export function middleware(request: NextRequest) {
       }
     }
 
-    // No user found - redirect to login
+    // No user found - redirect to login without error param
     if (!user) {
       const loginUrl = new URL('/auth/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
-      loginUrl.searchParams.set('error', 'unauthorized');
       return NextResponse.redirect(loginUrl);
-    }
-
-    // Check role-based access
-    const userRole = user.role;
-    
-    // Admin can access all dashboards
-    if (userRole === 'admin') {
-      return NextResponse.next();
-    }
-
-    // Check if user is accessing their own dashboard
-    const allowedPaths = rolePaths[userRole] || [];
-    const isAllowed = allowedPaths.some(path => pathname.startsWith(path));
-
-    if (!isAllowed) {
-      // Don't redirect if already on login page (prevent loop)
-      if (pathname === '/auth/login' || pathname.startsWith('/auth/')) {
-        return NextResponse.next();
-      }
-      
-      // Redirect to appropriate dashboard
-      const dashboardPath = userRole === 'teacher' 
-        ? '/dashboard/teacher' 
-        : userRole === 'student'
-          ? '/dashboard/student'
-          : '/auth/login';
-      
-      const redirectUrl = new URL(dashboardPath, request.url);
-      redirectUrl.searchParams.set('error', 'access_denied');
-      return NextResponse.redirect(redirectUrl);
     }
 
     return NextResponse.next();
