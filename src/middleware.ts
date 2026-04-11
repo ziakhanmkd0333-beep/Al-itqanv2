@@ -26,18 +26,22 @@ export function middleware(request: NextRequest) {
     // Get user from cookies
     const userCookie = request.cookies.get('user')?.value;
     
+    console.log('[Middleware] Dashboard access:', pathname, 'Cookie exists:', !!userCookie);
+    
     let user: { role?: string } | null = null;
     
     if (userCookie) {
       try {
         user = JSON.parse(decodeURIComponent(userCookie));
-      } catch (_e) {
-        // Invalid cookie
+        console.log('[Middleware] User found:', user?.email, 'Role:', user?.role);
+      } catch (e) {
+        console.error('[Middleware] Invalid cookie:', e);
       }
     }
 
     // No user found - redirect to login without error param
     if (!user) {
+      console.log('[Middleware] No user, redirecting to login');
       const loginUrl = new URL('/auth/login', request.url);
       loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl);
