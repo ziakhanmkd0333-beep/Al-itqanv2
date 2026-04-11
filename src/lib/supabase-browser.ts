@@ -22,10 +22,15 @@ export function getSupabaseBrowser(): SupabaseClient {
     _supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
       realtime: { params: { eventsPerSecond: 10 } },
+      db: {
+        schema: 'public',
+      },
       global: {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Accept-Profile': 'public',
+          'X-Client-Info': 'supabase-js/2.x',
         },
       },
     });
