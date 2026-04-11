@@ -10,17 +10,17 @@ import { LanguageSwitcher } from "./language-switcher";
 import { useTranslation } from "@/hooks/use-translation";
 
 export function Navbar() {
-  const { t, isRTL } = useTranslation();
+  const { t, isRTL, isMounted } = useTranslation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("/");
 
   const navLinks = [
-    { href: "/", label: t("nav.home"), icon: "🏠" },
-    { href: "/courses", label: t("nav.courses"), icon: "📚" },
-    { href: "/about", label: t("nav.about"), icon: "ℹ️" },
-    { href: "/admission", label: t("nav.admission"), icon: "🎓" },
-    { href: "/contact", label: t("nav.contact"), icon: "📞" }
+    { href: "/", label: isMounted ? t("nav.home") : "Home", icon: "🏠" },
+    { href: "/courses", label: isMounted ? t("nav.courses") : "Courses", icon: "📚" },
+    { href: "/about", label: isMounted ? t("nav.about") : "About", icon: "ℹ️" },
+    { href: "/admission", label: isMounted ? t("nav.admission") : "Admission", icon: "🎓" },
+    { href: "/contact", label: isMounted ? t("nav.contact") : "Contact", icon: "📞" }
   ];
 
   useEffect(() => {
@@ -90,11 +90,11 @@ export function Navbar() {
               <motion.h1
                 className={`text-[var(--text-primary)] font-brand font-bold text-sm md:text-base leading-tight group-hover:text-[var(--gold)] transition-colors duration-300 ${isRTL ? "arabic-text" : ""}`}
               >
-                {t("nav.brandName")}
+                {isMounted ? t("nav.brandName") : "Al-Itqan Institute"}
               </motion.h1>
               <p className={`text-[var(--text-muted)] text-xs flex items-center gap-1 ${isRTL ? "arabic-text" : ""}`}>
                 <Sparkles className="w-3 h-3 text-[var(--gold)]" />
-                {t("nav.brandTagline")}
+                {isMounted ? t("nav.brandTagline") : "Excellence in Learning"}
               </p>
             </div>
           </Link>
