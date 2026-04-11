@@ -16,11 +16,7 @@ export function getSupabaseBrowser(): SupabaseClient {
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseAnonKey) {
-      console.error('[supabase-browser] Missing required environment variables');
-      return createClient('https://placeholder.supabase.co', 'placeholder-key', {
-        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true },
-        realtime: { params: { eventsPerSecond: 10 } }
-      });
+      throw new Error('[supabase-browser] Missing required environment variables: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY must be set');
     }
 
     _supabaseBrowser = createClient(supabaseUrl, supabaseAnonKey, {
