@@ -69,32 +69,59 @@ function StudentProfileContent() {
 
   useEffect(() => {
     async function loadProfile() {
-      const user = getCurrentUser();
-      console.log('[ProfilePage] Current user:', user);
-      if (user?.id) {
-        try {
-          const profileData = await getStudentProfile(user.id);
-          console.log('[ProfilePage] Profile data:', profileData);
-          if (profileData) {
-            setProfile(profileData);
+      try {
+        const user = getCurrentUser();
+        console.log('[ProfilePage] Current user:', user);
+        
+        if (user?.id) {
+          try {
+            const profileData = await getStudentProfile(user.id);
+            console.log('[ProfilePage] Profile data:', profileData);
+            if (profileData) {
+              setProfile(profileData);
+              setProfileForm({
+                fullName: profileData.full_name || user.full_name || "",
+                email: profileData.email || user.email || "",
+                phone: profileData.phone || "",
+                country: profileData.country || "",
+                city: profileData.city || "",
+                dateOfBirth: profileData.date_of_birth || "",
+                language: profileData.language || "en",
+                timezone: profileData.timezone || "UTC-5"
+              });
+            } else {
+              // Use user data as fallback
+              setProfileForm({
+                fullName: user.full_name || "",
+                email: user.email || "",
+                phone: "",
+                country: "",
+                city: "",
+                dateOfBirth: "",
+                language: "en",
+                timezone: "UTC-5"
+              });
+            }
+          } catch (error) {
+            console.error('[ProfilePage] Error loading profile:', error);
+            // Use user data as fallback on error
             setProfileForm({
-              fullName: profileData.full_name || "",
-              email: profileData.email || "",
-              phone: profileData.phone || "",
-              country: profileData.country || "",
-              city: profileData.city || "",
-              dateOfBirth: profileData.date_of_birth || "",
-              language: profileData.language || "en",
-              timezone: profileData.timezone || "UTC-5"
+              fullName: user.full_name || "",
+              email: user.email || "",
+              phone: "",
+              country: "",
+              city: "",
+              dateOfBirth: "",
+              language: "en",
+              timezone: "UTC-5"
             });
           }
-        } catch (error) {
-          console.error('[ProfilePage] Error loading profile:', error);
-        } finally {
-          setIsLoading(false);
+        } else {
+          console.log('[ProfilePage] No user ID found');
         }
-      } else {
-        console.log('[ProfilePage] No user ID found');
+      } catch (e) {
+        console.error('[ProfilePage] Error in loadProfile:', e);
+      } finally {
         setIsLoading(false);
       }
     }
