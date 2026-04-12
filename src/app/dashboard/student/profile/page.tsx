@@ -70,9 +70,11 @@ function StudentProfileContent() {
   useEffect(() => {
     async function loadProfile() {
       const user = getCurrentUser();
+      console.log('[ProfilePage] Current user:', user);
       if (user?.id) {
         try {
           const profileData = await getStudentProfile(user.id);
+          console.log('[ProfilePage] Profile data:', profileData);
           if (profileData) {
             setProfile(profileData);
             setProfileForm({
@@ -87,10 +89,13 @@ function StudentProfileContent() {
             });
           }
         } catch (error) {
-          console.error('Error loading profile:', error);
+          console.error('[ProfilePage] Error loading profile:', error);
         } finally {
           setIsLoading(false);
         }
+      } else {
+        console.log('[ProfilePage] No user ID found');
+        setIsLoading(false);
       }
     }
     loadProfile();
