@@ -35,18 +35,26 @@ export default function StudentDashboard() {
 function StudentDashboardContent() {
   const { t, isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
+  const [studentName, setStudentName] = useState<string>("");
   const [isConnected, setIsConnected] = useState(true);
 
-  // Get student ID from profile on mount
+  // Get student ID and name from profile on mount
   useEffect(() => {
     async function loadProfile() {
       const user = getCurrentUser();
       if (user?.id) {
+        // Set name from user object
+        setStudentName(user.full_name || user.email || "");
+        
         if (user.role === 'student' || !user.role) {
           const { getStudentProfile } = await import("@/lib/supabase-browser");
           const profile = await getStudentProfile(user.id);
           if (profile?.id) {
             setStudentId(profile.id);
+            // Update name from profile if available
+            if (profile.full_name) {
+              setStudentName(profile.full_name);
+            }
           }
         } else {
           setStudentId(user.id);
@@ -86,8 +94,8 @@ function StudentDashboardContent() {
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className={`text-[var(--text-primary)] text-3xl font-bold mb-2 ${isRTL ? "arabic-text" : ""}`}>
-                {t("dashboard.welcomeStudent") || "Student Dashboard"}
+              <h1 className={`text-2xl lg:text-3xl font-bold text-[var(--text-primary)] ${isRTL ? "arabic-text" : ""}`}>
+                {t("dashboard.welcome") || "Welcome"}{studentName ? `, ${studentName}` : ""}
               </h1>
               <p className={`text-[var(--text-muted)] ${isRTL ? "arabic-text" : ""}`}>
                 {enrollments.length > 0 
