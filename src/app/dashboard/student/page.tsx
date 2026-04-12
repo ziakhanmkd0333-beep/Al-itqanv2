@@ -134,10 +134,9 @@ function StudentDashboardContent() {
         </motion.div>
 
         {/* Stats Overview */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
           {[
             { labelKey: "dashboard.courses", label: "Courses", value: enrollments.length, icon: BookOpen, color: "#3B82F6" },
-            { labelKey: "dashboard.hoursLearned", label: "Hours Learned", value: "48", icon: Clock, color: "#10B981" },
             { labelKey: "dashboard.certificates", label: "Certificates", value: certificates.length, icon: Award, color: "#F59E0B" },
             { labelKey: "dashboard.progress", label: "Progress", value: `${attendanceRate}%`, icon: TrendingUp, color: "#8B5CF6" }
           ].map((stat, index) => (
