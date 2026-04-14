@@ -17,7 +17,8 @@ export async function GET(request: Request) {
         courses:course_id(title),
         teachers:teacher_id(full_name)
       `)
-      .order('scheduled_at', { ascending: true });
+      .order('scheduled_date', { ascending: true })
+      .order('scheduled_time', { ascending: true });
     
     if (courseId) {
       query = query.eq('course_id', courseId);
@@ -46,8 +47,9 @@ export async function GET(request: Request) {
       course_title: (s.courses as any)?.title || 'Unknown',
       teacher_id: s.teacher_id,
       teacher_name: (s.teachers as any)?.full_name || 'Unknown',
-      scheduled_at: s.scheduled_at,
-      duration: s.duration,
+      scheduled_date: s.scheduled_date,
+      scheduled_time: s.scheduled_time,
+      duration: s.duration_minutes,
       meeting_url: s.meeting_url,
       meeting_platform: s.meeting_platform,
       meeting_id: s.meeting_id,
@@ -78,8 +80,9 @@ export async function POST(request: Request) {
       description,
       course_id,
       teacher_id,
-      scheduled_at,
-      duration,
+      scheduled_date,
+      scheduled_time,
+      duration_minutes,
       meeting_platform = 'jitsi',
       meeting_url,
       meeting_id,
@@ -88,9 +91,9 @@ export async function POST(request: Request) {
       waiting_room_enabled = false
     } = body;
 
-    if (!title || !course_id || !teacher_id || !scheduled_at) {
+    if (!title || !course_id || !teacher_id || !scheduled_date || !scheduled_time) {
       return NextResponse.json(
-        { error: 'Title, course_id, teacher_id, and scheduled_at are required' },
+        { error: 'Title, course_id, teacher_id, scheduled_date, and scheduled_time are required' },
         { status: 400 }
       );
     }
@@ -112,8 +115,9 @@ export async function POST(request: Request) {
         description,
         course_id,
         teacher_id,
-        scheduled_at,
-        duration,
+        scheduled_date,
+      scheduled_time,
+        duration_minutes,
         meeting_platform,
         meeting_url: finalMeetingUrl,
         meeting_id: finalMeetingId,
