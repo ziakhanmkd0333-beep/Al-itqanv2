@@ -22,7 +22,9 @@ import {
   TrendingUp,
   UserCheck,
   User,
-  Bell
+  Bell,
+  Video,
+  PlayCircle
 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -37,6 +39,8 @@ const adminNavItems = [
   { href: "/dashboard/admin/teachers/", labelKey: "sidebar.teachers", label: "Teachers", icon: GraduationCap },
   { href: "/dashboard/admin/courses/", labelKey: "sidebar.courses", label: "Courses", icon: BookOpen },
   { href: "/dashboard/admin/assignments/", labelKey: "sidebar.assignments", label: "Assignments", icon: Award },
+  { href: "/dashboard/admin/live-classes/", labelKey: "sidebar.liveClasses", label: "Live Classes", icon: Video },
+  { href: "/dashboard/admin/recorded-lessons/", labelKey: "sidebar.recordedLessons", label: "Recorded Lessons", icon: PlayCircle },
   { href: "/dashboard/admin/admissions/", labelKey: "sidebar.admissions", label: "Admissions", icon: ClipboardList },
   { href: "/dashboard/admin/payments/", labelKey: "sidebar.payments", label: "Payments", icon: CreditCard },
   { href: "/dashboard/admin/settings/", labelKey: "sidebar.settings", label: "Settings", icon: Settings }
@@ -46,6 +50,8 @@ const studentNavItems = [
   { href: "/dashboard/student/", labelKey: "sidebar.dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/student/profile/", labelKey: "sidebar.profile", label: "My Profile", icon: User },
   { href: "/dashboard/student/courses/", labelKey: "sidebar.myCourses", label: "My Courses", icon: BookOpen },
+  { href: "/dashboard/student/live-classes/", labelKey: "sidebar.liveClasses", label: "Live Classes", icon: Video },
+  { href: "/dashboard/student/recorded-lessons/", labelKey: "sidebar.recordedLessons", label: "Recorded Lessons", icon: PlayCircle },
   { href: "/dashboard/student/assignments/", labelKey: "sidebar.assignments", label: "Assignments", icon: ClipboardList },
   { href: "/dashboard/student/materials/", labelKey: "sidebar.materials", label: "Materials", icon: FileText },
   { href: "/dashboard/student/progress/", labelKey: "sidebar.progress", label: "Progress", icon: TrendingUp },
