@@ -183,7 +183,7 @@ function LiveClassesContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-800">
       <DashboardSidebar isAdmin />
 
       <div className="lg:ml-72 min-h-screen">
@@ -195,10 +195,10 @@ function LiveClassesContent() {
             className="mb-8 flex items-center justify-between"
           >
             <div>
-              <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                 Live Classes
               </h1>
-              <p className="text-[var(--text-muted)]">
+              <p className="text-gray-500 dark:text-gray-400">
                 Schedule and manage online video classes
               </p>
             </div>
@@ -237,19 +237,19 @@ function LiveClassesContent() {
           {/* Search */}
           <div className="mb-6 flex gap-4">
             <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 dark:text-gray-400" />
               <input
                 type="text"
                 placeholder="Search live classes..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
             <button
               onClick={fetchData}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--background)] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:bg-gray-800 transition-colors"
             >
               <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
               Refresh
@@ -259,7 +259,7 @@ function LiveClassesContent() {
           {/* Sessions List */}
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <RefreshCw className="w-8 h-8 animate-spin text-[var(--primary)]" />
+              <RefreshCw className="w-8 h-8 animate-spin text-emerald-600" />
             </div>
           ) : (
             <div className="grid gap-4">
@@ -268,21 +268,21 @@ function LiveClassesContent() {
                   key={session.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-4 bg-[var(--card-background)] rounded-xl border border-[var(--border)]"
+                  className="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-300 dark:border-gray-600"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className="w-10 h-10 rounded-lg bg-[var(--primary)]/10 flex items-center justify-center">
-                          <Video className="w-5 h-5 text-[var(--primary)]" />
+                        <div className="w-10 h-10 rounded-lg bg-emerald-600 hover:bg-emerald-700/10 flex items-center justify-center">
+                          <Video className="w-5 h-5 text-emerald-600" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-[var(--text-primary)]">{session.title}</h3>
-                          <p className="text-sm text-[var(--text-muted)]">{session.course_title}</p>
+                          <h3 className="font-semibold text-gray-900 dark:text-gray-100">{session.title}</h3>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">{session.course_title}</p>
                         </div>
                       </div>
 
-                      <div className="flex flex-wrap gap-4 text-sm text-[var(--text-muted)] ml-13">
+                      <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400 ml-13">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
                           {formatDate(session.scheduled_at)}
@@ -306,7 +306,7 @@ function LiveClassesContent() {
                         href={session.meeting_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1 px-3 py-2 bg-[var(--primary)] text-white rounded-lg hover:opacity-90 transition-opacity text-sm"
+                        className="flex items-center gap-1 px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg hover:opacity-90 transition-opacity text-sm"
                       >
                         <Play className="w-4 h-4" />
                         Join
@@ -324,7 +324,7 @@ function LiveClassesContent() {
               ))}
 
               {filteredSessions.length === 0 && (
-                <div className="text-center py-12 text-[var(--text-muted)]">
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                   <Video className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p className="text-lg font-medium">No live classes scheduled</p>
                   <p className="text-sm">Click "Schedule Live Class" to create one</p>
@@ -337,27 +337,28 @@ function LiveClassesContent() {
 
       {/* Create Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-[var(--card-background)] rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="bg-white dark:bg-gray-900 rounded-2xl p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gray-200 dark:border-gray-700"
           >
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Schedule Live Class
               </h2>
               <button
                 onClick={() => setShowModal(false)}
-                className="p-2 hover:bg-[var(--background)] rounded-lg transition-colors"
+                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Title *
                 </label>
                 <input
@@ -365,19 +366,19 @@ function LiveClassesContent() {
                   required
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   placeholder="e.g., Quran Recitation Class"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Description
                 </label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   rows={3}
                   placeholder="Class description..."
                 />
@@ -385,14 +386,14 @@ function LiveClassesContent() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                     Course *
                   </label>
                   <select
                     required
                     value={formData.course_id}
                     onChange={(e) => setFormData({ ...formData, course_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
                     <option value="">Select Course</option>
                     {courses.map(c => (
@@ -402,14 +403,14 @@ function LiveClassesContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                     Teacher *
                   </label>
                   <select
                     required
                     value={formData.teacher_id}
                     onChange={(e) => setFormData({ ...formData, teacher_id: e.target.value })}
-                    className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   >
                     <option value="">Select Teacher</option>
                     {teachers.map(t => (
@@ -421,7 +422,7 @@ function LiveClassesContent() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                     Date & Time *
                   </label>
                   <input
@@ -429,12 +430,12 @@ function LiveClassesContent() {
                     required
                     value={formData.scheduled_at}
                     onChange={(e) => setFormData({ ...formData, scheduled_at: e.target.value })}
-                    className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                  <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                     Duration (minutes) *
                   </label>
                   <input
@@ -448,31 +449,31 @@ function LiveClassesContent() {
                       const numValue = value === '' ? 60 : parseInt(value);
                       setFormData({ ...formData, duration: isNaN(numValue) ? 60 : numValue });
                     }}
-                    className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Meeting Platform
                 </label>
                 <select
                   value={formData.meeting_platform}
                   onChange={(e) => setFormData({ ...formData, meeting_platform: e.target.value })}
-                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   <option value="jitsi">Jitsi Meet (Free, Built-in)</option>
                   <option value="zoom">Zoom</option>
                   <option value="google_meet">Google Meet</option>
                 </select>
-                <p className="text-xs text-[var(--text-muted)] mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   Jitsi Meet is free and requires no account. A meeting link will be auto-generated.
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-[var(--text-primary)] mb-1">
+                <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Max Participants
                 </label>
                 <input
@@ -481,7 +482,7 @@ function LiveClassesContent() {
                   max={500}
                   value={formData.max_participants}
                   onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </div>
 
@@ -493,7 +494,7 @@ function LiveClassesContent() {
                   onChange={(e) => setFormData({ ...formData, waiting_room_enabled: e.target.checked })}
                   className="w-4 h-4"
                 />
-                <label htmlFor="waiting_room" className="text-sm text-[var(--text-primary)]">
+                <label htmlFor="waiting_room" className="text-sm text-gray-900 dark:text-gray-100">
                   Enable waiting room (teacher must admit students)
                 </label>
               </div>
@@ -502,13 +503,13 @@ function LiveClassesContent() {
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="flex-1 px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--background)] transition-colors"
+                  className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:bg-gray-800 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-[var(--primary)] text-white rounded-lg hover:opacity-90 transition-opacity"
+                  className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg hover:opacity-90 transition-opacity"
                 >
                   Schedule Class
                 </button>
