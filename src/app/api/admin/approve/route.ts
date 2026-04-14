@@ -91,6 +91,16 @@ export async function POST(request: Request) {
             .from('students')
             .update({ user_id: userId })
             .eq('id', student.id);
+          
+          // Also update users.is_approved to true
+          await supabaseAdmin
+            .from('users')
+            .update({ 
+              is_approved: true,
+              approved_by: adminId || null,
+              approved_at: now
+            })
+            .eq('id', userId);
         }
 
         // Also update any related admissions and create enrollment
@@ -156,12 +166,15 @@ export async function POST(request: Request) {
         );
       }
 
-      // Also update the linked user's is_active status
+      // Also update the linked user's is_active and is_approved status
       if (teacher?.user_id) {
         await supabaseAdmin
           .from('users')
           .update({
             is_active: action === 'approve',
+            is_approved: action === 'approve',
+            approved_by: action === 'approve' ? adminId : null,
+            approved_at: action === 'approve' ? now : null,
             updated_at: now
           })
           .eq('id', teacher.user_id);
@@ -196,7 +209,7 @@ export async function GET(request: Request) {
 
     const result: Record<string, unknown> = {};
 
-    // Get pending students
+    // Get pending students from students table
     if (userType === 'all' || userType === 'student') {
       const { data: pendingStudents, error: studentsError } = await supabaseAdmin
         .from('students')
@@ -209,7 +222,7 @@ export async function GET(request: Request) {
       }
     }
 
-    // Get pending teachers
+    // Get pending teachers from teachers table
     if (userType === 'all' || userType === 'teacher') {
       const { data: pendingTeachers, error: teachersError } = await supabaseAdmin
         .from('teachers')
@@ -220,6 +233,17 @@ export async function GET(request: Request) {
       if (!teachersError) {
         result.pendingTeachers = pendingTeachers || [];
       }
+    }
+
+    // Get unapproved users directly from users table
+    const { data: unapprovedUsers, error: usersError } = await supabaseAdmin
+      .from('users')
+      .select('id, full_name, email, role, is_approved, created_at')
+      .eq('is_approved', false)
+      .order('created_at', { ascending: true });
+
+    if (!usersError) {
+      result.unapprovedUsers = unapprovedUsers || [];
     }
 
     return NextResponse.json(result);

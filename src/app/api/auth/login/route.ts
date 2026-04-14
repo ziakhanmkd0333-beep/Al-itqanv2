@@ -34,6 +34,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Account is inactive' }, { status: 403 });
     }
 
+    // Check if user is approved by admin
+    if (!user.is_approved) {
+      return NextResponse.json({ 
+        error: 'Your account is pending admin approval. Please wait for approval before logging in.' 
+      }, { status: 403 });
+    }
+
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password_hash);
     if (!isPasswordValid) {
