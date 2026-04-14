@@ -120,6 +120,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
 
         if (!userError && userData) {
+          // Check if user is approved
+          if (!userData.is_approved) {
+            return { 
+              success: false, 
+              error: 'Your account is pending admin approval. Please wait for approval before logging in.' 
+            };
+          }
+          
           const { password_hash, ...safeUser } = userData;
           
           // Store in localStorage for compatibility

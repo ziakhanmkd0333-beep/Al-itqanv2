@@ -203,6 +203,7 @@ export const translations = {
           active: "Active",
           inactive: "Inactive",
           suspended: "Suspended",
+          pending: "Pending",
         },
         form: {
           fullName: "Full Name",
@@ -243,6 +244,7 @@ export const translations = {
           active: "Active",
           inactive: "Inactive",
           onLeave: "On Leave",
+          pending: "Pending",
         },
         form: {
           fullName: "Full Name",
@@ -280,6 +282,7 @@ export const translations = {
           active: "Active",
           inactive: "Inactive",
           draft: "Draft",
+          pending: "Pending",
         },
         form: {
           title: "Course Title",
@@ -1112,6 +1115,7 @@ export const translations = {
           active: "نشط",
           inactive: "غير نشط",
           suspended: "معلق",
+          pending: "معلق",
         },
         form: {
           fullName: "الاسم الكامل",
@@ -1150,6 +1154,7 @@ export const translations = {
           active: "نشط",
           inactive: "غير نشط",
           onLeave: "في إجازة",
+          pending: "معلق",
         },
         form: {
           fullName: "الاسم الكامل",
@@ -1187,6 +1192,7 @@ export const translations = {
           active: "نشطة",
           inactive: "غير نشطة",
           draft: "مسودة",
+          pending: "معلقة",
         },
         form: {
           title: "عنوان الدورة",
