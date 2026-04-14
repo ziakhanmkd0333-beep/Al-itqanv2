@@ -36,6 +36,7 @@ const adminNavItems = [
   { href: "/dashboard/admin/students/", labelKey: "sidebar.students", label: "Students", icon: Users },
   { href: "/dashboard/admin/teachers/", labelKey: "sidebar.teachers", label: "Teachers", icon: GraduationCap },
   { href: "/dashboard/admin/courses/", labelKey: "sidebar.courses", label: "Courses", icon: BookOpen },
+  { href: "/dashboard/admin/assignments/", labelKey: "sidebar.assignments", label: "Assignments", icon: Award },
   { href: "/dashboard/admin/admissions/", labelKey: "sidebar.admissions", label: "Admissions", icon: ClipboardList },
   { href: "/dashboard/admin/payments/", labelKey: "sidebar.payments", label: "Payments", icon: CreditCard },
   { href: "/dashboard/admin/settings/", labelKey: "sidebar.settings", label: "Settings", icon: Settings }
