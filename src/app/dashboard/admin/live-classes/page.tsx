@@ -39,8 +39,9 @@ interface LiveSession {
   course_title: string;
   teacher_id: string;
   teacher_name: string;
-  scheduled_at: string;
-  duration: number;
+  scheduled_date: string;
+  scheduled_time: string;
+  duration_minutes: number;
   meeting_url: string;
   meeting_platform: string;
   status: string;
@@ -75,7 +76,7 @@ function LiveClassesContent() {
     course_id: "",
     teacher_id: "",
     scheduled_at: "",
-    duration: 60,
+    duration_minutes: 60,
     meeting_platform: "jitsi",
     max_participants: 100,
     waiting_room_enabled: false
@@ -120,12 +121,24 @@ function LiveClassesContent() {
     setError("");
     setSuccess("");
 
+    // Split scheduled_at into date and time for API
+    const scheduledDateTime = new Date(formData.scheduled_at);
+    const scheduled_date = scheduledDateTime.toISOString().split('T')[0];
+    const scheduled_time = scheduledDateTime.toTimeString().slice(0, 5);
+
+    const submitData = {
+      ...formData,
+      scheduled_date,
+      scheduled_time,
+    };
+    delete (submitData as { scheduled_at?: string }).scheduled_at;
+
     try {
       const response = await fetch('/api/admin/sessions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
       if (!response.ok) {
@@ -141,7 +154,7 @@ function LiveClassesContent() {
         course_id: "",
         teacher_id: "",
         scheduled_at: "",
-        duration: 60,
+        duration_minutes: 60,
         meeting_platform: "jitsi",
         max_participants: 100,
         waiting_room_enabled: false
@@ -285,11 +298,11 @@ function LiveClassesContent() {
                       <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400 ml-13">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          {formatDate(session.scheduled_at)}
+                          {formatDate(session.scheduled_date)}
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          {session.duration} min
+                          {session.duration_minutes} min
                         </span>
                         <span className="flex items-center gap-1">
                           <Users className="w-4 h-4" />
@@ -443,7 +456,7 @@ function LiveClassesContent() {
                     required
                     min={15}
                     max={180}
-                    value={formData.duration}
+                    value={formData.duration_minutes}
                     onChange={(e) => {
                       const value = e.target.value;
                       const numValue = value === '' ? 60 : parseInt(value);
@@ -476,18 +489,6 @@ function LiveClassesContent() {
                 <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Max Participants
                 </label>
-                <input
-                  type="number"
-                  min={5}
-                  max={500}
-                  value={formData.max_participants}
-                  onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                />
-              </div>
-
-              <div className="flex items-center gap-2">
-                <input
                   type="checkbox"
                   id="waiting_room"
                   checked={formData.waiting_room_enabled}
