@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     const now = new Date().toISOString();
 
     if (userType === 'student') {
-      // Update student status
+      // First, try to find student in students table
       const { data: student, error: studentError } = await supabaseAdmin
         .from('students')
         .update({
@@ -48,6 +48,33 @@ export async function POST(request: Request) {
         .eq('id', userId)
         .select()
         .single();
+
+      // If student not found in students table, approve directly in users table
+      if (studentError && studentError.code === 'PGRST116') {
+        const { error: userError } = await supabaseAdmin
+          .from('users')
+          .update({
+            is_approved: action === 'approve',
+            approved_by: adminId || null,
+            approved_at: now,
+            updated_at: now
+          })
+          .eq('id', userId)
+          .eq('role', 'student');
+
+        if (userError) {
+          console.error('User approval error:', userError);
+          return NextResponse.json(
+            { error: 'Failed to update user approval status' },
+            { status: 500 }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: `Student ${action === 'approve' ? 'approved' : 'rejected'} successfully`
+        });
+      }
 
       if (studentError) {
         console.error('Student approval error:', studentError);
@@ -145,7 +172,7 @@ export async function POST(request: Request) {
     }
 
     if (userType === 'teacher') {
-      // Update teacher status
+      // First, try to find teacher in teachers table
       const { data: teacher, error: teacherError } = await supabaseAdmin
         .from('teachers')
         .update({
@@ -157,6 +184,33 @@ export async function POST(request: Request) {
         .eq('id', userId)
         .select()
         .single();
+
+      // If teacher not found in teachers table, approve directly in users table
+      if (teacherError && teacherError.code === 'PGRST116') {
+        const { error: userError } = await supabaseAdmin
+          .from('users')
+          .update({
+            is_approved: action === 'approve',
+            approved_by: adminId || null,
+            approved_at: now,
+            updated_at: now
+          })
+          .eq('id', userId)
+          .eq('role', 'teacher');
+
+        if (userError) {
+          console.error('User approval error:', userError);
+          return NextResponse.json(
+            { error: 'Failed to update user approval status' },
+            { status: 500 }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: `Teacher ${action === 'approve' ? 'approved' : 'rejected'} successfully`
+        });
+      }
 
       if (teacherError) {
         console.error('Teacher approval error:', teacherError);
@@ -182,7 +236,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        message: `Teacher ${action}d successfully`,
+        message: `Teacher ${action === 'approve' ? 'approved' : 'rejected'} successfully`,
         user: teacher
       });
     }

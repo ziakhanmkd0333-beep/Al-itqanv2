@@ -65,10 +65,26 @@ function ApprovalsContent() {
         throw new Error(data.error || 'Failed to fetch pending users');
       }
 
-      // Combine students and teachers with type indicator
+      // Combine all pending users from different sources
       const users: PendingUser[] = [
-        ...(data.pendingStudents || []).map((s: Record<string, unknown>) => ({ ...s, type: 'student' as const })),
-        ...(data.pendingTeachers || []).map((t: Record<string, unknown>) => ({ ...t, type: 'teacher' as const }))
+        // From students table (legacy registration flow)
+        ...(data.pendingStudents || []).map((s: Record<string, unknown>) => ({ 
+          ...s, 
+          type: 'student' as const,
+          status: s.status || 'pending'
+        })),
+        // From teachers table (legacy registration flow)
+        ...(data.pendingTeachers || []).map((t: Record<string, unknown>) => ({ 
+          ...t, 
+          type: 'teacher' as const,
+          status: t.status || 'pending'
+        })),
+        // From users table with is_approved = false (new approval system)
+        ...(data.unapprovedUsers || []).map((u: Record<string, unknown>) => ({ 
+          ...u, 
+          type: u.role === 'teacher' ? 'teacher' as const : 'student' as const,
+          status: 'pending'
+        }))
       ];
 
       // Sort by created_at
