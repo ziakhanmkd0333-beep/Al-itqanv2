@@ -14,8 +14,8 @@ export async function GET(request: Request) {
       .from('sessions')
       .select(`
         *,
-        courses!inner(title),
-        teachers!inner(full_name)
+        courses:course_id(title),
+        teachers:teacher_id(full_name)
       `)
       .order('scheduled_at', { ascending: true });
     
