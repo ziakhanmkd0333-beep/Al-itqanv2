@@ -218,10 +218,17 @@ function StudentCoursesContent() {
                 ))
               ) : (
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center">
-                  <p className="text-gray-500 dark:text-gray-400">No courses enrolled yet</p>
-                  <Link href="/courses" className="text-emerald-600 hover:underline text-sm mt-2 inline-block">
-                    Browse courses
-                  </Link>
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                      <BookOpen className="w-6 h-6 text-gray-400" />
+                    </div>
+                    <div>
+                      <p className="text-gray-900 dark:text-white font-medium">No courses assigned yet</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        Please contact your administrator to get enrolled in courses.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
