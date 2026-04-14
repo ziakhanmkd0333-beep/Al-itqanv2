@@ -443,7 +443,11 @@ function LiveClassesContent() {
                     min={15}
                     max={180}
                     value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      const numValue = value === '' ? 60 : parseInt(value);
+                      setFormData({ ...formData, duration: isNaN(numValue) ? 60 : numValue });
+                    }}
                     className="w-full px-3 py-2 border border-[var(--border)] rounded-lg bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)]"
                   />
                 </div>
