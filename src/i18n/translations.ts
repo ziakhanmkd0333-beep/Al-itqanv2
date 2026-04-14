@@ -874,6 +874,11 @@ export const translations = {
       noAccount: "Don't have an account?",
       applyAdmission: "Apply for Admission",
       backToHome: "Back to Home",
+      errors: {
+        invalidCredentials: "Invalid email or password",
+        inactiveAccount: "Account is inactive",
+        approvalRequired: "Your account is pending admin approval. Please wait for approval before logging in.",
+      },
     },
     // Languages
     languages: {
@@ -1653,8 +1658,8 @@ export const translations = {
     },
     // Login
     login: {
-      welcomeBack: "أهلاً بعودتك",
-      signInToContinue: "سجل الدخول لمتابعة رحلة تعلمك",
+      welcomeBack: "مرحباً بعودتك",
+      signInToContinue: "قم بتسجيل الدخول لمواصلة رحلة التعلم",
       email: "البريد الإلكتروني",
       emailPlaceholder: "أدخل بريدك الإلكتروني",
       password: "كلمة المرور",
@@ -1665,8 +1670,13 @@ export const translations = {
       signingIn: "جاري تسجيل الدخول...",
       orContinueWith: "أو تابع باستخدام",
       noAccount: "ليس لديك حساب؟",
-      applyAdmission: "تقديم طلب القبول",
+      applyAdmission: "قدم طلب القبول",
       backToHome: "العودة للرئيسية",
+      errors: {
+        invalidCredentials: "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+        inactiveAccount: "الحساب غير نشط",
+        approvalRequired: "حسابك في انتظار موافقة المشرف. يرجى الانتظار حتى الموافقة قبل تسجيل الدخول.",
+      },
     },
     // Languages
     languages: {
