@@ -460,7 +460,7 @@ function LiveClassesContent() {
                     onChange={(e) => {
                       const value = e.target.value;
                       const numValue = value === '' ? 60 : parseInt(value);
-                      setFormData({ ...formData, duration: isNaN(numValue) ? 60 : numValue });
+                      setFormData({ ...formData, duration_minutes: isNaN(numValue) ? 60 : numValue });
                     }}
                     className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                   />
@@ -489,6 +489,18 @@ function LiveClassesContent() {
                 <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-1">
                   Max Participants
                 </label>
+                <input
+                  type="number"
+                  min={1}
+                  max={500}
+                  value={formData.max_participants}
+                  onChange={(e) => setFormData({ ...formData, max_participants: parseInt(e.target.value) || 100 })}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
                   type="checkbox"
                   id="waiting_room"
                   checked={formData.waiting_room_enabled}

@@ -12,11 +12,7 @@ export async function GET(request: Request) {
     
     let query = supabaseAdmin
       .from('sessions')
-      .select(`
-        *,
-        courses:course_id(title),
-        teachers:teacher_id(full_name)
-      `)
+      .select('*')
       .order('scheduled_date', { ascending: true })
       .order('scheduled_time', { ascending: true });
     
@@ -44,9 +40,9 @@ export async function GET(request: Request) {
       title: s.title,
       description: s.description,
       course_id: s.course_id,
-      course_title: (s.courses as any)?.title || 'Unknown',
+      course_title: 'Unknown',
       teacher_id: s.teacher_id,
-      teacher_name: (s.teachers as any)?.full_name || 'Unknown',
+      teacher_name: 'Unknown',
       scheduled_date: s.scheduled_date,
       scheduled_time: s.scheduled_time,
       duration: s.duration_minutes,
