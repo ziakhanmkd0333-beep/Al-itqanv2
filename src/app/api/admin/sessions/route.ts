@@ -126,9 +126,9 @@ export async function POST(request: Request) {
       .single();
 
     if (error) {
-      console.error('Error creating session:', error);
+      console.error('Error creating session:', JSON.stringify(error, null, 2));
       return NextResponse.json(
-        { error: 'Failed to create session' },
+        { error: 'Failed to create session', details: error.message, code: error.code },
         { status: 500 }
       );
     }

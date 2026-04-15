@@ -121,8 +121,18 @@ function LiveClassesContent() {
     setError("");
     setSuccess("");
 
+    // Validate required fields
+    if (!formData.title || !formData.course_id || !formData.teacher_id || !formData.scheduled_at) {
+      setError("Please fill in all required fields: Title, Course, Teacher, and Date/Time");
+      return;
+    }
+
     // Split scheduled_at into date and time for API
     const scheduledDateTime = new Date(formData.scheduled_at);
+    if (isNaN(scheduledDateTime.getTime())) {
+      setError("Invalid date/time selected");
+      return;
+    }
     const scheduled_date = scheduledDateTime.toISOString().split('T')[0];
     const scheduled_time = scheduledDateTime.toTimeString().slice(0, 5);
 
@@ -132,6 +142,8 @@ function LiveClassesContent() {
       scheduled_time,
     };
     delete (submitData as { scheduled_at?: string }).scheduled_at;
+
+    console.log('Submitting session data:', submitData);
 
     try {
       const response = await fetch('/api/admin/sessions', {
