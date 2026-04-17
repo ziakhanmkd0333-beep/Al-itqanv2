@@ -15,7 +15,11 @@ const getSupabaseAdmin = () => {
 };
 
 // Verify admin access
-const verifyAdmin = async (supabase: any, authHeader: string | null) => {
+type VerifyAdminResult = 
+  | { user: { id: string; role: string }; error?: never }
+  | { user?: never; error: string };
+
+const verifyAdmin = async (supabase: ReturnType<typeof getSupabaseAdmin>, authHeader: string | null): Promise<VerifyAdminResult> => {
   if (!authHeader) return { error: 'Unauthorized' };
   
   try {
@@ -31,12 +35,12 @@ const verifyAdmin = async (supabase: any, authHeader: string | null) => {
       .eq('id', user.id)
       .single();
     
-    if (userError || userData.role !== 'admin') {
+    if (userError || !userData || userData.role !== 'admin') {
       return { error: 'Forbidden - Admin access required' };
     }
     
     return { user: userData };
-  } catch (error) {
+  } catch {
     return { error: 'Unauthorized' };
   }
 };
@@ -56,8 +60,8 @@ export async function POST(
     const authHeader = request.headers.get('authorization');
     const { error: authError, user: adminUser } = await verifyAdmin(supabaseAdmin, authHeader);
     
-    if (authError) {
-      return NextResponse.json({ error: authError }, { status: 401 });
+    if (authError || !adminUser) {
+      return NextResponse.json({ error: authError || 'Unauthorized' }, { status: 401 });
     }
 
     // Parse request body
@@ -72,14 +76,14 @@ export async function POST(
     }
 
     // Try to find in students table first
-    let { data: student, error: studentError } = await supabaseAdmin
+    const { data: student, error: studentError } = await supabaseAdmin
       .from('students')
       .select('*, users!inner(*)')
       .eq('id', applicationId)
       .single();
 
     let isTeacher = false;
-    let application = student;
+    let application: typeof student = student;
 
     // If not found in students, try teachers
     if (studentError || !student) {
@@ -104,7 +108,7 @@ export async function POST(
     const tableName = isTeacher ? 'teachers' : 'students';
 
     // Update application status
-    const updateData: any = {
+    const updateData: Record<string, string | boolean | null> = {
       status: action === 'approve' ? 'approved' : 'rejected',
       is_approved: action === 'approve',
       reviewed_at: now,
@@ -157,7 +161,7 @@ export async function POST(
         details: { notes: notes || null },
         created_at: now,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error logging admin action:', err);
     }
 
@@ -172,10 +176,11 @@ export async function POST(
       },
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Enhanced approval POST error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
@@ -199,7 +204,7 @@ export async function GET(
     }
 
     // Try students table first
-    let { data: student, error: studentError } = await supabaseAdmin
+    const { data: student, error: studentError } = await supabaseAdmin
       .from('students')
       .select(`
         *,
@@ -246,10 +251,11 @@ export async function GET(
       { status: 404 }
     );
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Enhanced approval GET single error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

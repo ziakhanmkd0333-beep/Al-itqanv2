@@ -15,28 +15,32 @@ const getSupabaseAdmin = () => {
 };
 
 // Verify admin access
-const verifyAdmin = async (supabase: any, authHeader: string | null) => {
+type VerifyAdminResult = 
+  | { user: { id: string; role: string }; error?: never }
+  | { user?: never; error: string };
+
+const verifyAdmin = async (supabase: ReturnType<typeof getSupabaseAdmin>, authHeader: string | null): Promise<VerifyAdminResult> => {
   if (!authHeader) return { error: 'Unauthorized' };
   
   try {
     const token = authHeader.replace('Bearer ', '');
-    const { data: { user }, error } = await supabase.auth.getUser(token);
+    const { data: { user } } = await supabase.auth.getUser(token);
     
-    if (error || !user) return { error: 'Unauthorized' };
+    if (!user) return { error: 'Unauthorized' };
     
     // Check if user has admin role
     const { data: userData, error: userError } = await supabase
       .from('users')
-      .select('role')
+      .select('role, id')
       .eq('id', user.id)
       .single();
     
-    if (userError || userData.role !== 'admin') {
+    if (userError || !userData || userData.role !== 'admin') {
       return { error: 'Forbidden - Admin access required' };
     }
     
-    return { user };
-  } catch (error) {
+    return { user: userData };
+  } catch {
     return { error: 'Unauthorized' };
   }
 };
@@ -50,7 +54,7 @@ export async function GET(request: Request) {
     
     // Verify admin access
     const authHeader = request.headers.get('authorization');
-    const { error: authError, user } = await verifyAdmin(supabaseAdmin, authHeader);
+    const { error: authError } = await verifyAdmin(supabaseAdmin, authHeader);
     
     if (authError) {
       return NextResponse.json({ error: authError }, { status: 401 });
@@ -122,7 +126,7 @@ export async function GET(request: Request) {
 
     // Fetch additional data for each student
     const applications = await Promise.all(
-      (students || []).map(async (student: any) => {
+      (students || []).map(async (student: Record<string, unknown>) => {
         // Fetch Islamic qualifications
         const { data: qualifications } = await supabaseAdmin
           .from('islamic_education_qualifications')
@@ -212,7 +216,7 @@ export async function GET(request: Request) {
     }
 
     // Format teacher data to match student structure
-    const formattedTeachers = (teachers || []).map((teacher: any) => ({
+    const formattedTeachers = (teachers || []).map((teacher: Record<string, unknown>) => ({
       ...teacher,
       role_info: {
         school_name: teacher.school_name,
@@ -241,10 +245,11 @@ export async function GET(request: Request) {
       count: allApplications.length,
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Enhanced approvals GET error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

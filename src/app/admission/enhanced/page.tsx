@@ -2,17 +2,14 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { courses } from "@/lib/courses-data";
 import { 
-  Send, CheckCircle, User, Mail, Phone, MapPin, BookOpen, Clock, Calendar, 
-  Lock, Eye, EyeOff, GraduationCap, FileText, Award, Briefcase, Languages,
-  Upload, X, FileCheck, Building, CreditCard, ChevronRight, ChevronLeft,
-  AlertCircle, Camera, FileUp, Shield, Check
+  Send, CheckCircle, User, BookOpen, 
+  Eye, EyeOff, GraduationCap, Briefcase,
+  Building, ChevronRight, ChevronLeft,
+  AlertCircle, Camera, Shield
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -178,8 +175,8 @@ const currentYear = new Date().getFullYear();
 const yearOptions = Array.from({ length: 50 }, (_, i) => (currentYear - i).toString());
 
 export default function EnhancedAdmissionPage() {
-  const { t } = useTranslation();
-  const router = useRouter();
+  const { t: _t } = useTranslation();
+  const _router = useRouter();
   
   // State
   const [currentStep, setCurrentStep] = useState(1);
@@ -194,7 +191,6 @@ export default function EnhancedAdmissionPage() {
   
   // Refs
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const certInputRef = useRef<HTMLInputElement>(null);
   
   // Check if minor based on class/grade
   useEffect(() => {
@@ -306,7 +302,7 @@ export default function EnhancedAdmissionPage() {
   };
   
   // Input handlers
-  const handleInputChange = (field: keyof FormData, value: any) => {
+  const handleInputChange = (field: keyof FormData, value: string | number | boolean | string[]) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     // Clear error for this field
     if (errors[field]) {
@@ -317,7 +313,7 @@ export default function EnhancedAdmissionPage() {
   const handleQualificationChange = (
     qualification: "nazira" | "hifz" | "tarjama" | "tafseer",
     field: string,
-    value: any
+    value: string | number | boolean
   ) => {
     setFormData(prev => ({
       ...prev,
@@ -387,7 +383,7 @@ export default function EnhancedAdmissionPage() {
   };
   
   // Update previous education
-  const updatePreviousEducation = (id: string, field: string, value: any) => {
+  const updatePreviousEducation = (id: string, field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       previousEducation: prev.previousEducation.map(edu => 
@@ -447,8 +443,9 @@ export default function EnhancedAdmissionPage() {
       }
       
       setIsSubmitted(true);
-    } catch (error: any) {
-      setErrors({ submit: error.message || "An error occurred during registration" });
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : "An error occurred during registration";
+      setErrors({ submit: errorMessage });
     } finally {
       setIsSubmitting(false);
     }

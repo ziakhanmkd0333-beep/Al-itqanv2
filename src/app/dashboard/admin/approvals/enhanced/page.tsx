@@ -10,7 +10,6 @@ import {
   XCircle,
   AlertTriangle,
   Search,
-  Filter,
   Eye,
   Mail,
   Phone,
@@ -22,14 +21,9 @@ import {
   Shield,
   Clock,
   FileText,
-  ChevronLeft,
-  ChevronRight,
   X,
-  Check,
   Flag,
-  MoreVertical,
-  RefreshCw,
-  Download
+  RefreshCw
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -115,7 +109,7 @@ export default function EnhancedApprovalsPage() {
 }
 
 function EnhancedApprovalsContent() {
-  const { t } = useTranslation();
+  const { t: _t } = useTranslation();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -138,8 +132,9 @@ function EnhancedApprovalsContent() {
       if (!response.ok) throw new Error("Failed to fetch applications");
       const data = await response.json();
       setApplications(data.applications || []);
-    } catch (err: any) {
-      setError(err.message || "Failed to load applications");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to load applications";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -201,8 +196,9 @@ function EnhancedApprovalsContent() {
             : null
         );
       }
-    } catch (err: any) {
-      setError(err.message || "Failed to process action");
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Failed to process action";
+      setError(errorMessage);
     } finally {
       setActionLoading(null);
       setReviewNotes("");

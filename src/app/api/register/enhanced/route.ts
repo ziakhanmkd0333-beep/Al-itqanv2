@@ -50,7 +50,7 @@ const isValidPassword = (password: string): { valid: boolean; message?: string }
 
 // Fraud detection: Check for duplicate submissions
 const checkFraudDetection = async (
-  supabase: any,
+  supabase: ReturnType<typeof getSupabaseAdmin>,
   email: string,
   phone: string,
   ipAddress: string
@@ -106,7 +106,7 @@ const checkFraudDetection = async (
 
 // Update fraud detection log
 const updateFraudLog = async (
-  supabase: any,
+  supabase: ReturnType<typeof getSupabaseAdmin>,
   email: string,
   phone: string,
   ipAddress: string
@@ -141,7 +141,7 @@ const updateFraudLog = async (
 
 // File upload handler (placeholder - implement with your storage solution)
 const uploadFile = async (
-  supabase: any,
+  supabase: ReturnType<typeof getSupabaseAdmin>,
   file: File,
   folder: string,
   userId: string
@@ -375,7 +375,7 @@ export async function POST(request: Request) {
         }
       } else {
         // Teacher, Imam, or Mudarris
-        const teacherData: any = {
+        const teacherData: Record<string, unknown> = {
           user_id: userId,
           full_name: fullName,
           email,
@@ -465,7 +465,7 @@ export async function POST(request: Request) {
       }
 
       // ===== CREATE ROLE-SPECIFIC INFO =====
-      const roleSpecificData: any = {
+      const roleSpecificData: Record<string, unknown> = {
         user_id: userId,
         role,
       };
@@ -510,22 +510,22 @@ export async function POST(request: Request) {
         },
       });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Rollback: Delete auth user if any step failed
       await supabaseAdmin.auth.admin.deleteUser(userId);
       await supabaseAdmin.from('users').delete().eq('id', userId);
-
-      console.error('Registration error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create user record';
       return NextResponse.json(
-        { error: error.message || 'An unexpected error occurred during registration' },
+        { error: errorMessage },
         { status: 500 }
       );
     }
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
     return NextResponse.json(
-      { error: error.message || 'An unexpected error occurred' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
