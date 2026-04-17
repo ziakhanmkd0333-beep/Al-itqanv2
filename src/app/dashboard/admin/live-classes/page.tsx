@@ -94,6 +94,10 @@ function LiveClassesContent() {
       if (sessionsRes.ok) {
         const data = await sessionsRes.json();
         setSessions(data.sessions || []);
+      } else {
+        const errorData = await sessionsRes.json();
+        console.error('Sessions fetch error:', errorData);
+        setError(`Failed to load sessions: ${errorData.details || errorData.error || 'Unknown error'}`);
       }
 
       // Fetch courses
@@ -143,7 +147,7 @@ function LiveClassesContent() {
     };
     delete (submitData as { scheduled_at?: string }).scheduled_at;
 
-    console.log('Submitting session data:', submitData);
+    console.log('Submitting session data:', JSON.stringify(submitData, null, 2));
 
     try {
       const response = await fetch('/api/admin/sessions', {
@@ -155,7 +159,8 @@ function LiveClassesContent() {
 
       if (!response.ok) {
         const data = await response.json();
-        throw new Error(data.error || 'Failed to create session');
+        console.error('API error response:', data);
+        throw new Error(data.error || data.details || 'Failed to create session');
       }
 
       setSuccess('Live class scheduled successfully!');

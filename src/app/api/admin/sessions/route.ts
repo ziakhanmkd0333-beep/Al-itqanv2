@@ -27,9 +27,9 @@ export async function GET(request: Request) {
     const { data: sessions, error } = await query;
 
     if (error) {
-      console.error('Error fetching sessions:', error);
+      console.error('Error fetching sessions:', JSON.stringify(error, null, 2));
       return NextResponse.json(
-        { error: 'Failed to fetch sessions' },
+        { error: 'Failed to fetch sessions', details: error.message, code: error.code },
         { status: 500 }
       );
     }
