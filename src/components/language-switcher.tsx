@@ -54,7 +54,7 @@ export function LanguageSwitcher() {
         aria-haspopup="listbox"
       >
         <Globe className="w-4 h-4 text-[var(--gold)]" />
-        <span className="text-sm font-medium">{currentLang.flag}</span>
+        <span className="text-sm font-medium" suppressHydrationWarning>{currentLang.flag}</span>
         <span className="text-sm font-medium hidden sm:inline">{currentLang.label}</span>
       </motion.button>
 
@@ -84,7 +84,7 @@ export function LanguageSwitcher() {
                   aria-selected={language === lang.code}
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{lang.flag}</span>
+                    <span className="text-lg" suppressHydrationWarning>{lang.flag}</span>
                     <span className="font-medium">
                       {lang.code === 'ur' ? 'اردو' : t(`languages.${lang.code}`)}
                     </span>

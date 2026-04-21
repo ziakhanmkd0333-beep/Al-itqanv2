@@ -210,8 +210,9 @@ export async function POST(request: Request) {
     const tafseer = JSON.parse(formData.get('tafseer') as string || '{}');
     const previousEducation = JSON.parse(formData.get('previousEducation') as string || '[]');
 
-    // Get files
-    const profilePicture = formData.get('profilePicture') as File | null;
+    // Get Supabase URLs
+    const profilePictureUrl = formData.get('profilePictureUrl') as string | null;
+    const certificateUrls = JSON.parse(formData.get('certificateUrls') as string || '[]');
 
     // ===== VALIDATION =====
     const errors: Record<string, string> = {};
@@ -231,7 +232,7 @@ export async function POST(request: Request) {
     if (!country) errors.country = 'Country is required';
     if (!city) errors.city = 'City is required';
     if (!fullAddress) errors.fullAddress = 'Full address is required';
-    if (!profilePicture) errors.profilePicture = 'Profile picture is required';
+    if (!profilePictureUrl) errors.profilePicture = 'Profile picture is required';
 
     // Role Validation
     if (!role) errors.role = 'Role is required';
@@ -297,12 +298,6 @@ export async function POST(request: Request) {
     const userId = authData.user.id;
 
     try {
-      // ===== UPLOAD PROFILE PICTURE =====
-      let profilePictureUrl: string | null = null;
-      if (profilePicture) {
-        profilePictureUrl = await uploadFile(supabaseAdmin, profilePicture, 'profiles', userId);
-      }
-
       // ===== HASH PASSWORD =====
       const passwordHash = await bcrypt.hash(password, 10);
 
@@ -380,10 +375,10 @@ export async function POST(request: Request) {
           full_name: fullName,
           email,
           phone,
+          profile_picture_url: profilePictureUrl,
           country,
           city,
           full_address: fullAddress,
-          profile_picture_url: profilePictureUrl,
           role,
           status: fraudCheck.isSuspicious ? 'flagged' : 'pending',
           is_approved: false,
@@ -461,6 +456,17 @@ export async function POST(request: Request) {
               completion_year: edu.completionYear ? parseInt(edu.completionYear) : null,
             });
           }
+        }
+      }
+
+      // ===== STORE CERTIFICATE URLS =====
+      if (certificateUrls && certificateUrls.length > 0) {
+        for (const url of certificateUrls) {
+          await supabaseAdmin.from('certificates').insert({
+            user_id: userId,
+            file_url: url,
+            uploaded_at: new Date().toISOString(),
+          });
         }
       }
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -8,10 +8,12 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { courses } from "@/lib/courses-data";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { 
   Send, CheckCircle, User, Mail, Phone, MapPin, BookOpen, Clock, Calendar, 
   Lock, Eye, EyeOff, GraduationCap, FileText, Award, Briefcase, Languages,
-  Upload, X, FileCheck, Building, CreditCard
+  Upload, X, FileCheck, Building, CreditCard, ChevronRight, ChevronLeft,
+  AlertCircle, Shield, FileUp, Check
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -37,17 +39,21 @@ const countries = [
   "Ukraine", "USA", "Yemen", "Other"
 ];
 
-// Qualifications list
-const qualifications = [
-  "Hafiz-e-Quran", "Alim/Aalimah Course", "Islamic Studies Degree",
-  "Arabic Language Degree", "Bachelors in Islamic Studies", 
-  "Masters in Islamic Studies", "PhD in Islamic Studies",
-  "Tajweed Certification", "Other"
-];
+// Previous Education Type
+interface PreviousEducation {
+  id: string;
+  educationType: 'general' | 'islamic';
+  institutionName: string;
+  degreeTitle: string;
+  completionYear: string;
+}
 
-// Teaching experience options
-const experienceOptions = [
-  "Less than 1 year", "1-2 years", "3-5 years", "5-10 years", "10+ years"
+// Form Steps
+const FORM_STEPS = [
+  { id: 1, title: "Personal Info", icon: User },
+  { id: 2, title: "Islamic Qualifications", icon: BookOpen },
+  { id: 3, title: "Education", icon: GraduationCap },
+  { id: 4, title: "Course & Password", icon: Lock }
 ];
 
 export default function AdmissionPage() {
@@ -57,20 +63,52 @@ export default function AdmissionPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<"student" | "teacher">("student");
   
-  // Student form state
-  const [studentForm, setStudentForm] = useState({
+  // Multi-step form state
+  const [currentStep, setCurrentStep] = useState(1);
+  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  
+  // Personal Info State
+  const [personalInfo, setPersonalInfo] = useState({
     fullName: "",
     email: "",
     phone: "",
     country: "",
+    city: "",
+    address: "",
     age: "",
-    language: "en",
+    language: "en"
+  });
+
+  // Profile Picture State
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] = useState<string | null>(null);
+  const [profilePictureName, setProfilePictureName] = useState("");
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+
+  // Certificate URLs State
+  const [certificateUrls, setCertificateUrls] = useState<string[]>([]);
+
+  // Previous Education State
+  const [previousEducation, setPreviousEducation] = useState<PreviousEducation[]>([
+    { id: "1", educationType: "general", institutionName: "", degreeTitle: "", completionYear: "" }
+  ]);
+
+  // Certificates State
+  const [certificates, setCertificates] = useState<File[]>([]);
+  const [certificateNames, setCertificateNames] = useState<string[]>([]);
+
+  // Course Selection State
+  const [courseSelection, setCourseSelection] = useState({
     courseId: "",
     preferredTiming: "",
     startDate: "",
     guardianName: "",
     guardianPhone: "",
-    message: "",
+    message: ""
+  });
+
+  // Password State
+  const [passwordData, setPasswordData] = useState({
     password: "",
     confirmPassword: ""
   });
@@ -86,20 +124,28 @@ export default function AdmissionPage() {
     specialization: "",
     languagesKnown: [] as string[],
     cvFile: null as File | null,
+    certFile: null as File | null,
     certificationFile: null as File | null,
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    message: ""
   });
-  
+  const [cvFileName, setCvFileName] = useState("");
+  const [certFileName, setCertFileName] = useState("");
+
+  // Teacher form options
+  const qualifications = ["High School", "Bachelor's", "Master's", "PhD", "Other"];
+  const experienceOptions = ["0-1 years", "1-3 years", "3-5 years", "5-10 years", "10+ years"];
+
   // UI states
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isMinor, setIsMinor] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
-  const [cvFileName, setCvFileName] = useState("");
-  const [certFileName, setCertFileName] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
   
   // Generate particles client-side only to avoid hydration mismatch
   const [particles, setParticles] = useState<Particle[]>([]);
@@ -116,6 +162,9 @@ export default function AdmissionPage() {
     );
   }, []);
   
+  // Refs for file inputs
+  const profilePictureRef = useRef<HTMLInputElement>(null);
+  const certificatesRef = useRef<HTMLInputElement>(null);
   const cvInputRef = useRef<HTMLInputElement>(null);
   const certInputRef = useRef<HTMLInputElement>(null);
 
@@ -124,11 +173,199 @@ export default function AdmissionPage() {
     setIsMinor(parseInt(age) < 18);
   };
 
-  // Handle student form change
-  const handleStudentChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  // Handle personal info change
+  const handlePersonalInfoChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setStudentForm(prev => ({ ...prev, [name]: value }));
+    setPersonalInfo(prev => ({ ...prev, [name]: value }));
     if (name === "age") checkMinor(value);
+    // Clear error for this field
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  // Handle course selection change
+  const handleCourseChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setCourseSelection(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Handle password change
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({ ...prev, [name]: value }));
+  };
+
+  // Add previous education entry
+  const addPreviousEducation = () => {
+    const newId = (previousEducation.length + 1).toString();
+    setPreviousEducation(prev => [
+      ...prev,
+      { id: newId, educationType: "general", institutionName: "", degreeTitle: "", completionYear: "" }
+    ]);
+  };
+
+  // Remove previous education entry
+  const removePreviousEducation = (id: string) => {
+    if (previousEducation.length > 1) {
+      setPreviousEducation(prev => prev.filter(edu => edu.id !== id));
+    }
+  };
+
+  // Update previous education
+  const updatePreviousEducation = (id: string, field: string, value: string | number) => {
+    setPreviousEducation(prev =>
+      prev.map(edu =>
+        edu.id === id ? { ...edu, [field]: value } : edu
+      )
+    );
+  };
+
+  // Supabase upload function for profile picture
+  const uploadProfilePicture = async (file: File): Promise<string | null> => {
+    try {
+      const supabase = createClientComponentClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `profile-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `profiles/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('admission-files')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Profile upload error:', uploadError);
+        setError(`Failed to upload profile picture: ${uploadError.message}`);
+        return null;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('admission-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (err) {
+      console.error('Profile upload exception:', err);
+      setError('Failed to upload profile picture');
+      return null;
+    }
+  };
+
+  // Supabase upload function for certificates
+  const uploadCertificate = async (file: File): Promise<string | null> => {
+    try {
+      const supabase = createClientComponentClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `cert-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `certificates/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('admission-files')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('Certificate upload error:', uploadError);
+        setError(`Failed to upload certificate: ${uploadError.message}`);
+        return null;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('admission-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (err) {
+      console.error('Certificate upload exception:', err);
+      setError('Failed to upload certificate');
+      return null;
+    }
+  };
+
+  // Handle profile picture upload with Supabase
+  const handleProfilePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        setError("Profile picture must be less than 2MB");
+        return;
+      }
+      if (!file.type.startsWith('image/')) {
+        setError("Please upload an image file");
+        return;
+      }
+      
+      setIsUploading(true);
+      setError("");
+      
+      // Show preview immediately
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicturePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      
+      // Upload to Supabase
+      const publicUrl = await uploadProfilePicture(file);
+      if (publicUrl) {
+        setProfilePicture(file);
+        setProfilePictureName(file.name);
+        setProfilePictureUrl(publicUrl);
+      }
+      
+      setIsUploading(false);
+    }
+  };
+
+  // Handle certificates upload with Supabase
+  const handleCertificatesUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(file => {
+      if (file.size > 5 * 1024 * 1024) {
+        setError(`File ${file.name} is too large. Max size is 5MB`);
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length === 0) return;
+
+    setIsUploading(true);
+    setError("");
+
+    const uploadedUrls: string[] = [];
+    const uploadedNames: string[] = [];
+
+    for (const file of validFiles) {
+      const publicUrl = await uploadCertificate(file);
+      if (publicUrl) {
+        uploadedUrls.push(publicUrl);
+        uploadedNames.push(file.name);
+      }
+    }
+
+    if (uploadedUrls.length > 0) {
+      setCertificateUrls(prev => [...prev, ...uploadedUrls]);
+      setCertificateNames(prev => [...prev, ...uploadedNames]);
+    }
+
+    setIsUploading(false);
+  };
+
+  // Remove certificate
+  const removeCertificate = (index: number) => {
+    setCertificates(prev => prev.filter((_, i) => i !== index));
+    setCertificateNames(prev => prev.filter((_, i) => i !== index));
+    setCertificateUrls(prev => prev.filter((_, i) => i !== index));
   };
 
   // Handle teacher form change
@@ -147,7 +384,7 @@ export default function AdmissionPage() {
     }));
   };
 
-  // Handle file upload
+  // Handle file upload for teacher
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: "cv" | "cert") => {
     const file = e.target.files?.[0];
     if (file) {
@@ -165,6 +402,84 @@ export default function AdmissionPage() {
     }
   };
 
+  // Step validation functions
+  const validateStep1 = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!personalInfo.fullName.trim()) newErrors.fullName = "Full name is required";
+    if (!personalInfo.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(personalInfo.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+    if (!personalInfo.phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else if (!/^[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}$/.test(personalInfo.phone)) {
+      newErrors.phone = "Please enter a valid phone number";
+    }
+    if (!personalInfo.country) newErrors.country = "Country is required";
+    if (!personalInfo.city.trim()) newErrors.city = "City is required";
+    if (!personalInfo.address.trim()) newErrors.address = "Full address is required";
+    if (!personalInfo.age) {
+      newErrors.age = "Age is required";
+    } else if (parseInt(personalInfo.age) < 5 || parseInt(personalInfo.age) > 100) {
+      newErrors.age = "Age must be between 5 and 100";
+    }
+    if (!profilePicture) newErrors.profilePicture = "Profile picture is required";
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateStep4 = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!courseSelection.courseId) newErrors.courseId = "Please select a course";
+    if (!passwordData.password) {
+      newErrors.password = "Password is required";
+    } else if (passwordData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+    if (passwordData.password !== passwordData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+    if (isMinor && !courseSelection.guardianName) {
+      newErrors.guardianName = "Guardian name is required for minors";
+    }
+    if (isMinor && !courseSelection.guardianPhone) {
+      newErrors.guardianPhone = "Guardian phone is required for minors";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Navigation functions
+  const nextStep = () => {
+    if (currentStep === 1 && !validateStep1()) return;
+    if (currentStep === 4 && !validateStep4()) return;
+    
+    if (currentStep < 4) {
+      setCompletedSteps(prev => [...new Set([...prev, currentStep])]);
+      setCurrentStep(prev => prev + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 1) {
+      setCurrentStep(prev => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const goToStep = (step: number) => {
+    if (step <= Math.max(...completedSteps, 0) + 1) {
+      setCurrentStep(step);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   // Validate password
   const validatePassword = (password: string, confirmPassword: string): string | null => {
     if (password !== confirmPassword) return "Passwords do not match";
@@ -175,43 +490,65 @@ export default function AdmissionPage() {
     return null;
   };
 
-  // Submit student form
+  // Submit student form (enhanced)
   const handleStudentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    const passwordError = validatePassword(studentForm.password, studentForm.confirmPassword);
-    if (passwordError) {
-      setError(passwordError);
+    // Final validation
+    if (!validateStep1() || !validateStep4()) {
       return;
     }
 
-    if (isMinor && (!studentForm.guardianName || !studentForm.guardianPhone)) {
-      setError("Guardian information is required for minors");
+    const passwordError = validatePassword(passwordData.password, passwordData.confirmPassword);
+    if (passwordError) {
+      setError(passwordError);
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/register/student', {
+      const formData = new FormData();
+      
+      // Personal Info
+      formData.append('email', personalInfo.email);
+      formData.append('password', passwordData.password);
+      formData.append('fullName', personalInfo.fullName);
+      formData.append('phone', personalInfo.phone);
+      formData.append('country', personalInfo.country);
+      formData.append('city', personalInfo.city);
+      formData.append('address', personalInfo.address);
+      formData.append('age', personalInfo.age);
+      formData.append('language', personalInfo.language);
+      formData.append('role', 'Student');
+      
+      // Profile Picture URL from Supabase
+      if (profilePictureUrl) {
+        formData.append('profilePictureUrl', profilePictureUrl);
+      }
+      
+      // Course Selection
+      formData.append('courseId', courseSelection.courseId);
+      formData.append('preferredTiming', courseSelection.preferredTiming);
+      formData.append('startDate', courseSelection.startDate);
+      if (isMinor) {
+        formData.append('guardianName', courseSelection.guardianName);
+        formData.append('guardianPhone', courseSelection.guardianPhone);
+      }
+      formData.append('message', courseSelection.message);
+
+      // Previous Education
+      formData.append('previousEducation', JSON.stringify(previousEducation));
+      
+      // Certificate URLs from Supabase
+      if (certificateUrls.length > 0) {
+        formData.append('certificateUrls', JSON.stringify(certificateUrls));
+      }
+
+      const response = await fetch('/api/register/enhanced', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: studentForm.email,
-          password: studentForm.password,
-          fullName: studentForm.fullName,
-          phone: studentForm.phone,
-          country: studentForm.country,
-          age: parseInt(studentForm.age),
-          language: studentForm.language,
-          courseId: studentForm.courseId,
-          preferredTiming: studentForm.preferredTiming,
-          startDate: studentForm.startDate,
-          guardianName: isMinor ? studentForm.guardianName : null,
-          guardianPhone: isMinor ? studentForm.guardianPhone : null,
-          message: studentForm.message
-        })
+        body: formData
       });
 
       const data = await response.json();
@@ -395,6 +732,7 @@ export default function AdmissionPage() {
           </div>
 
           {/* Floating Particles */}
+          <div suppressHydrationWarning>
           {particles.map((particle) => (
             <motion.div
               key={particle.id}
@@ -416,6 +754,7 @@ export default function AdmissionPage() {
               }}
             />
           ))}
+          </div>
 
           {/* Gradient Overlay for Text Readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
@@ -573,8 +912,8 @@ export default function AdmissionPage() {
                           type="text"
                           name="fullName"
                           required
-                          value={studentForm.fullName}
-                          onChange={handleStudentChange}
+                          value={personalInfo.fullName}
+                          onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder={t("admission.placeholders.fullName")}
                         />
@@ -590,8 +929,8 @@ export default function AdmissionPage() {
                             type="email"
                             name="email"
                             required
-                            value={studentForm.email}
-                            onChange={handleStudentChange}
+                            value={personalInfo.email}
+                            onChange={handlePersonalInfoChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.email")}
                           />
@@ -608,8 +947,8 @@ export default function AdmissionPage() {
                             type="tel"
                             name="phone"
                             required
-                            value={studentForm.phone}
-                            onChange={handleStudentChange}
+                            value={personalInfo.phone}
+                            onChange={handlePersonalInfoChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.phone")}
                           />
@@ -623,8 +962,8 @@ export default function AdmissionPage() {
                         <select
                           name="country"
                           required
-                          value={studentForm.country}
-                          onChange={handleStudentChange}
+                          value={personalInfo.country}
+                          onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="">{t("admin.admissions.table.country")}</option>
@@ -632,6 +971,38 @@ export default function AdmissionPage() {
                             <option key={country} value={country}>{country}</option>
                           ))}
                         </select>
+                      </div>
+
+                      <div className={isRTL ? "text-right" : ""}>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                          City *
+                        </label>
+                        <input
+                          type="text"
+                          name="city"
+                          required
+                          value={personalInfo.city}
+                          onChange={handlePersonalInfoChange}
+                          className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          placeholder="Enter your city"
+                        />
+                        {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                      </div>
+
+                      <div className={isRTL ? "text-right" : ""}>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                          Full Address *
+                        </label>
+                        <textarea
+                          name="address"
+                          required
+                          value={personalInfo.address}
+                          onChange={handlePersonalInfoChange}
+                          className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          placeholder="Enter your complete residential address"
+                          rows={3}
+                        />
+                        {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                       </div>
 
                       <div className={isRTL ? "text-right" : ""}>
@@ -644,8 +1015,8 @@ export default function AdmissionPage() {
                           required
                           min="5"
                           max="100"
-                          value={studentForm.age}
-                          onChange={handleStudentChange}
+                          value={personalInfo.age}
+                          onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder={t("admission.placeholders.age")}
                         />
@@ -658,8 +1029,8 @@ export default function AdmissionPage() {
                         <select
                           name="language"
                           required
-                          value={studentForm.language}
-                          onChange={handleStudentChange}
+                          value={personalInfo.language}
+                          onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="en">{t("languages.en")}</option>
@@ -667,6 +1038,198 @@ export default function AdmissionPage() {
                           <option value="ar">{t("languages.ar")}</option>
                         </select>
                       </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Picture Upload */}
+                  <div className="mb-8 pt-8 border-t border-[var(--border)]">
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                      <Upload className="w-5 h-5 text-[var(--primary)]" />
+                      Profile Picture (Required)
+                    </h2>
+                    <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`}>
+                      <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                        Upload Profile Picture * (Max 2MB, JPG/PNG)
+                      </label>
+                      <div className="flex items-center gap-4">
+                        <input
+                          type="file"
+                          ref={profilePictureRef}
+                          onChange={handleProfilePictureUpload}
+                          accept="image/jpeg,image/png,image/jpg"
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => profilePictureRef.current?.click()}
+                          disabled={isUploading}
+                          className="px-4 py-2 bg-[var(--surface)] hover:bg-[var(--border)] text-[var(--text-primary)] rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isUploading ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-5 h-5" />
+                              Choose Photo
+                            </>
+                          )}
+                        </button>
+                        {profilePictureName && !isUploading && (
+                          <span className="text-sm text-[var(--text-secondary)]">{profilePictureName}</span>
+                        )}
+                      </div>
+                      {errors.profilePicture && <p className="text-red-500 text-sm mt-1">{errors.profilePicture}</p>}
+                      {profilePicturePreview && (
+                        <div className="mt-4">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={profilePicturePreview}
+                            alt="Profile Preview"
+                            width={120}
+                            height={120}
+                            className="rounded-xl object-cover"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Previous Education */}
+                  <div className="mb-8 pt-8 border-t border-[var(--border)]">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className={`text-[var(--text-primary)] text-xl font-bold flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                        <GraduationCap className="w-5 h-5 text-[var(--primary)]" />
+                        Previous Education / Qualifications
+                      </h2>
+                      <button
+                        type="button"
+                        onClick={addPreviousEducation}
+                        className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white rounded-lg transition-colors text-sm"
+                      >
+                        + Add Education
+                      </button>
+                    </div>
+                    
+                    {previousEducation.map((edu, index) => (
+                      <div key={edu.id} className="mb-6 p-4 bg-[var(--surface)] rounded-xl">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-medium">Education {index + 1}</h3>
+                          {previousEducation.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removePreviousEducation(edu.id)}
+                              className="text-red-500 hover:text-red-700"
+                            >
+                              <X className="w-5 h-5" />
+                            </button>
+                          )}
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-sm text-[var(--text-secondary)] mb-1">Education Type *</label>
+                            <select
+                              value={edu.educationType}
+                              onChange={(e) => updatePreviousEducation(edu.id, 'educationType', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] ${isRTL ? "text-right" : ""}`}
+                            >
+                              <option value="general">General Education</option>
+                              <option value="islamic">Islamic Education</option>
+                            </select>
+                          </div>
+                          <div>
+                            <label className="block text-sm text-[var(--text-secondary)] mb-1">Institution Name *</label>
+                            <input
+                              type="text"
+                              value={edu.institutionName}
+                              onChange={(e) => updatePreviousEducation(edu.id, 'institutionName', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] ${isRTL ? "text-right" : ""}`}
+                              placeholder="Institution name"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm text-[var(--text-secondary)] mb-1">Degree/Title *</label>
+                            <input
+                              type="text"
+                              value={edu.degreeTitle}
+                              onChange={(e) => updatePreviousEducation(edu.id, 'degreeTitle', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] ${isRTL ? "text-right" : ""}`}
+                              placeholder="e.g., High School, Bachelor's, Hifz Certificate"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm text-[var(--text-secondary)] mb-1">Completion Year</label>
+                            <input
+                              type="number"
+                              min="1900"
+                              max="2100"
+                              value={edu.completionYear}
+                              onChange={(e) => updatePreviousEducation(edu.id, 'completionYear', e.target.value)}
+                              className={`w-full px-3 py-2 rounded-lg border border-[var(--border)] bg-[var(--background)] ${isRTL ? "text-right" : ""}`}
+                              placeholder="Year of completion"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Certificates Upload */}
+                  <div className="mb-8 pt-8 border-t border-[var(--border)]">
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                      <FileUp className="w-5 h-5 text-[var(--primary)]" />
+                      Certificates Upload (Optional)
+                    </h2>
+                    <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`}>
+                      <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                        Upload Certificates (PDF, JPG, PNG - Max 5MB each)
+                      </label>
+                      <div className="flex items-center gap-4 mb-4">
+                        <input
+                          type="file"
+                          ref={certificatesRef}
+                          onChange={handleCertificatesUpload}
+                          accept=".pdf,image/jpeg,image/png"
+                          multiple
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => certificatesRef.current?.click()}
+                          disabled={isUploading}
+                          className="px-4 py-2 bg-[var(--surface)] hover:bg-[var(--border)] text-[var(--text-primary)] rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isUploading ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-5 h-5" />
+                              Upload Certificates
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      {certificateNames.length > 0 && (
+                        <div className="space-y-2">
+                          {certificateNames.map((name, index) => (
+                            <div key={index} className="flex items-center justify-between p-2 bg-[var(--surface)] rounded-lg">
+                              <span className="text-sm text-[var(--text-secondary)]">{name}</span>
+                              <button
+                                type="button"
+                                onClick={() => removeCertificate(index)}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -689,8 +1252,8 @@ export default function AdmissionPage() {
                             name="password"
                             required
                             minLength={8}
-                            value={studentForm.password}
-                            onChange={handleStudentChange}
+                            value={passwordData.password}
+                            onChange={handlePasswordChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.form.passwordRequirements")}
                           />
@@ -715,8 +1278,8 @@ export default function AdmissionPage() {
                             name="confirmPassword"
                             required
                             minLength={8}
-                            value={studentForm.confirmPassword}
-                            onChange={handleStudentChange}
+                            value={passwordData.confirmPassword}
+                            onChange={handlePasswordChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("login.passwordPlaceholder")}
                           />
@@ -747,8 +1310,8 @@ export default function AdmissionPage() {
                         <select
                           name="courseId"
                           required
-                          value={studentForm.courseId}
-                          onChange={handleStudentChange}
+                          value={courseSelection.courseId}
+                          onChange={handleCourseChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="">{t("admission.form.course")}</option>
@@ -767,8 +1330,8 @@ export default function AdmissionPage() {
                         <select
                           name="preferredTiming"
                           required
-                          value={studentForm.preferredTiming}
-                          onChange={handleStudentChange}
+                          value={courseSelection.preferredTiming}
+                          onChange={handleCourseChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="">{t("admission.form.timing")}</option>
@@ -789,8 +1352,8 @@ export default function AdmissionPage() {
                             type="date"
                             name="startDate"
                             required
-                            value={studentForm.startDate}
-                            onChange={handleStudentChange}
+                            value={courseSelection.startDate}
+                            onChange={handleCourseChange}
                             min={new Date().toISOString().split('T')[0]}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           />
@@ -822,8 +1385,8 @@ export default function AdmissionPage() {
                             type="text"
                             name="guardianName"
                             required={isMinor}
-                            value={studentForm.guardianName}
-                            onChange={handleStudentChange}
+                            value={courseSelection.guardianName}
+                            onChange={handleCourseChange}
                             className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.form.guardianName")}
                           />
@@ -839,8 +1402,8 @@ export default function AdmissionPage() {
                               type="tel"
                               name="guardianPhone"
                               required={isMinor}
-                              value={studentForm.guardianPhone}
-                              onChange={handleStudentChange}
+                              value={courseSelection.guardianPhone}
+                              onChange={handleCourseChange}
                               className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                               placeholder={t("admission.form.guardianPhone")}
                             />
@@ -860,8 +1423,8 @@ export default function AdmissionPage() {
                     <textarea
                       name="message"
                       rows={4}
-                      value={studentForm.message}
-                      onChange={handleStudentChange}
+                      value={teacherForm.message || ""}
+                      onChange={(e) => setTeacherForm({...teacherForm, message: e.target.value})}
                       className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors resize-none ${isRTL ? "text-right" : ""}`}
                       placeholder={t("admission.placeholders.message")}
                     />
@@ -994,7 +1557,7 @@ export default function AdmissionPage() {
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="">{t("admission.form.selectQualification")}</option>
-                          {qualifications.map(qual => (
+                          {qualifications.map((qual: string) => (
                             <option key={qual} value={qual}>{qual}</option>
                           ))}
                         </select>
@@ -1012,7 +1575,7 @@ export default function AdmissionPage() {
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                         >
                           <option value="">{t("admission.form.selectExperience")}</option>
-                          {experienceOptions.map(exp => (
+                          {experienceOptions.map((exp: string) => (
                             <option key={exp} value={exp}>{exp}</option>
                           ))}
                         </select>

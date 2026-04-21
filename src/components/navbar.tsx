@@ -86,7 +86,7 @@ export function Navbar() {
                 />
               </div>
             </motion.div>
-            <div className="hidden md:block">
+            <div className="hidden md:block" suppressHydrationWarning>
               <motion.h1
                 className={`text-white drop-shadow-md font-brand font-bold text-sm md:text-base leading-tight group-hover:text-[var(--gold)] transition-colors duration-300 ${isRTL ? "arabic-text" : ""}`}
               >
