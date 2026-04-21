@@ -89,10 +89,11 @@ export function Navbar() {
             <div className="hidden md:block" suppressHydrationWarning>
               <motion.h1
                 className={`text-white drop-shadow-md font-brand font-bold text-sm md:text-base leading-tight group-hover:text-[var(--gold)] transition-colors duration-300 ${isRTL ? "arabic-text" : ""}`}
+                suppressHydrationWarning
               >
                 {isMounted ? t("nav.brandName") : "Al-Itqan Institute"}
               </motion.h1>
-              <p className={`text-white/80 drop-shadow-md text-xs flex items-center gap-1 ${isRTL ? "arabic-text" : ""}`}>
+              <p className={`text-white/80 drop-shadow-md text-xs flex items-center gap-1 ${isRTL ? "arabic-text" : ""}`} suppressHydrationWarning>
                 <Sparkles className="w-3 h-3 text-[var(--gold)]" />
                 {isMounted ? t("nav.brandTagline") : "Excellence in Learning"}
               </p>

@@ -55,7 +55,7 @@ export function LanguageSwitcher() {
       >
         <Globe className="w-4 h-4 text-[var(--gold)]" />
         <span className="text-sm font-medium" suppressHydrationWarning>{currentLang.flag}</span>
-        <span className="text-sm font-medium hidden sm:inline">{currentLang.label}</span>
+        <span className="text-sm font-medium hidden sm:inline" suppressHydrationWarning>{currentLang.label}</span>
       </motion.button>
 
       <AnimatePresence>
