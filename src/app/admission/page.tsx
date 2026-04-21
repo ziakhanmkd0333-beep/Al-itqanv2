@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { courses } from "@/lib/courses-data";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createBrowserClient } from "@supabase/ssr";
 import { 
   Send, CheckCircle, User, Mail, Phone, MapPin, BookOpen, Clock, Calendar, 
   Lock, Eye, EyeOff, GraduationCap, FileText, Award, Briefcase, Languages,
@@ -228,7 +228,10 @@ export default function AdmissionPage() {
   // Supabase upload function for profile picture
   const uploadProfilePicture = async (file: File): Promise<string | null> => {
     try {
-      const supabase = createClientComponentClient();
+      const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
       const fileExt = file.name.split('.').pop();
       const fileName = `profile-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `profiles/${fileName}`;
@@ -261,7 +264,10 @@ export default function AdmissionPage() {
   // Supabase upload function for certificates
   const uploadCertificate = async (file: File): Promise<string | null> => {
     try {
-      const supabase = createClientComponentClient();
+      const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
       const fileExt = file.name.split('.').pop();
       const fileName = `cert-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `certificates/${fileName}`;
