@@ -132,6 +132,8 @@ export default function AdmissionPage() {
   });
   const [cvFileName, setCvFileName] = useState("");
   const [certFileName, setCertFileName] = useState("");
+  const [cvFileUrl, setCvFileUrl] = useState<string | null>(null);
+  const [certFileUrl, setCertFileUrl] = useState<string | null>(null);
 
   // Teacher form options
   const qualifications = ["High School", "Bachelor's", "Master's", "PhD", "Other"];
@@ -297,6 +299,42 @@ export default function AdmissionPage() {
     }
   };
 
+  // Generic file upload function for teacher documents
+  const uploadTeacherFile = async (file: File, folder: string): Promise<string | null> => {
+    try {
+      const supabase = createBrowserClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${folder}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `${folder}s/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('admission-files')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        console.error('File upload error:', uploadError);
+        setError(`Failed to upload ${folder}: ${uploadError.message}`);
+        return null;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('admission-files')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (err) {
+      console.error('File upload exception:', err);
+      setError(`Failed to upload ${folder}`);
+      return null;
+    }
+  };
+
   // Handle profile picture upload with Supabase
   const handleProfilePictureUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -391,19 +429,39 @@ export default function AdmissionPage() {
   };
 
   // Handle file upload for teacher
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: "cv" | "cert") => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: "cv" | "cert") => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
         setError("File size must be less than 5MB");
         return;
       }
-      if (type === "cv") {
-        setTeacherForm(prev => ({ ...prev, cvFile: file }));
-        setCvFileName(file.name);
-      } else {
-        setTeacherForm(prev => ({ ...prev, certificationFile: file }));
-        setCertFileName(file.name);
+
+      setIsUploading(true);
+      setError("");
+
+      try {
+        if (type === "cv") {
+          setTeacherForm(prev => ({ ...prev, cvFile: file }));
+          setCvFileName(file.name);
+
+          const url = await uploadTeacherFile(file, 'cv');
+          if (url) {
+            setCvFileUrl(url);
+          }
+        } else {
+          setTeacherForm(prev => ({ ...prev, certificationFile: file }));
+          setCertFileName(file.name);
+
+          const url = await uploadTeacherFile(file, 'certification');
+          if (url) {
+            setCertFileUrl(url);
+          }
+        }
+      } catch (err) {
+        console.error('File upload error:', err);
+      } finally {
+        setIsUploading(false);
       }
     }
   };
@@ -600,8 +658,8 @@ export default function AdmissionPage() {
       formData.append('experience', teacherForm.experience);
       formData.append('specialization', teacherForm.specialization);
       formData.append('languagesKnown', JSON.stringify(teacherForm.languagesKnown));
-      if (teacherForm.cvFile) formData.append('cvFile', teacherForm.cvFile);
-      if (teacherForm.certificationFile) formData.append('certificationFile', teacherForm.certificationFile);
+      if (cvFileUrl) formData.append('cvFileUrl', cvFileUrl);
+      if (certFileUrl) formData.append('certificationFileUrl', certFileUrl);
 
       const response = await fetch('/api/register/teacher', {
         method: 'POST',
@@ -625,7 +683,7 @@ export default function AdmissionPage() {
   // Success screen
   if (isSubmitted) {
     return (
-      <main className="min-h-screen">
+      <main className="min-h-screen" suppressHydrationWarning>
         <Navbar />
         <section className="pt-32 pb-20 bg-[var(--background)]">
           <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -682,7 +740,7 @@ export default function AdmissionPage() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen" suppressHydrationWarning>
       <Navbar />
       
       {/* Header - Enhanced Hero Section */}
@@ -695,6 +753,7 @@ export default function AdmissionPage() {
             fill
             className="object-cover"
             priority
+            suppressHydrationWarning
           />
           
           {/* Gradient Overlay - Enhanced with multiple layers */}
@@ -791,7 +850,7 @@ export default function AdmissionPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="inline-block mb-4"
             >
-              <span className="px-4 py-2 rounded-full bg-[#C9A84C]/20 border border-[#C9A84C]/30 text-[#C9A84C] text-sm font-semibold uppercase tracking-wider">
+              <span className="px-4 py-2 rounded-full bg-[#C9A84C]/20 border border-[#C9A84C]/30 text-[#C9A84C] text-sm font-semibold uppercase tracking-wider" suppressHydrationWarning>
                 {t("admission.subtitle")}
               </span>
             </motion.div>
@@ -806,7 +865,7 @@ export default function AdmissionPage() {
                 textShadow: "0 4px 30px rgba(0,0,0,0.5)"
               }}
             >
-              <span className="bg-gradient-to-r from-white via-white to-[#C9A84C] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white via-white to-[#C9A84C] bg-clip-text text-transparent" suppressHydrationWarning>
                 {t("admission.title")}
               </span>
             </motion.h1>
@@ -817,6 +876,7 @@ export default function AdmissionPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
               className={`text-white/90 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed ${isRTL ? "arabic-text" : ""}`}
+              suppressHydrationWarning
             >
               {t("admission.description")}
             </motion.p>
@@ -866,7 +926,7 @@ export default function AdmissionPage() {
             )}
 
             {/* Tab Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-4 mb-8 ${isRTL ? "flex-row-reverse" : ""}`}>
+            <div className={`flex flex-col sm:flex-row gap-4 mb-8 ${isRTL ? "flex-row-reverse" : ""}`} suppressHydrationWarning>
               <button
                 type="button"
                 onClick={() => setActiveTab("student")}
@@ -875,6 +935,7 @@ export default function AdmissionPage() {
                     ? "bg-[var(--primary)] text-white shadow-lg"
                     : "bg-[var(--background-green)] text-[var(--primary)] hover:bg-[var(--primary)]/10"
                 } ${isRTL ? "arabic-text flex-row-reverse" : ""}`}
+                suppressHydrationWarning
               >
                 <User className="w-5 h-5" />
                 {t("admission.registerStudent")}
@@ -887,6 +948,7 @@ export default function AdmissionPage() {
                     ? "bg-[var(--primary)] text-white shadow-lg"
                     : "bg-[var(--background-green)] text-[var(--primary)] hover:bg-[var(--primary)]/10"
                 } ${isRTL ? "arabic-text flex-row-reverse" : ""}`}
+                suppressHydrationWarning
               >
                 <GraduationCap className="w-5 h-5" />
                 {t("admission.registerTeacher")}
@@ -904,14 +966,14 @@ export default function AdmissionPage() {
                   onSubmit={handleStudentSubmit}
                 >
                   <div className="mb-8">
-                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                       <User className="w-5 h-5 text-[var(--primary)]" />
                       {t("admission.personalInfo")}
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.fullName")} *
                         </label>
                         <input
@@ -922,11 +984,12 @@ export default function AdmissionPage() {
                           onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder={t("admission.placeholders.fullName")}
+                          suppressHydrationWarning
                         />
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.email")} *
                         </label>
                         <div className="relative">
@@ -939,6 +1002,7 @@ export default function AdmissionPage() {
                             onChange={handlePersonalInfoChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.email")}
+                            suppressHydrationWarning
                           />
                         </div>
                       </div>
@@ -957,6 +1021,7 @@ export default function AdmissionPage() {
                             onChange={handlePersonalInfoChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.phone")}
+                            suppressHydrationWarning
                           />
                         </div>
                       </div>
@@ -971,6 +1036,7 @@ export default function AdmissionPage() {
                           value={personalInfo.country}
                           onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admin.admissions.table.country")}</option>
                           {countries.map(country => (
@@ -991,6 +1057,7 @@ export default function AdmissionPage() {
                           onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder="Enter your city"
+                          suppressHydrationWarning
                         />
                         {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
                       </div>
@@ -1007,6 +1074,7 @@ export default function AdmissionPage() {
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder="Enter your complete residential address"
                           rows={3}
+                          suppressHydrationWarning
                         />
                         {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
                       </div>
@@ -1025,6 +1093,7 @@ export default function AdmissionPage() {
                           onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder={t("admission.placeholders.age")}
+                          suppressHydrationWarning
                         />
                       </div>
 
@@ -1038,6 +1107,7 @@ export default function AdmissionPage() {
                           value={personalInfo.language}
                           onChange={handlePersonalInfoChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="en">{t("languages.en")}</option>
                           <option value="ur">{t("languages.ur")}</option>
@@ -1106,7 +1176,7 @@ export default function AdmissionPage() {
                   {/* Previous Education */}
                   <div className="mb-8 pt-8 border-t border-[var(--border)]">
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className={`text-[var(--text-primary)] text-xl font-bold flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                      <h2 className={`text-[var(--text-primary)] text-xl font-bold flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                         <GraduationCap className="w-5 h-5 text-[var(--primary)]" />
                         Previous Education / Qualifications
                       </h2>
@@ -1247,8 +1317,8 @@ export default function AdmissionPage() {
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.password")} *
                         </label>
                         <div className="relative">
@@ -1262,6 +1332,7 @@ export default function AdmissionPage() {
                             onChange={handlePasswordChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.form.passwordRequirements")}
+                            suppressHydrationWarning
                           />
                           <button
                             type="button"
@@ -1273,8 +1344,8 @@ export default function AdmissionPage() {
                         </div>
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("login.passwordPlaceholder")} *
                         </label>
                         <div className="relative">
@@ -1288,6 +1359,7 @@ export default function AdmissionPage() {
                             onChange={handlePasswordChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-12" : "pl-12 pr-12"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("login.passwordPlaceholder")}
+                            suppressHydrationWarning
                           />
                           <button
                             type="button"
@@ -1303,14 +1375,14 @@ export default function AdmissionPage() {
 
                   {/* Course Selection */}
                   <div className="mb-8 pt-8 border-t border-[var(--border)]">
-                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                       <BookOpen className="w-5 h-5 text-[var(--primary)]" />
                       {t("admission.courseSelection")}
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.course")} *
                         </label>
                         <select
@@ -1319,6 +1391,7 @@ export default function AdmissionPage() {
                           value={courseSelection.courseId}
                           onChange={handleCourseChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admission.form.course")}</option>
                           {courses.map(course => (
@@ -1329,8 +1402,8 @@ export default function AdmissionPage() {
                         </select>
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.timing")} *
                         </label>
                         <select
@@ -1339,6 +1412,7 @@ export default function AdmissionPage() {
                           value={courseSelection.preferredTiming}
                           onChange={handleCourseChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admission.form.timing")}</option>
                           <option value="morning">{t("admission.form.timingOptions.morning")}</option>
@@ -1348,8 +1422,8 @@ export default function AdmissionPage() {
                         </select>
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admin.admissions.table.applied")} *
                         </label>
                         <div className="relative">
@@ -1362,6 +1436,7 @@ export default function AdmissionPage() {
                             onChange={handleCourseChange}
                             min={new Date().toISOString().split('T')[0]}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                            suppressHydrationWarning
                           />
                         </div>
                       </div>
@@ -1376,15 +1451,15 @@ export default function AdmissionPage() {
                       exit={{ opacity: 0, height: 0 }}
                       className="mb-8 pt-8 border-t border-[var(--border)]"
                     >
-                      <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                      <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                         <User className="w-5 h-5 text-[var(--primary)]" />
                         {t("admission.guardianInfo")}
-                        <span className={`text-sm font-normal text-[var(--text-muted)] ${isRTL ? "mr-2" : "ml-2"}`}>({t("admission.guardianInfoNote")})</span>
+                        <span className={`text-sm font-normal text-[var(--text-muted)] ${isRTL ? "mr-2" : "ml-2"}`} suppressHydrationWarning>({t("admission.guardianInfoNote")})</span>
                       </h2>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className={isRTL ? "text-right" : ""}>
-                          <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                        <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                          <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                             {t("admission.form.guardianName")} *
                           </label>
                           <input
@@ -1395,11 +1470,12 @@ export default function AdmissionPage() {
                             onChange={handleCourseChange}
                             className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.form.guardianName")}
+                            suppressHydrationWarning
                           />
                         </div>
 
-                        <div className={isRTL ? "text-right" : ""}>
-                          <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                        <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                          <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                             {t("admission.form.guardianPhone")} *
                           </label>
                           <div className="relative">
@@ -1466,14 +1542,14 @@ export default function AdmissionPage() {
                 >
                   {/* Personal Information */}
                   <div className="mb-8">
-                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                       <User className="w-5 h-5 text-[var(--primary)]" />
                       {t("admission.personalInfo")}
                     </h2>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.fullName")} *
                         </label>
                         <input
@@ -1484,11 +1560,12 @@ export default function AdmissionPage() {
                           onChange={handleTeacherChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                           placeholder={t("admission.placeholders.fullName")}
+                          suppressHydrationWarning
                         />
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.email")} *
                         </label>
                         <div className="relative">
@@ -1501,6 +1578,7 @@ export default function AdmissionPage() {
                             onChange={handleTeacherChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.email")}
+                            suppressHydrationWarning
                           />
                         </div>
                       </div>
@@ -1519,12 +1597,13 @@ export default function AdmissionPage() {
                             onChange={handleTeacherChange}
                             className={`w-full py-3 ${isRTL ? "pr-12 pl-4" : "pl-12 pr-4"} rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
                             placeholder={t("admission.placeholders.phone")}
+                            suppressHydrationWarning
                           />
                         </div>
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.country")} *
                         </label>
                         <select
@@ -1533,6 +1612,7 @@ export default function AdmissionPage() {
                           value={teacherForm.country}
                           onChange={handleTeacherChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admin.admissions.table.country")}</option>
                           {countries.map(country => (
@@ -1545,14 +1625,14 @@ export default function AdmissionPage() {
 
                   {/* Professional Information */}
                   <div className="mb-8 pt-8 border-t border-[var(--border)]">
-                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`}>
+                    <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
                       <Briefcase className="w-5 h-5 text-[var(--primary)]" />
                       {t("admission.teacherInfo")}
                     </h2>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.qualification")} *
                         </label>
                         <select
@@ -1561,6 +1641,7 @@ export default function AdmissionPage() {
                           value={teacherForm.qualification}
                           onChange={handleTeacherChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admission.form.selectQualification")}</option>
                           {qualifications.map((qual: string) => (
@@ -1569,8 +1650,8 @@ export default function AdmissionPage() {
                         </select>
                       </div>
 
-                      <div className={isRTL ? "text-right" : ""}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={isRTL ? "text-right" : ""} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.experience")} *
                         </label>
                         <select
@@ -1579,6 +1660,7 @@ export default function AdmissionPage() {
                           value={teacherForm.experience}
                           onChange={handleTeacherChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
                           <option value="">{t("admission.form.selectExperience")}</option>
                           {experienceOptions.map((exp: string) => (
@@ -1587,8 +1669,8 @@ export default function AdmissionPage() {
                         </select>
                       </div>
 
-                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.specialization")} *
                         </label>
                         <select
@@ -1597,8 +1679,9 @@ export default function AdmissionPage() {
                           value={teacherForm.specialization}
                           onChange={handleTeacherChange}
                           className={`w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary)] transition-colors ${isRTL ? "text-right" : ""}`}
+                          suppressHydrationWarning
                         >
-                          <option value="">{t("admission.form.specialization")}</option>
+                          <option value="">{t("admission.form.selectSpecialization")}</option>
                           {courses.map(course => (
                             <option key={course.id} value={course.id}>
                               {isRTL ? t(`courseData.${course.id}.title`) : course.title}
@@ -1608,8 +1691,8 @@ export default function AdmissionPage() {
                         </select>
                       </div>
 
-                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`}>
-                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2">
+                      <div className={`md:col-span-2 ${isRTL ? "text-right" : ""}`} suppressHydrationWarning>
+                        <label className="block text-[var(--text-secondary)] text-sm font-medium mb-2" suppressHydrationWarning>
                           {t("admission.form.languagesKnown")} *
                         </label>
                         <div className={`flex flex-wrap gap-3 ${isRTL ? "flex-row-reverse" : ""}`}>

@@ -145,6 +145,7 @@ export function Navbar() {
             <Link
               href="/auth/login"
               className="hidden md:flex items-center gap-1.5 px-4 py-2 text-white/90 hover:text-[var(--gold)] text-sm font-medium transition-all duration-300 hover:bg-white/10 rounded-xl drop-shadow-md"
+              suppressHydrationWarning
             >
               {t("nav.login")}
             </Link>
@@ -157,6 +158,7 @@ export function Navbar() {
               <Link
                 href="/admission"
                 className="hidden md:flex items-center gap-2 bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] hover:from-[var(--gold-dark)] hover:to-[var(--gold)] text-[var(--primary-dark)] px-5 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 shadow-lg hover:shadow-xl"
+                suppressHydrationWarning
               >
                 <Sparkles className="w-4 h-4" />
                 {t("nav.applyNow")}
@@ -246,6 +248,7 @@ export function Navbar() {
                       href="/auth/login"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block px-4 py-3 text-center text-[var(--text-secondary)] hover:text-[var(--primary)] font-medium rounded-xl hover:bg-[var(--primary)]/5 transition-all"
+                      suppressHydrationWarning
                     >
                       {t("nav.login")}
                     </Link>
@@ -260,6 +263,7 @@ export function Navbar() {
                       href="/admission"
                       onClick={() => setIsMobileMenuOpen(false)}
                       className="block py-3 text-center bg-gradient-to-r from-[var(--gold)] to-[var(--gold-dark)] text-[var(--primary-dark)] rounded-xl font-semibold shadow-lg"
+                      suppressHydrationWarning
                     >
                       {t("nav.applyNow")}
                     </Link>

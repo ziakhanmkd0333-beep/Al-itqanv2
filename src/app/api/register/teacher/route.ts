@@ -32,8 +32,8 @@ export async function POST(request: Request) {
     const experience = formData.get('experience') as string;
     const specialization = formData.get('specialization') as string;
     const languagesKnown = JSON.parse(formData.get('languagesKnown') as string || '[]');
-    const cvFile = formData.get('cvFile') as File | null;
-    const certificationFile = formData.get('certificationFile') as File | null;
+    const cvFileUrl = formData.get('cvFileUrl') as string | null;
+    const certificationFileUrl = formData.get('certificationFileUrl') as string | null;
 
     if (!email || !password || !fullName) {
       return NextResponse.json({ error: 'Email, password, and full name are required' }, { status: 400 });
@@ -73,19 +73,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: userError.message || 'Failed to create user record' }, { status: 500 });
     }
 
-    // Handle file uploads (store as URLs - in production, use proper storage)
-    let cvUrl: string | null = null;
-    let certificationUrl: string | null = null;
-
-    if (cvFile) {
-      // In production, upload to Supabase Storage
-      // For now, just store the filename
-      cvUrl = `pending-upload/${userId}/${cvFile.name}`;
-    }
-
-    if (certificationFile) {
-      certificationUrl = `pending-upload/${userId}/${certificationFile.name}`;
-    }
+    // Use the provided Supabase URLs
+    const cvUrl = cvFileUrl;
+    const certificationUrl = certificationFileUrl;
 
     // Create teacher record
     const { data: teacher, error: teacherError } = await supabaseAdmin
@@ -112,6 +102,15 @@ export async function POST(request: Request) {
       await supabaseAdmin.auth.admin.deleteUser(userId);
       await supabaseAdmin.from('users').delete().eq('id', userId);
       return NextResponse.json({ error: teacherError.message || 'Failed to create teacher record' }, { status: 500 });
+    }
+
+    // Store certification URL in certificates table
+    if (certificationUrl) {
+      await supabaseAdmin.from('certificates').insert({
+        user_id: userId,
+        file_url: certificationUrl,
+        uploaded_at: new Date().toISOString(),
+      });
     }
 
     return NextResponse.json({
