@@ -1,20 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Navbar } from "@/components/navbar";
-import { Footer } from "@/components/footer";
-import { courses } from "@/lib/courses-data";
-import { createBrowserClient } from "@supabase/ssr";
-import { 
-  Send, CheckCircle, User, Mail, Phone, MapPin, BookOpen, Clock, Calendar, 
-  Lock, Eye, EyeOff, GraduationCap, FileText, Award, Briefcase, Languages,
-  Upload, X, FileCheck, Building, CreditCard, ChevronRight, ChevronLeft,
-  AlertCircle, Shield, FileUp, Check
-} from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
 // Floating particles for background - will be generated client-side only

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '@/lib/supabase-browser';
 
 interface User {
@@ -29,7 +28,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
 
   // Check authentication on mount - sync with Supabase Auth session
   const checkAuth = useCallback(async () => {
@@ -85,7 +83,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single()
           .then(({ data, error }) => {
             if (!error && data) {
-              const { password_hash, ...safeUser } = data;
+              const { password_hash: _password_hash, ...safeUser } = data;
               setUser(safeUser as User);
               localStorage.setItem('user', JSON.stringify(safeUser));
             }

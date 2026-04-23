@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { type StudentRef, type CourseRef, getJoinValue } from '@/types/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,8 +35,8 @@ export async function GET() {
       course_id: e.course_id,
       status: e.status,
       enrolled_at: e.enrolled_at,
-      student_name: (e.students as any)?.full_name || 'Unknown',
-      course_title: (e.courses as any)?.title || 'Unknown'
+      student_name: getJoinValue<StudentRef>(e.students as unknown as StudentRef)?.full_name || 'Unknown',
+      course_title: getJoinValue<CourseRef>(e.courses as unknown as CourseRef)?.title || 'Unknown'
     })) || [];
 
     return NextResponse.json({ enrollments: formattedEnrollments });

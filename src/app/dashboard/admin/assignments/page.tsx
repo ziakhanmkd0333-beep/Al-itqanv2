@@ -206,7 +206,7 @@ function AssignmentsContent() {
             ].map(tab => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as 'students' | 'courses' | 'enrollments')}
                 className={`flex items-center gap-2 px-4 py-3 font-medium transition-colors ${
                   activeTab === tab.id
                     ? 'text-[var(--primary)] border-b-2 border-[var(--primary)]'

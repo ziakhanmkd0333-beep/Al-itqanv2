@@ -155,7 +155,6 @@ export default function TeacherStudentsPage() {
 function TeacherStudentsContent() {
   const { t, isRTL } = useTranslation();
   const [teacherId, setTeacherId] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("all");
   const [selectedStudent, setSelectedStudent] = useState<typeof mockStudents[0] | null>(null);

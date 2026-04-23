@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { type LessonProgressRef, type TeacherRef, type CourseRef, getJoinValue } from '@/types/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -64,15 +65,15 @@ export async function GET(request: Request) {
 
     // Transform data
     const formattedLessons = lessons?.map(l => {
-      const progress = (l.lesson_progress as any)?.[0] || null;
+      const progress = getJoinValue<LessonProgressRef>(l.lesson_progress as unknown as LessonProgressRef);
       return {
         id: l.id,
         title: l.title,
         description: l.description,
         course_id: l.course_id,
-        course_title: (l.courses as any)?.title || 'Unknown',
-        teacher_name: (l.teachers as any)?.full_name || 'Unknown',
-        teacher_photo: (l.teachers as any)?.photo_url,
+        course_title: getJoinValue<CourseRef>(l.courses as unknown as CourseRef)?.title || 'Unknown',
+        teacher_name: getJoinValue<TeacherRef>(l.teachers as unknown as TeacherRef)?.full_name || 'Unknown',
+        teacher_photo: getJoinValue<TeacherRef>(l.teachers as unknown as TeacherRef)?.photo_url,
         video_url: l.video_url,
         thumbnail_url: l.thumbnail_url,
         duration: l.duration,

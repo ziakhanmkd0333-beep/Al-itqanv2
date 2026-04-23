@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase-admin';
+import { type TeacherRef, type CourseRef, getJoinValue } from '@/types/supabase';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,9 +74,9 @@ export async function GET(request: Request) {
       title: s.title,
       description: s.description,
       course_id: s.course_id,
-      course_title: (s.courses as any)?.title || 'Unknown',
-      teacher_name: (s.teachers as any)?.full_name || 'Unknown',
-      teacher_photo: (s.teachers as any)?.photo_url,
+      course_title: getJoinValue<CourseRef>(s.courses as unknown as CourseRef)?.title || 'Unknown',
+      teacher_name: getJoinValue<TeacherRef>(s.teachers as unknown as TeacherRef)?.full_name || 'Unknown',
+      teacher_photo: getJoinValue<TeacherRef>(s.teachers as unknown as TeacherRef)?.photo_url,
       scheduled_at: s.scheduled_at,
       duration: s.duration,
       meeting_url: s.meeting_url,

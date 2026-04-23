@@ -14,7 +14,6 @@ import {
   Settings,
   LogOut,
   Menu,
-  X,
   Award,
   Calendar,
   Clock,
@@ -72,7 +71,6 @@ const teacherNavItems = [
 
 export function DashboardSidebar({ userType }: { userType: "admin" | "student" | "teacher" }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { t, isRTL } = useTranslation();
   const { logout } = useAuth();

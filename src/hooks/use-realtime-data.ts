@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
-import { supabaseBrowser, getCurrentUser } from '@/lib/supabase-browser';
-import { adminDataService, studentDataService, teacherDataService } from '@/lib/client-services';
+import { supabaseBrowser } from '@/lib/supabase-browser';
 
 // Generic hook for fetching and subscribing to data
 export function useRealtimeData<T>(
@@ -45,7 +44,7 @@ export function useRealtimeData<T>(
           table: tableName,
           ...(filter && { filter })
         },
-        (payload) => {
+        (payload: { eventType: string; new: T & { id: string }; old: { id: string } }) => {
           if (payload.eventType === 'INSERT') {
             setData((prev) => [...prev, payload.new as T]);
           } else if (payload.eventType === 'UPDATE') {

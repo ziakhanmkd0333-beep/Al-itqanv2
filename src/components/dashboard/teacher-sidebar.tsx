@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -19,7 +19,6 @@ import {
   LogOut,
   GraduationCap
 } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface TeacherSidebarProps {
@@ -37,9 +36,8 @@ const menuItems = [
 ];
 
 export function TeacherSidebar({ children }: TeacherSidebarProps) {
-  const { t, isRTL } = useTranslation();
-  const router = useRouter();
   const pathname = usePathname();
+  const router = useRouter();
   const { user, isLoading, logout, hasRole } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);

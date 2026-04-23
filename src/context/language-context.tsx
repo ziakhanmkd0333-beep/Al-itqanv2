@@ -41,7 +41,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     if (stored && ["en", "ar", "ur"].includes(stored) && stored !== language) {
       setLanguageState(stored);
     }
-  }, []);
+  }, [language]);
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);

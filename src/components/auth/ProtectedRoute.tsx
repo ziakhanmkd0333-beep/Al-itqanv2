@@ -47,7 +47,7 @@ export function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) 
 
       setIsChecking(false);
     }
-  }, [isLoading, isAuthenticated, hasRole, allowedRoles, user, router, pathname]);
+  }, [isLoading, isAuthenticated, hasRole, allowedRoles, user, router, pathname, logout]);
 
   // Loading state
   if (isLoading || isChecking) {
