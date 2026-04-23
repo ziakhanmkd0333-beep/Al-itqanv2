@@ -37,13 +37,6 @@ export function HeroSection() {
           
           {/* Left Column - Existing Content */}
           <div className={`space-y-4 md:space-y-5 ${isRTL ? "lg:order-1" : "lg:order-1"}`} suppressHydrationWarning>
-            {/* Bismillah */}
-            <div className="mb-3">
-              <p className="arabic-text text-[#C9A84C] text-xl md:text-2xl lg:text-3xl leading-relaxed">
-                {t("hero.bismillah")}
-              </p>
-            </div>
-
             {/* Main Headline */}
             <h1 className={`font-display text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight max-w-2xl ${isRTL ? "arabic-text" : ""}`} suppressHydrationWarning>
               <span className="bg-gradient-to-r from-white via-white to-[#C9A84C] bg-clip-text text-transparent">
