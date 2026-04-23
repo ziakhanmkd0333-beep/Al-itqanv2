@@ -893,6 +893,20 @@ export const translations = {
       light: "Light Mode",
       dark: "Dark Mode",
     },
+    // Hero Notification
+    notification: {
+      title: "Admission Notice",
+      limitedSeats: "Limited Seats",
+      line1: "Admissions are open —",
+      highlight: "Limited Seats",
+      line1End: "available",
+      line2: "Come quickly and get ahead — A golden opportunity to secure your seat!",
+      line3: "Registration is open for all courses. Apply now and confirm your place.",
+      classStart: "Regular Classes Start",
+      hijriDate: "1 Muharram 1448 AH",
+      gregorianDate: "(Corresponding to June 17, 2026)",
+      cta: "Register Now",
+    },
     // Course Levels
     levels: {
       beginner: "Beginner",
@@ -1690,6 +1704,20 @@ export const translations = {
       green: "الوضع الإسلامي الأخضر",
       light: "الوضع الفاتح",
       dark: "الوضع الداكن",
+    },
+    // Hero Notification
+    notification: {
+      title: "إشعار القبول",
+      limitedSeats: "مقاعد محدودة",
+      line1: "التسجيلات مفتوحة —",
+      highlight: "مقاعد محدودة",
+      line1End: "متوفرة",
+      line2: "أسرع وسبق الآخرين — فرصة ذهبية لحجز مقعدك!",
+      line3: "التسجيل مفتوح لجميع الدورات. سجل الآن وأكد مكانك.",
+      classStart: "بداية الدروس المنتظمة",
+      hijriDate: "1 محرم 1448 هـ",
+      gregorianDate: "(ما يوافق 17 يونيو 2026 م)",
+      cta: "سجل الآن",
     },
     // Course Levels
     levels: {
@@ -2715,6 +2743,20 @@ export const translations = {
       green: "گرین اسلامی موڈ",
       light: "لائٹ موڈ",
       dark: "ڈارک موڈ",
+    },
+    // Hero Notification
+    notification: {
+      title: "داخلہ نوٹس",
+      limitedSeats: "محدود نشستیں",
+      line1: "داخلے جاری ہیں —",
+      highlight: "محدود نشستیں",
+      line1End: "دستیاب ہیں",
+      line2: "جلدی آئیں اور جلدی پائیں — اپنی نشست محفوظ بنانے کا سنہری موقع!",
+      line3: "تمام کورسز کے لیے رجسٹریشن اوپن ہے۔ ابھی اپلائی کریں اور اپنی جگہ کنفرم کریں۔",
+      classStart: "باقاعدہ کلاسز کا آغاز",
+      hijriDate: "1 محرم 1448ھ",
+      gregorianDate: "(بمطابق 17 جون 2026ء)",
+      cta: "ابھی رجسٹریشن کریں",
     },
     // Course Levels
     levels: {

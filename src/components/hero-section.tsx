@@ -33,10 +33,10 @@ export function HeroSection() {
 
       {/* Content - 2 Column Layout */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isRTL ? "text-right" : "text-left"}`}>
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isRTL ? "text-right" : "text-left"}`} suppressHydrationWarning>
           
           {/* Left Column - Existing Content */}
-          <div className={`space-y-4 md:space-y-5 ${isRTL ? "lg:order-2" : "lg:order-1"}`}>
+          <div className={`space-y-4 md:space-y-5 ${isRTL ? "lg:order-1" : "lg:order-1"}`} suppressHydrationWarning>
             {/* Bismillah */}
             <div className="mb-3">
               <p className="arabic-text text-[#C9A84C] text-xl md:text-2xl lg:text-3xl leading-relaxed">
@@ -45,24 +45,24 @@ export function HeroSection() {
             </div>
 
             {/* Main Headline */}
-            <h1 className={`font-display text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight max-w-2xl ${isRTL ? "arabic-text" : ""}`}>
+            <h1 className={`font-display text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight max-w-2xl ${isRTL ? "arabic-text" : ""}`} suppressHydrationWarning>
               <span className="bg-gradient-to-r from-white via-white to-[#C9A84C] bg-clip-text text-transparent">
                 {t("hero.title")}
               </span>
             </h1>
 
             {/* Subheadline */}
-            <h2 className={`text-lg md:text-xl lg:text-2xl text-white/95 font-bold max-w-2xl ${isRTL ? "arabic-text" : ""}`}>
+            <h2 className={`text-lg md:text-xl lg:text-2xl text-white/95 font-bold max-w-2xl ${isRTL ? "arabic-text" : ""}`} suppressHydrationWarning>
               {t("hero.subtitle")}
             </h2>
 
             {/* Description */}
-            <p className={`text-base md:text-lg text-white/90 max-w-2xl leading-relaxed ${isRTL ? "arabic-text" : ""}`}>
+            <p className={`text-base md:text-lg text-white/90 max-w-2xl leading-relaxed ${isRTL ? "arabic-text" : ""}`} suppressHydrationWarning>
               {t("hero.description")}
             </p>
 
             {/* CTA Buttons */}
-            <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isRTL ? "items-end" : "items-start"}`}>
+            <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isRTL ? "items-end" : "items-start"}`} suppressHydrationWarning>
               <Link
                 href="/courses"
                 className="group bg-gradient-to-r from-[#C9A84C] to-[#A0803D] hover:from-[#A0803D] hover:to-[#C9A84C] text-[#0D4D2F] px-6 py-3 rounded-xl font-semibold text-base transition-all duration-300 shadow-lg flex items-center gap-2"
@@ -83,7 +83,7 @@ export function HeroSection() {
           </div>
 
           {/* Right Column - Modern Blob Notification */}
-          <div className={`${isRTL ? "lg:order-1" : "lg:order-2"} flex justify-center lg:justify-end`}>
+          <div className={`${isRTL ? "lg:order-2" : "lg:order-2"} flex justify-center ${isRTL ? "lg:justify-end" : "lg:justify-end"}`} suppressHydrationWarning>
             <NotificationBlob />
           </div>
         </div>
@@ -138,6 +138,8 @@ export function HeroSection() {
 
 // Modern Blob Notification Component
 function NotificationBlob() {
+  const { t, isRTL } = useTranslation();
+  
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -165,11 +167,11 @@ function NotificationBlob() {
         "
       >
         {/* Decorative Background Elements */}
-        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#C9A84C]/20 to-transparent rounded-full blur-2xl" />
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-xl" />
+        <div className={`absolute top-0 ${isRTL ? 'left-0' : 'right-0'} w-32 h-32 bg-gradient-to-br from-[#C9A84C]/20 to-transparent rounded-full blur-2xl`} />
+        <div className={`absolute bottom-0 ${isRTL ? 'right-0' : 'left-0'} w-24 h-24 bg-gradient-to-tr from-emerald-400/20 to-transparent rounded-full blur-xl`} />
         
         {/* Limited Seats Badge */}
-        <div className="absolute -top-1 -right-1 sm:top-2 sm:right-2 z-10">
+        <div className={`absolute -top-1 ${isRTL ? '-left-1 sm:top-2 sm:left-2' : '-right-1 sm:top-2 sm:right-2'} z-10`} suppressHydrationWarning>
           <div className="
             flex items-center gap-1.5
             px-3 py-1.5
@@ -180,7 +182,7 @@ function NotificationBlob() {
             animate-pulse
           ">
             <AlertCircle className="w-3.5 h-3.5" />
-            <span>محدود نشستیں</span>
+            <span suppressHydrationWarning>{t("notification.limitedSeats")}</span>
           </div>
         </div>
 
@@ -206,24 +208,25 @@ function NotificationBlob() {
           text-emerald-900
           mb-4
           leading-tight
-        ">
-          📢 داخلہ نوٹس
+        "
+        suppressHydrationWarning>
+          📢 {t("notification.title")}
         </h3>
 
         {/* Content */}
         <div className="relative z-10 space-y-3 text-emerald-800">
-          <p className="arabic-text text-base sm:text-lg leading-relaxed font-medium">
-            داخلے جاری ہیں —{" "}
-            <span className="text-[#C9A84C] font-bold">محدود نشستیں</span>{" "}
-            دستیاب ہیں
+          <p className="arabic-text text-base sm:text-lg leading-relaxed font-medium" suppressHydrationWarning>
+            {t("notification.line1")}{" "}
+            <span className="text-[#C9A84C] font-bold">{t("notification.highlight")}</span>{" "}
+            {t("notification.line1End")}
           </p>
           
-          <p className="arabic-text text-sm sm:text-base leading-relaxed text-emerald-700/90">
-            جلدی آئیں اور جلدی پائیں — اپنی نشست محفوظ بنانے کا سنہری موقع!
+          <p className="arabic-text text-sm sm:text-base leading-relaxed text-emerald-700/90" suppressHydrationWarning>
+            {t("notification.line2")}
           </p>
           
-          <p className="arabic-text text-sm sm:text-base leading-relaxed text-emerald-600/80">
-            تمام کورسز کے لیے رجسٹریشن اوپن ہے۔ ابھی اپلائی کریں اور اپنی جگہ کنفرم کریں۔
+          <p className="arabic-text text-sm sm:text-base leading-relaxed text-emerald-600/80" suppressHydrationWarning>
+            {t("notification.line3")}
           </p>
         </div>
 
@@ -236,18 +239,19 @@ function NotificationBlob() {
           bg-gradient-to-r from-emerald-100/80 to-[#C9A84C]/10
           rounded-2xl
           border border-emerald-200/50
-        ">
+        "
+        suppressHydrationWarning>
           <div className="flex items-center justify-center gap-2 mb-2">
             <Calendar className="w-4 h-4 text-emerald-600" />
-            <span className="arabic-text text-sm font-semibold text-emerald-700">
-              باقاعدہ کلاسز کا آغاز
+            <span className="arabic-text text-sm font-semibold text-emerald-700" suppressHydrationWarning>
+              {t("notification.classStart")}
             </span>
           </div>
-          <p className="arabic-text text-base sm:text-lg font-bold text-emerald-900 text-center">
-            1 محرم 1448ھ
+          <p className="arabic-text text-base sm:text-lg font-bold text-emerald-900 text-center" suppressHydrationWarning>
+            {t("notification.hijriDate")}
           </p>
-          <p className="arabic-text text-xs sm:text-sm text-emerald-600 text-center mt-1">
-            (بمطابق 17 جون 2026ء)
+          <p className="arabic-text text-xs sm:text-sm text-emerald-600 text-center mt-1" suppressHydrationWarning>
+            {t("notification.gregorianDate")}
           </p>
         </div>
 
@@ -272,9 +276,10 @@ function NotificationBlob() {
             transition-all duration-300
             flex items-center justify-center gap-2
             group
-          ">
-          <span>🔘 ابھی رجسٹریشن کریں</span>
-          <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1 rotate-180" />
+          "
+          suppressHydrationWarning>
+          <span suppressHydrationWarning>🔘 {t("notification.cta")}</span>
+          <ArrowRight className={`w-4 h-4 transition-transform ${isRTL ? "group-hover:-translate-x-1 rotate-180" : "group-hover:translate-x-1"}`} />
         </Link>
       </div>
     </motion.div>
