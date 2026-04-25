@@ -6,6 +6,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import {
+  Send, CheckCircle, User, Mail, Phone, BookOpen, Calendar,
+  Lock, Eye, EyeOff, GraduationCap, FileText, Award, Briefcase,
+  Upload, X, FileCheck, FileUp
+} from "lucide-react";
 
 // Floating particles for background - will be generated client-side only
 interface Particle {

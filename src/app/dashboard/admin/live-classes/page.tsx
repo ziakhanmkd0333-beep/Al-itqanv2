@@ -357,7 +357,7 @@ function LiveClassesContent() {
                 <div className="text-center py-12 text-gray-500 dark:text-gray-400">
                   <Video className="w-12 h-12 mx-auto mb-4 opacity-50" />
                   <p className="text-lg font-medium">No live classes scheduled</p>
-                  <p className="text-sm">Click "Schedule Live Class" to create one</p>
+                  <p className="text-sm">Click &quot;Schedule Live Class&quot; to create one</p>
                 </div>
               )}
             </div>
