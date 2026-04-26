@@ -189,11 +189,12 @@ export async function POST(
 // GET /api/admin/enhanced-approvals/[id] - Get single application details
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const supabaseAdmin = getSupabaseAdmin();
-    const applicationId = params.id;
+    const applicationId = id;
     
     // Verify admin access
     const authHeader = request.headers.get('authorization');
