@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { StudentRoute } from "@/components/auth/ProtectedRoute";
-import { Calendar, Clock, BookOpen, Video, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Clock, Video, RefreshCw } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useStudentDashboard } from "@/hooks/use-realtime-data";
 import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
@@ -20,7 +20,6 @@ export default function StudentSchedulePage() {
 function StudentScheduleContent() {
   const { t, isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
-  const [currentDate, setCurrentDate] = useState(new Date());
 
   // Get student ID from profile on mount
   useEffect(() => {

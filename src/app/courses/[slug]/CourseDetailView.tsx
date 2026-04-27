@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Clock, BookOpen, CheckCircle, ChevronRight, GraduationCap, DollarSign, ArrowLeft, Play } from "lucide-react";
+import { Clock, BookOpen, CheckCircle, ChevronRight, GraduationCap, DollarSign, Play } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { Course } from "@/types";
 import { Navbar } from "@/components/navbar";

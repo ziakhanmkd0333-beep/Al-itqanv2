@@ -10,7 +10,7 @@ import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 
 function ResetPasswordContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -68,7 +68,7 @@ function ResetPasswordContent() {
       } else {
         setError(data.error || "Failed to reset password");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);

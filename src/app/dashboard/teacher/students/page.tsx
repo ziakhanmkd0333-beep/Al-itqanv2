@@ -153,7 +153,8 @@ export default function TeacherStudentsPage() {
 }
 
 function TeacherStudentsContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
+  const [isConnected, setIsConnected] = useState(false);
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("all");
@@ -172,7 +173,7 @@ function TeacherStudentsContent() {
   }, []);
 
   // Use real-time hook for teacher students
-  const { students: fetchedStudents, loading, refetch } = useTeacherStudents(teacherId, selectedCourse === "all" ? undefined : selectedCourse);
+  const { students: fetchedStudents } = useTeacherStudents(teacherId, selectedCourse === "all" ? undefined : selectedCourse);
 
   // Monitor real-time connection
   useEffect(() => {
@@ -238,15 +239,21 @@ function TeacherStudentsContent() {
           className="max-w-7xl mx-auto"
         >
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-              <Users className="w-8 h-8 text-emerald-600" />
-              My Students
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              View and manage your assigned students
-            </p>
-          </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                  <Users className="w-8 h-8 text-emerald-600" />
+                  My Students
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-2">
+                  View and manage your assigned students
+                </p>
+              </div>
+              <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium ${isConnected ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'} animate-pulse`} />
+                {isConnected ? 'Real-time Connected' : 'Connecting...'}
+              </div>
+            </div>
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

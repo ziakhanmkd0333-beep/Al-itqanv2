@@ -7,12 +7,10 @@ import { StudentRoute } from "@/components/auth/ProtectedRoute";
 import {
   BookOpen,
   Calendar,
-  Clock,
   Award,
   ChevronRight,
   Play,
   User,
-  CheckCircle,
   TrendingUp,
   RefreshCw,
   Wifi,

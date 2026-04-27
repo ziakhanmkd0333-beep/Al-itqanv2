@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -226,11 +226,7 @@ export default function CoursesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("");
 
-  useEffect(() => {
-    fetchCourses();
-  }, [selectedCategory, selectedLevel]);
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -260,7 +256,12 @@ export default function CoursesPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, selectedLevel]);
+
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
 
   return (
     <div className="min-h-screen bg-[var(--background)]">

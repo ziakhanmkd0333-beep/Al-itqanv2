@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
@@ -12,7 +12,6 @@ import {
   ClipboardList,
   CreditCard,
   TrendingUp,
-  TrendingDown,
   DollarSign,
   Calendar,
   CheckCircle,
@@ -45,26 +44,6 @@ interface DashboardStats {
   pendingPayments: number;
   activeStudents: number;
   newStudentsThisMonth: number;
-}
-
-interface RecentAdmission {
-  id: string;
-  student_id: string;
-  course_id: string;
-  status: "pending" | "approved" | "rejected" | "deferred";
-  applied_at: string;
-  student_name?: string;
-  course_title?: string;
-}
-
-interface RecentPayment {
-  id: string;
-  student_id: string;
-  amount: number;
-  status: string;
-  created_at: string;
-  student_name?: string;
-  course_title?: string;
 }
 
 interface UpcomingSession {
@@ -100,7 +79,7 @@ export default function AdminDashboard() {
 
 function AdminDashboardContent() {
   const { t, isRTL } = useTranslation();
-  const { stats: realtimeStats, recentAdmissions, recentPayments, upcomingSessions: realtimeSessions, loading, refetch } = useAdminDashboard();
+  const { stats: realtimeStats, recentAdmissions, upcomingSessions: realtimeSessions, loading, refetch } = useAdminDashboard();
   const [isConnected, setIsConnected] = useState(true);
   const [stats, setStats] = useState<DashboardStats>({
     totalStudents: 0,
@@ -114,14 +93,14 @@ function AdminDashboardContent() {
     newStudentsThisMonth: 0
   });
   const [upcomingSessions, setUpcomingSessions] = useState<UpcomingSession[]>([]);
-  const [paymentAnalytics, setPaymentAnalytics] = useState<PaymentAnalytics>({
+  const [paymentAnalytics] = useState<PaymentAnalytics>({
     totalRevenue: 0,
     pendingAmount: 0,
     paidThisMonth: 0,
     failedPayments: 0,
     revenueGrowth: 0
   });
-  const [courseEnrollments, setCourseEnrollments] = useState<CourseEnrollment[]>([]);
+  const [courseEnrollments] = useState<CourseEnrollment[]>([]);
 
   // Update stats when real-time data changes
   useEffect(() => {

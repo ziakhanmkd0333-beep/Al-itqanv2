@@ -139,41 +139,7 @@ const updateFraudLog = async (
   }
 };
 
-// File upload handler (placeholder - implement with your storage solution)
-const uploadFile = async (
-  supabase: ReturnType<typeof getSupabaseAdmin>,
-  file: File,
-  folder: string,
-  userId: string
-): Promise<string | null> => {
-  try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${folder}/${userId}/${Date.now()}.${fileExt}`;
-    
-    // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from('admission-documents')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: false,
-      });
 
-    if (error) {
-      console.error('File upload error:', error);
-      return null;
-    }
-
-    // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('admission-documents')
-      .getPublicUrl(fileName);
-
-    return publicUrl;
-  } catch (error) {
-    console.error('File upload error:', error);
-    return null;
-  }
-};
 
 export const dynamic = 'force-dynamic';
 

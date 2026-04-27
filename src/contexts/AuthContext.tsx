@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabaseBrowser } from '@/lib/supabase-browser';
+import { useRouter } from 'next/navigation';
 
 interface User {
   id: string;
@@ -44,7 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
         
         if (!error && userData) {
-          const { password_hash, ...safeUser } = userData;
+          const { password_hash: _password_hash, ...safeUser } = userData;
           setUser(safeUser as User);
         } else {
           setUser(null);
@@ -117,33 +118,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .eq('id', authData.user.id)
           .single();
 
-        if (!userError && userData) {
-          // Check if user is approved
-          if (!userData.is_approved) {
-            return { 
-              success: false, 
-              error: 'Your account is pending admin approval. Please wait for approval before logging in.' 
-            };
+          if (!userError && userData) {
+            // Check if user is approved
+            if (!userData.is_approved) {
+              return { 
+                success: false, 
+                error: 'Your account is pending admin approval. Please wait for approval before logging in.' 
+              };
+            }
+            
+            const { password_hash: _password_hash, ...safeUser } = userData;
+            
+            // Store in localStorage for compatibility
+            const userJson = JSON.stringify(safeUser);
+            if (rememberMe) {
+              localStorage.setItem('user', userJson);
+            } else {
+              sessionStorage.setItem('user', userJson);
+            }
+            
+            // Also set cookie for middleware/proxy compatibility
+            const cookieValue = `user=${encodeURIComponent(userJson)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
+            document.cookie = cookieValue;
+            console.log('[AuthContext] Cookie set, length:', cookieValue.length);
+            
+            setUser(safeUser as User);
+            return { success: true, user: safeUser as User };
           }
-          
-          const { password_hash, ...safeUser } = userData;
-          
-          // Store in localStorage for compatibility
-          const userJson = JSON.stringify(safeUser);
-          if (rememberMe) {
-            localStorage.setItem('user', userJson);
-          } else {
-            sessionStorage.setItem('user', userJson);
-          }
-          
-          // Also set cookie for middleware/proxy compatibility
-          const cookieValue = `user=${encodeURIComponent(userJson)}; path=/; SameSite=Lax${rememberMe ? '; max-age=2592000' : ''}`;
-          document.cookie = cookieValue;
-          console.log('[AuthContext] Cookie set, length:', cookieValue.length);
-          
-          setUser(safeUser as User);
-          return { success: true, user: safeUser as User };
-        }
       }
 
       // Fallback: try custom API login

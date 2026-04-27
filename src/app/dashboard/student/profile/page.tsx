@@ -17,7 +17,6 @@ import {
   Bell,
   Shield,
   Save,
-  CheckCircle,
   Calendar,
   BookOpen,
   RefreshCw
@@ -49,7 +48,7 @@ export default function StudentProfilePage() {
 }
 
 function StudentProfileContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -67,44 +66,29 @@ function StudentProfileContent() {
     timezone: "UTC-5"
   });
 
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        const user = getCurrentUser();
-        console.log('[ProfilePage] Current user:', user);
-        
-        if (user?.id) {
-          try {
-            const profileData = await getStudentProfile(user.id);
-            console.log('[ProfilePage] Profile data:', profileData);
-            if (profileData) {
-              setProfile(profileData);
-              setProfileForm({
-                fullName: profileData.full_name || user.full_name || "",
-                email: profileData.email || user.email || "",
-                phone: profileData.phone || "",
-                country: profileData.country || "",
-                city: profileData.city || "",
-                dateOfBirth: profileData.date_of_birth || "",
-                language: profileData.language || "en",
-                timezone: profileData.timezone || "UTC-5"
-              });
-            } else {
-              // Use user data as fallback
-              setProfileForm({
-                fullName: user.full_name || "",
-                email: user.email || "",
-                phone: "",
-                country: "",
-                city: "",
-                dateOfBirth: "",
-                language: "en",
-                timezone: "UTC-5"
-              });
-            }
-          } catch (error) {
-            console.error('[ProfilePage] Error loading profile:', error);
-            // Use user data as fallback on error
+  const loadProfile = useCallback(async () => {
+    try {
+      const user = await getCurrentUser();
+      console.log('[ProfilePage] Current user:', user);
+      
+      if (user?.id) {
+        try {
+          const profileData = await getStudentProfile(user.id);
+          console.log('[ProfilePage] Profile data:', profileData);
+          if (profileData) {
+            setProfile(profileData);
+            setProfileForm({
+              fullName: profileData.full_name || user.full_name || "",
+              email: profileData.email || user.email || "",
+              phone: profileData.phone || "",
+              country: profileData.country || "",
+              city: profileData.city || "",
+              dateOfBirth: profileData.date_of_birth || "",
+              language: profileData.language || "en",
+              timezone: profileData.timezone || "UTC-5"
+            });
+          } else {
+            // Use user data as fallback
             setProfileForm({
               fullName: user.full_name || "",
               email: user.email || "",
@@ -116,17 +100,33 @@ function StudentProfileContent() {
               timezone: "UTC-5"
             });
           }
-        } else {
-          console.log('[ProfilePage] No user ID found');
+        } catch (error) {
+          console.error('[ProfilePage] Error loading profile:', error);
+          // Use user data as fallback on error
+          setProfileForm({
+            fullName: user.full_name || "",
+            email: user.email || "",
+            phone: "",
+            country: "",
+            city: "",
+            dateOfBirth: "",
+            language: "en",
+            timezone: "UTC-5"
+          });
         }
-      } catch (e) {
-        console.error('[ProfilePage] Error in loadProfile:', e);
-      } finally {
-        setIsLoading(false);
+      } else {
+        console.log('[ProfilePage] No user ID found');
       }
+    } catch (e) {
+      console.error('[ProfilePage] Error in loadProfile:', e);
+    } finally {
+      setIsLoading(false);
     }
-    loadProfile();
   }, []);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   const [notificationSettings, setNotificationSettings] = useState({
     classReminders: true,

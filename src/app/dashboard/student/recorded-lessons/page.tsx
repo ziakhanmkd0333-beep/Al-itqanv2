@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { StudentRoute } from "@/components/auth/ProtectedRoute";
@@ -15,8 +15,8 @@ import {
   Eye,
   GraduationCap
 } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
+import Image from "next/image";
 
 interface RecordedLesson {
   id: string;
@@ -49,20 +49,13 @@ export default function StudentRecordedLessonsPage() {
 }
 
 function RecordedLessonsContent() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const [lessons, setLessons] = useState<RecordedLesson[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [selectedLesson, setSelectedLesson] = useState<RecordedLesson | null>(null);
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchLessons();
-    }
-  }, [user]);
-
-  const fetchLessons = async () => {
+  const fetchLessons = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/student/lessons?userId=${user?.id}`, {
@@ -80,7 +73,13 @@ function RecordedLessonsContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchLessons();
+    }
+  }, [user?.id, fetchLessons]);
 
   const updateProgress = async (lessonId: string, progressPercent: number, lastPosition: number, isCompleted: boolean) => {
     try {
@@ -276,10 +275,11 @@ function RecordedLessonsContent() {
                       {/* Thumbnail */}
                       <div className="relative aspect-video bg-[var(--background)] rounded-xl overflow-hidden border border-[var(--border)] group-hover:border-[var(--primary)] transition-colors">
                         {lesson.thumbnail_url ? (
-                          <img
+                          <Image
                             src={lesson.thumbnail_url}
                             alt={lesson.title}
-                            className="w-full h-full object-cover"
+                            fill
+                            className="object-cover"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--primary)]/10 to-[var(--secondary)]/10">

@@ -80,7 +80,7 @@ export async function POST(request: Request) {
     }
 
     // Prepare response (omit sensitive data)
-    const { password_hash: _, ...safeUser } = newUser;
+    const { password_hash: _password_hash, ...safeUser } = newUser;
 
     return NextResponse.json({
       success: true,

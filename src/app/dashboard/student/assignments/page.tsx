@@ -9,17 +9,14 @@ import { getCurrentUser } from "@/lib/supabase-browser";
 import {
   ClipboardList,
   Upload,
-  FileText,
   CheckCircle,
   Clock,
   AlertCircle,
-  Download,
   Eye,
   Calendar,
   BookOpen,
   RefreshCw,
-  X,
-  ChevronRight
+  X
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 

@@ -7,8 +7,6 @@ import {
   User,
   Bell,
   Shield,
-  Globe,
-  Palette,
   Mail,
   Lock,
   Save,
@@ -29,8 +27,8 @@ interface AdminSettingsPageProps {
   params: Promise<{ lang: string }>;
 }
 
-export default function AdminSettingsPage({ params }: AdminSettingsPageProps) {
-  const { t, isRTL } = useTranslation();
+export default function AdminSettingsPage() {
+  const { isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);

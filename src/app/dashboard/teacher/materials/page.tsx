@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { TeacherRoute } from "@/components/auth/ProtectedRoute";
@@ -49,9 +49,9 @@ function TeacherMaterialsContent() {
   useEffect(() => {
     fetchMaterials();
     fetchCourses();
-  }, [selectedCourse]);
+  }, [fetchMaterials, fetchCourses]);
 
-  const fetchMaterials = async () => {
+  const fetchMaterials = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
@@ -86,9 +86,9 @@ function TeacherMaterialsContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCourse]);
 
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) return;
@@ -105,7 +105,7 @@ function TeacherMaterialsContent() {
     } catch (error) {
       console.error('Courses fetch error:', error);
     }
-  };
+  }, []);
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();

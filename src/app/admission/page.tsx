@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
 import { createBrowserClient } from "@supabase/ssr";
@@ -47,13 +46,7 @@ interface PreviousEducation {
   completionYear: string;
 }
 
-// Form Steps
-const FORM_STEPS = [
-  { id: 1, title: "Personal Info", icon: User },
-  { id: 2, title: "Islamic Qualifications", icon: BookOpen },
-  { id: 3, title: "Education", icon: GraduationCap },
-  { id: 4, title: "Course & Password", icon: Lock }
-];
+
 
 export default function AdmissionPage() {
   const { t, isRTL } = useTranslation();
@@ -61,9 +54,7 @@ export default function AdmissionPage() {
   // Tab state
   const [activeTab, setActiveTab] = useState<"student" | "teacher">("student");
   
-  // Multi-step form state
-  const [currentStep, setCurrentStep] = useState(1);
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+
   
   // Personal Info State
   const [personalInfo, setPersonalInfo] = useState({

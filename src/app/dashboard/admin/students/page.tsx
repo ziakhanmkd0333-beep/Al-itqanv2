@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import {
   Users,
   Search,
-  Filter,
   Plus,
   Edit,
   Eye,
@@ -19,20 +18,15 @@ import {
   Phone,
   MapPin,
   BookOpen,
-  DollarSign,
   Calendar,
   CheckCircle,
   XCircle,
   Clock,
-  MoreVertical,
   RefreshCw,
-  Wifi,
-  WifiOff,
   Globe
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAdminStudents } from "@/hooks/use-realtime-data";
-import { supabaseBrowser } from "@/lib/supabase-browser";
 
 // Types
 interface Student {
@@ -92,40 +86,23 @@ export default function StudentsManagementPage() {
   const [formData, setFormData] = useState<StudentFormData>(initialFormData);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [studentToDelete, setStudentToDelete] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   const itemsPerPage = 10;
 
   // Use real-time hook for students
   const {
     students: fetchedStudents,
-    total,
     loading,
-    error,
     refetch,
     createStudent,
     updateStudent,
     deleteStudent
   } = useAdminStudents(currentPage, itemsPerPage, searchQuery, statusFilter === "all" ? "" : statusFilter);
 
-  // Monitor real-time connection
-  useEffect(() => {
-    const channel = supabaseBrowser.channel('students-connection');
-    
-    channel.subscribe((status) => {
-      setIsConnected(status === 'SUBSCRIBED');
-    });
-
-    return () => {
-      supabaseBrowser.removeChannel(channel);
-    };
-  }, []);
-
   // Use fetched students directly from hook
   const students = fetchedStudents;
 
-  // Filter and search logic (client-side for loaded data)
+  // Filter and search logic
   const filteredStudents = students.filter((student) => {
     const matchesSearch =
       student.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -187,22 +164,20 @@ export default function StudentsManagementPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaving(true);
     try {
       if (modalMode === "add") {
         await createStudent({
           ...formData,
-          password: 'temp123' // Default password for new students
+          password: 'temp123'
         });
       } else if (modalMode === "edit" && selectedStudent) {
         await updateStudent(selectedStudent.id, formData as unknown as Record<string, unknown>);
       }
+      refetch();
       closeModal();
     } catch (error) {
       console.error("Error saving student:", error);
       alert("Failed to save student. Please try again.");
-    } finally {
-      setSaving(false);
     }
   };
 

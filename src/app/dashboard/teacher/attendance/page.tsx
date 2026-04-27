@@ -14,10 +14,6 @@ import {
   Save,
   FileText,
   Upload,
-  X,
-  RefreshCw,
-  Wifi,
-  WifiOff,
   Users,
   Search
 } from "lucide-react";
@@ -56,13 +52,11 @@ export default function TeacherAttendancePage() {
 function TeacherAttendanceContent() {
   const { t, isRTL } = useTranslation();
   const [teacherId, setTeacherId] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(true);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedCourse, setSelectedCourse] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [attendance, setAttendance] = useState<Record<number, { status: string; notes: string }>>({});
   const [showMaterialModal, setShowMaterialModal] = useState(false);
-  const [selectedStudentId, setSelectedStudentId] = useState<number | null>(null);
   const [sessionNotes, setSessionNotes] = useState("");
 
   // Get teacher ID from profile on mount
@@ -86,18 +80,6 @@ function TeacherAttendanceContent() {
   // Use real-time hook for teacher students
   const { students: fetchedStudents, loading, refetch } = useTeacherStudents(teacherId, selectedCourse === "all" ? undefined : selectedCourse);
 
-  // Monitor real-time connection
-  useEffect(() => {
-    const channel = supabaseBrowser.channel('teacher-attendance-connection');
-    
-    channel.subscribe((status) => {
-      setIsConnected(status === 'SUBSCRIBED');
-    });
-
-    return () => {
-      supabaseBrowser.removeChannel(channel);
-    };
-  }, []);
 
   // Use fetched students or fall back to mock data
   const students = fetchedStudents.length > 0 ? fetchedStudents : mockStudents;
@@ -173,7 +155,6 @@ function TeacherAttendanceContent() {
   };
 
   const handleUploadMaterial = (studentId: number) => {
-    setSelectedStudentId(studentId);
     setShowMaterialModal(true);
   };
 

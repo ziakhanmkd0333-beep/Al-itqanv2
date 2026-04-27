@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { supabase } from "@/lib/supabase";
+import Image from "next/image";
 
 export default function TeacherProfilePage() {
   return (
@@ -32,7 +33,6 @@ function TeacherProfileContent() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [teacher, setTeacher] = useState<Record<string, unknown> | null>(null);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -59,7 +59,6 @@ function TeacherProfileContent() {
 
       if (response.ok) {
         const data = await response.json();
-        setTeacher(data.teacher);
         setFormData({
           full_name: data.teacher.full_name || "",
           email: data.teacher.users?.email || data.teacher.email || "",
@@ -150,10 +149,11 @@ function TeacherProfileContent() {
             <div className="bg-card rounded-2xl border border-[var(--border)] p-6 text-center">
               <div className="relative w-32 h-32 mx-auto mb-4">
                 {formData.photo_url ? (
-                  <img
+                  <Image
                     src={formData.photo_url}
                     alt={formData.full_name}
-                    className="w-full h-full rounded-full object-cover border-4 border-[var(--primary)]"
+                    fill
+                    className="rounded-full object-cover border-4 border-[var(--primary)]"
                   />
                 ) : (
                   <div className="w-full h-full rounded-full bg-[var(--primary)]/10 flex items-center justify-center border-4 border-[var(--primary)]">

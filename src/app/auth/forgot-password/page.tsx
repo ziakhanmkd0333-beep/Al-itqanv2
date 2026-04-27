@@ -9,7 +9,7 @@ import { useTranslation } from "@/hooks/use-translation";
 import Link from "next/link";
 
 export default function ForgotPasswordPage() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -36,7 +36,7 @@ export default function ForgotPasswordPage() {
       } else {
         setError(data.error || "Failed to send reset email");
       }
-    } catch (err) {
+    } catch {
       setError("An error occurred. Please try again.");
     } finally {
       setIsLoading(false);

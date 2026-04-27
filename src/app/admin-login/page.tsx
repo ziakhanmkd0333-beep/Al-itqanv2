@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Shield, Lock, Mail, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@/hooks/use-translation";
+
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminLoginPage() {

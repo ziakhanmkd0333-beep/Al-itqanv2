@@ -20,8 +20,6 @@ import {
   AlertCircle,
   FileText,
   Receipt,
-  Filter,
-  Users,
   BookOpen,
   ArrowUpRight,
   ArrowDownRight,
@@ -30,7 +28,6 @@ import {
   RefreshCw
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
-import { supabase } from "@/lib/supabase";
 
 // Types
 interface Payment {

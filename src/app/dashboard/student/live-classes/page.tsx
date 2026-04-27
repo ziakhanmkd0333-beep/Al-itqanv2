@@ -8,14 +8,12 @@ import {
   Video,
   Calendar,
   Clock,
-  Users,
   ExternalLink,
   RefreshCw,
   AlertCircle,
   Play,
   GraduationCap
 } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface LiveSession {
@@ -43,19 +41,12 @@ export default function StudentLiveClassesPage() {
 }
 
 function LiveClassesContent() {
-  const { t } = useTranslation();
   const { user } = useAuth();
   const [sessions, setSessions] = useState<LiveSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchSessions();
-    }
-  }, [user]);
-
-  const fetchSessions = async () => {
+  const fetchSessions = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/student/sessions?userId=${user?.id}`, {
@@ -73,7 +64,13 @@ function LiveClassesContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchSessions();
+    }
+  }, [user?.id, fetchSessions]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);

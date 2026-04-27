@@ -46,19 +46,19 @@ export async function verifyTeacherAuth(request: Request) {
  */
 export async function isTeacher(userId: string) {
   try {
-    const { data: teacher, error } = await supabaseAdmin
+    const { data: teacher, error: _error } = await supabaseAdmin
       .from('teachers')
       .select('id, status')
       .eq('user_id', userId)
       .eq('status', 'active')
       .single();
 
-    if (error || !teacher) {
+    if (_error || !teacher) {
       return false;
     }
 
     return true;
-  } catch (error) {
+  } catch (_error) {
     return false;
   }
 }
@@ -68,18 +68,18 @@ export async function isTeacher(userId: string) {
  */
 export async function getTeacherId(userId: string) {
   try {
-    const { data: teacher, error } = await supabaseAdmin
+    const { data: teacher, error: _error } = await supabaseAdmin
       .from('teachers')
       .select('id')
       .eq('user_id', userId)
       .single();
 
-    if (error || !teacher) {
+    if (_error || !teacher) {
       return null;
     }
 
     return teacher.id;
-  } catch (error) {
+  } catch (_error) {
     return null;
   }
 }

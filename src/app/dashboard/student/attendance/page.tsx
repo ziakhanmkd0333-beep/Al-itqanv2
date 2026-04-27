@@ -9,12 +9,8 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  ChevronLeft,
-  ChevronRight,
   Filter,
   RefreshCw,
-  Wifi,
-  WifiOff,
   TrendingUp,
   BookOpen
 } from "lucide-react";
@@ -31,7 +27,7 @@ export default function StudentAttendancePage() {
 }
 
 function StudentAttendanceContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [selectedCourse, setSelectedCourse] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");

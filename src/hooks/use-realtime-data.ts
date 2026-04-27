@@ -28,7 +28,7 @@ export function useRealtimeData<T>(
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [queryFn]);
 
   useEffect(() => {
     fetchData();

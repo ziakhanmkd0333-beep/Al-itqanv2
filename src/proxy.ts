@@ -42,7 +42,7 @@ export function proxy(request: NextRequest) {
     if (userCookie) {
       try {
         user = JSON.parse(decodeURIComponent(userCookie));
-      } catch (_e) {
+      } catch {
         // Invalid cookie
       }
     }

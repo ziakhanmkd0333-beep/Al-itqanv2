@@ -10,7 +10,6 @@ import {
   Users,
   GraduationCap,
   Search,
-  Filter,
   RefreshCw,
   Eye,
   Edit,
@@ -23,15 +22,11 @@ import {
   X,
   Save,
   AlertTriangle,
-  FileText,
   Mail,
   Phone,
   MapPin,
   Calendar,
-  BookOpen,
-  Award,
-  Wifi,
-  WifiOff
+  Award
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 

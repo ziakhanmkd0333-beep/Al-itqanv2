@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       .eq('id', user.id);
 
     // Prepare user object for the client (omit password_hash)
-    const { password_hash, ...safeUser } = user;
+    const { password_hash: _password_hash, ...safeUser } = user;
 
     return NextResponse.json({
       success: true,

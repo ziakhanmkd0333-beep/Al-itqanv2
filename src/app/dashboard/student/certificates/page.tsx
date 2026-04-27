@@ -9,7 +9,6 @@ import {
   Download,
   Share2,
   Eye,
-  X,
   Printer,
   CheckCircle,
   Clock,
@@ -33,7 +32,7 @@ export default function StudentCertificatesPage() {
 }
 
 function StudentCertificatesContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [selectedCertificate, setSelectedCertificate] = useState<Record<string, unknown> | null>(null);
   const [showPreviewModal, setShowPreviewModal] = useState(false);

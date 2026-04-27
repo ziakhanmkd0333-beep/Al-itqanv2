@@ -15,10 +15,7 @@ import {
   Mail,
   Phone,
   MapPin,
-  Calendar,
   BookOpen,
-  MessageSquare,
-  Filter,
   Download,
   Eye,
   UserCheck,
@@ -27,7 +24,6 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase";
 
 // Types
 interface Admission {

@@ -18,15 +18,12 @@ import {
   Phone,
   BookOpen,
   Users,
-  Calendar,
   CheckCircle,
   XCircle,
   Clock,
-  Award,
-  Globe
+  Award
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
-import { supabase } from "@/lib/supabase";
 
 // Types
 interface Teacher {

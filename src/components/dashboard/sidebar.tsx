@@ -26,7 +26,6 @@ import {
   PlayCircle
 } from "lucide-react";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
 
