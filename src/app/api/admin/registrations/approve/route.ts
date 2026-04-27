@@ -107,7 +107,7 @@ export async function POST(request: Request) {
     if (action === 'approve') {
       if (registration.user_type === 'student') {
         // Check if student record already exists
-        const { data: existingStudent, error: existingStudentError } = await supabaseAdmin
+        const { data: existingStudent } = await supabaseAdmin
           .from('students')
           .select('id')
           .eq('email', registration.email)

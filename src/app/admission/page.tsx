@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
+import { createBrowserClient } from "@supabase/ssr";
+import { courses } from "@/lib/courses-data";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import {
@@ -55,7 +57,6 @@ const FORM_STEPS = [
 
 export default function AdmissionPage() {
   const { t, isRTL } = useTranslation();
-  const router = useRouter();
   
   // Tab state
   const [activeTab, setActiveTab] = useState<"student" | "teacher">("student");
@@ -91,7 +92,6 @@ export default function AdmissionPage() {
   ]);
 
   // Certificates State
-  const [certificates, setCertificates] = useState<File[]>([]);
   const [certificateNames, setCertificateNames] = useState<string[]>([]);
 
   // Course Selection State
@@ -404,7 +404,6 @@ export default function AdmissionPage() {
 
   // Remove certificate
   const removeCertificate = (index: number) => {
-    setCertificates(prev => prev.filter((_, i) => i !== index));
     setCertificateNames(prev => prev.filter((_, i) => i !== index));
     setCertificateUrls(prev => prev.filter((_, i) => i !== index));
   };
@@ -513,32 +512,6 @@ export default function AdmissionPage() {
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  // Navigation functions
-  const nextStep = () => {
-    if (currentStep === 1 && !validateStep1()) return;
-    if (currentStep === 4 && !validateStep4()) return;
-    
-    if (currentStep < 4) {
-      setCompletedSteps(prev => [...new Set([...prev, currentStep])]);
-      setCurrentStep(prev => prev + 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(prev => prev - 1);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
-
-  const goToStep = (step: number) => {
-    if (step <= Math.max(...completedSteps, 0) + 1) {
-      setCurrentStep(step);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
   };
 
   // Validate password

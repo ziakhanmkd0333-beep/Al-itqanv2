@@ -182,7 +182,7 @@ export async function POST(request: Request) {
     const supabaseAdmin = getSupabaseAdmin();
     
     // Get client IP address
-    const headersList = headers();
+    const headersList = await headers();
     const forwardedFor = headersList.get('x-forwarded-for');
     const ipAddress = forwardedFor?.split(',')[0] || headersList.get('x-real-ip') || 'unknown';
 
@@ -201,7 +201,6 @@ export async function POST(request: Request) {
     const confirmPassword = formData.get('confirmPassword') as string;
     const guardianName = sanitizeInput(formData.get('guardianName') as string);
     const guardianPhone = sanitizeInput(formData.get('guardianPhone') as string);
-    const message = sanitizeInput(formData.get('message') as string);
 
     // Parse JSON fields
     const nazira = JSON.parse(formData.get('nazira') as string || '{}');

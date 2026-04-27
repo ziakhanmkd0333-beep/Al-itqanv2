@@ -9,7 +9,6 @@ import { useTranslation } from "@/hooks/use-translation";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function AdminLoginPage() {
-  const { t } = useTranslation();
   const router = useRouter();
   const { login, isAuthenticated, user } = useAuth();
   const [showPassword, setShowPassword] = useState(false);

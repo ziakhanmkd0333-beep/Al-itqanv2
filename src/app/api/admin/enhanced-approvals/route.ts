@@ -236,7 +236,7 @@ export async function GET(request: Request) {
 
     // Combine and sort all applications
     const allApplications = [...applications, ...formattedTeachers].sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 
     return NextResponse.json({

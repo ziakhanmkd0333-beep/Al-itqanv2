@@ -50,11 +50,12 @@ export const dynamic = 'force-dynamic';
 // POST /api/admin/enhanced-approvals/[id] - Approve or reject application
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabaseAdmin = getSupabaseAdmin();
-    const applicationId = params.id;
+    const applicationId = id;
     
     // Verify admin access
     const authHeader = request.headers.get('authorization');

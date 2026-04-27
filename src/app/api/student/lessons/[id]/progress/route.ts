@@ -6,10 +6,11 @@ export const dynamic = 'force-dynamic';
 // POST /api/student/lessons/[id]/progress - Update lesson progress
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const lessonId = params.id;
+    const { id } = await params;
+    const lessonId = id;
     const body = await request.json();
     const { userId, progress_percent, last_position, is_completed, total_watch_time } = body;
 
