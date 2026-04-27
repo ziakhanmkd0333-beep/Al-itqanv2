@@ -17,6 +17,9 @@ export interface LessonProgressRef {
   completed?: boolean;
   watched_seconds?: number;
   last_watched_at?: string;
+  progress_percent?: number;
+  last_position?: number;
+  is_completed?: boolean;
 }
 
 // Generic type for Supabase joined relation that may be an array or object

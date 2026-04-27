@@ -179,7 +179,7 @@ function AssignmentsContent() {
 
   return (
     <div className="min-h-screen bg-[var(--background)]">
-      <DashboardSidebar isAdmin />
+      <DashboardSidebar userType="admin" />
       
       <div className="lg:ml-72 min-h-screen">
         <main className="p-4 lg:p-8">
