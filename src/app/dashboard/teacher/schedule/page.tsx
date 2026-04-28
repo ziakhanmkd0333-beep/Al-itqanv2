@@ -51,6 +51,7 @@ function TeacherScheduleContent() {
   const [loading, setLoading] = useState(true);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   const weekDays = [
     { id: 0, name: t("schedule.sunday") || "Sunday", short: "Sun" },
