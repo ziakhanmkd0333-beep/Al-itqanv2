@@ -99,36 +99,6 @@ function TeacherScheduleContent() {
     }
   };
 
-  const fetchCoursesAndStudents = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
-
-      const [coursesRes, studentsRes] = await Promise.all([
-        fetch('/api/teacher/courses', {
-          credentials: 'include',
-          headers: { 'Authorization': `Bearer ${session.access_token}` }
-        }),
-        fetch('/api/teacher/students/all', {
-          credentials: 'include',
-          headers: { 'Authorization': `Bearer ${session.access_token}` }
-        })
-      ]);
-
-      if (coursesRes.ok) {
-        const coursesData = await coursesRes.json();
-        setCourses(coursesData.courses || []);
-      }
-
-      if (studentsRes.ok) {
-        const studentsData = await studentsRes.json();
-        setStudents(studentsData.students || []);
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-    }
-  };
-
   const getWeekDates = () => {
     const startOfWeek = new Date(currentWeek);
     const day = startOfWeek.getDay();

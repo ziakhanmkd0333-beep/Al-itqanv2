@@ -46,11 +46,6 @@ function TeacherMaterialsContent() {
     file_type: "pdf"
   });
 
-  useEffect(() => {
-    fetchMaterials();
-    fetchCourses();
-  }, [fetchMaterials, fetchCourses]);
-
   const fetchMaterials = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -106,6 +101,11 @@ function TeacherMaterialsContent() {
       console.error('Courses fetch error:', error);
     }
   }, []);
+
+  useEffect(() => {
+    fetchMaterials();
+    fetchCourses();
+  }, [fetchMaterials, fetchCourses]);
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
