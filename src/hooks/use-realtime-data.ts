@@ -37,7 +37,7 @@ export function useRealtimeData<T>(
     const channel = supabaseBrowser
       .channel(`public:${tableName}`)
       .on(
-        'postgres_changes',
+        'postgres_changes' as any,
         {
           event: '*',
           schema: 'public',
@@ -122,7 +122,7 @@ export function useAdminDashboard() {
       ].map(config => {
         return supabaseBrowser
           .channel(`admin-${config.name}`)
-          .on('postgres_changes', { event: '*', schema: 'public', table: config.table }, () => {
+          .on('postgres_changes' as any, { event: '*', schema: 'public', table: config.table }, () => {
             fetchDashboardData();
           })
           .subscribe();
@@ -191,7 +191,7 @@ export function useAdminStudents(page = 1, limit = 10, search = '', status = '')
 
     const channel = supabaseBrowser
       .channel('admin-students')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'users' }, () => {
+      .on('postgres_changes' as any, { event: '*', schema: 'public', table: 'users' }, () => {
         fetchStudents();
       })
       .subscribe();
@@ -293,7 +293,7 @@ export function useTeacherDashboard(teacherId: string | null) {
       const enrollmentsChannel = supabaseBrowser
         .channel('teacher-enrollments')
         .on(
-          'postgres_changes',
+          'postgres_changes' as any,
           { event: '*', schema: 'public', table: 'enrollments', filter: `teacher_id=eq.${teacherId}` },
           () => fetchData()
         )
@@ -302,7 +302,7 @@ export function useTeacherDashboard(teacherId: string | null) {
       const sessionsChannel = supabaseBrowser
         .channel('teacher-sessions')
         .on(
-          'postgres_changes',
+          'postgres_changes' as any,
           { event: '*', schema: 'public', table: 'sessions', filter: `teacher_id=eq.${teacherId}` },
           () => fetchData()
         )
@@ -419,7 +419,7 @@ export function useStudentDashboard(studentId: string | null) {
       const enrollmentsChannel = supabaseBrowser
         .channel('student-enrollments')
         .on(
-          'postgres_changes',
+          'postgres_changes' as any,
           { event: '*', schema: 'public', table: 'enrollments', filter: `student_id=eq.${studentId}` },
           () => fetchData()
         )
@@ -428,7 +428,7 @@ export function useStudentDashboard(studentId: string | null) {
       const sessionsChannel = supabaseBrowser
         .channel('student-sessions')
         .on(
-          'postgres_changes',
+          'postgres_changes' as any,
           { event: '*', schema: 'public', table: 'sessions', filter: `student_id=eq.${studentId}` },
           () => fetchData()
         )
@@ -437,7 +437,7 @@ export function useStudentDashboard(studentId: string | null) {
       const certificatesChannel = supabaseBrowser
         .channel('student-certificates')
         .on(
-          'postgres_changes',
+          'postgres_changes' as any,
           { event: '*', schema: 'public', table: 'certificates', filter: `student_id=eq.${studentId}` },
           () => fetchData()
         )
@@ -489,7 +489,7 @@ export function useStudentAttendance(studentId: string | null) {
     const channel = supabaseBrowser
       .channel('student-attendance-records')
       .on(
-        'postgres_changes',
+        'postgres_changes' as any,
         { event: '*', schema: 'public', table: 'attendance', filter: `student_id=eq.${studentId}` },
         () => fetchAttendance()
       )
