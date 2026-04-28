@@ -64,7 +64,6 @@ function TeacherScheduleContent() {
 
   useEffect(() => {
     fetchSchedule();
-    fetchCoursesAndStudents();
   }, [currentWeek]);
 
   const fetchSchedule = async () => {
