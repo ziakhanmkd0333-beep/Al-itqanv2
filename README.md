@@ -1,4 +1,4 @@
-# Al-NOOR Online Quran & Hadees Academy
+Al-Itqan Institute for Islamic & Arabic Studies
 
 **World's First Complete Islamic Knowledge Web App**
 
