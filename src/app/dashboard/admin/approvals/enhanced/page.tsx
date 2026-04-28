@@ -110,7 +110,7 @@ export default function EnhancedApprovalsPage() {
 }
 
 function EnhancedApprovalsContent() {
-  const { t: _t } = useTranslation();
+  useTranslation();
   const [applications, setApplications] = useState<Application[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

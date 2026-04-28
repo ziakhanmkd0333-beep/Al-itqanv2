@@ -35,7 +35,6 @@ function TeacherAnnouncementsContent() {
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -112,7 +111,7 @@ function TeacherAnnouncementsContent() {
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      setError(errorMessage || `Failed to create announcement`);
+      console.error(errorMessage || `Failed to create announcement`);
     } finally {
       setSaving(false);
     }

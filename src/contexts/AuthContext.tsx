@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single();
         
         if (!error && userData) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { password_hash: _password_hash, ...safeUser } = userData;
           setUser(safeUser as User);
         } else {
@@ -84,6 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .single()
           .then(({ data, error }) => {
             if (!error && data) {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { password_hash: _password_hash, ...safeUser } = data;
               setUser(safeUser as User);
               localStorage.setItem('user', JSON.stringify(safeUser));
@@ -127,6 +129,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               };
             }
             
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { password_hash: _password_hash, ...safeUser } = userData;
             
             // Store in localStorage for compatibility

@@ -45,7 +45,7 @@ export default function ApprovalsPage() {
 }
 
 function ApprovalsContent() {
-  const { t } = useTranslation();
+  useTranslation();
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

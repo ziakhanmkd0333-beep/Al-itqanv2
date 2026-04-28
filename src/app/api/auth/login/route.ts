@@ -54,6 +54,7 @@ export async function POST(request: Request) {
       .eq('id', user.id);
 
     // Prepare user object for the client (omit password_hash)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password_hash: _password_hash, ...safeUser } = user;
 
     return NextResponse.json({

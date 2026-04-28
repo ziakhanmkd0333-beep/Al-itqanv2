@@ -58,7 +58,7 @@ export async function isTeacher(userId: string) {
     }
 
     return true;
-  } catch (_error) {
+  } catch {
     return false;
   }
 }
@@ -79,7 +79,7 @@ export async function getTeacherId(userId: string) {
     }
 
     return teacher.id;
-  } catch (_error) {
+  } catch {
     return null;
   }
 }

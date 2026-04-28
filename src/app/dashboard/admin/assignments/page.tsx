@@ -52,7 +52,7 @@ export default function AssignmentsPage() {
 }
 
 function AssignmentsContent() {
-  const { t } = useTranslation();
+  useTranslation();
   const [activeTab, setActiveTab] = useState<'students' | 'courses' | 'enrollments'>('students');
   
   // Data states

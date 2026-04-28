@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { StudentRoute } from "@/components/auth/ProtectedRoute";
-import { FileText, Download, BookOpen, Video, RefreshCw, Folder, ExternalLink } from "lucide-react";
+import { FileText, Download, BookOpen, Video, RefreshCw, Folder } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useStudentDashboard } from "@/hooks/use-realtime-data";
 import { getCurrentUser, getStudentProfile } from "@/lib/supabase-browser";
@@ -18,7 +18,7 @@ export default function StudentMaterialsPage() {
 }
 
 function StudentMaterialsContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
 
   // Get student ID from profile on mount
@@ -82,7 +82,7 @@ function StudentMaterialsContent() {
           className="mb-8"
         >
           <h1 className={`text-[var(--text-primary)] text-3xl font-bold mb-2 ${isRTL ? "arabic-text" : ""}`}>
-            {t("sidebar.materials") || "Course Materials"}
+            {"Course Materials"}
           </h1>
           <p className="text-[var(--text-muted)]">
             Access your course books, notes, and resources

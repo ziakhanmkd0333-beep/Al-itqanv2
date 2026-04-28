@@ -33,8 +33,8 @@ export function middleware(request: NextRequest) {
     if (userCookie) {
       try {
         user = JSON.parse(decodeURIComponent(userCookie));
-        console.log('[Middleware] User object keys:', Object.keys(user));
-        console.log('[Middleware] User found:', user?.email, 'Role:', user?.role, 'ID:', user?.id);
+        console.log('[Middleware] User object keys:', user ? Object.keys(user) : []);
+        console.log('[Middleware] User found:', (user as any)?.email, 'Role:', user?.role, 'ID:', (user as any)?.id);
       } catch (e) {
         console.error('[Middleware] Invalid cookie:', e);
         console.log('[Middleware] Cookie value (first 200 chars):', userCookie?.substring(0, 200));

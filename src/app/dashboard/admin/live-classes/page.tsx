@@ -59,7 +59,7 @@ export default function LiveClassesPage() {
 }
 
 function LiveClassesContent() {
-  const { t } = useTranslation();
+  useTranslation();
   const [sessions, setSessions] = useState<LiveSession[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [teachers, setTeachers] = useState<Teacher[]>([]);

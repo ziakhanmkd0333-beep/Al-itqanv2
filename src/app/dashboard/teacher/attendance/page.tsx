@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { useTeacherStudents } from "@/hooks/use-realtime-data";
-import { supabaseBrowser, getCurrentUser, getTeacherProfile } from "@/lib/supabase-browser";
+import { getCurrentUser, getTeacherProfile } from "@/lib/supabase-browser";
 
 // Mock data for attendance
 const mockStudents = [
@@ -50,7 +50,7 @@ export default function TeacherAttendancePage() {
 }
 
 function TeacherAttendanceContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [teacherId, setTeacherId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
   const [selectedCourse, setSelectedCourse] = useState("all");
@@ -78,7 +78,7 @@ function TeacherAttendanceContent() {
   }, []);
 
   // Use real-time hook for teacher students
-  const { students: fetchedStudents, loading, refetch } = useTeacherStudents(teacherId, selectedCourse === "all" ? undefined : selectedCourse);
+  const { students: fetchedStudents } = useTeacherStudents(teacherId, selectedCourse === "all" ? undefined : selectedCourse);
 
 
   // Use fetched students or fall back to mock data
@@ -154,7 +154,7 @@ function TeacherAttendanceContent() {
     }
   };
 
-  const handleUploadMaterial = (studentId: number) => {
+  const handleUploadMaterial = (_studentId: number) => {
     setShowMaterialModal(true);
   };
 

@@ -33,7 +33,7 @@ export default function StudentCoursesPage() {
 }
 
 function StudentCoursesContent() {
-  const { t, isRTL } = useTranslation();
+  const { isRTL } = useTranslation();
   const [studentId, setStudentId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"lessons" | "materials" | "recordings">("lessons");
   const [selectedCourse, setSelectedCourse] = useState<Record<string, unknown> | null>(null);

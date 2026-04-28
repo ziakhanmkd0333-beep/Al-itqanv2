@@ -12,10 +12,8 @@ import {
   Calendar,
   Users,
   CheckCircle,
-  AlertCircle,
   Trash2,
-  Edit2,
-  Eye
+  Edit2
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { supabase } from "@/lib/supabase";

@@ -23,10 +23,6 @@ import {
 import { useTranslation } from "@/hooks/use-translation";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 
-interface AdminSettingsPageProps {
-  params: Promise<{ lang: string }>;
-}
-
 export default function AdminSettingsPage() {
   const { isRTL } = useTranslation();
   const [activeTab, setActiveTab] = useState("profile");

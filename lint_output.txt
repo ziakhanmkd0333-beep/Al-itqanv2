@@ -1,0 +1,97 @@
+﻿node.exe : `next lint` is deprecated and will be removed in Next.js 16.
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (`next lint` is ... in Next.js 16.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+For new projects, use create-next-app to choose your preferred linter.
+For existing projects, migrate to the ESLint CLI:
+npx @next/codemod@canary next-lint-to-eslint-cli .
+
+
+./src/app/api/auth/login/route.ts
+57:28  Warning: '_password_hash' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/api/auth/register/route.ts
+83:28  Warning: '_password_hash' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/approvals/enhanced/page.tsx
+113:14  Warning: '_t' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/approvals/page.tsx
+48:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/assignments/page.tsx
+55:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/courses/page.tsx
+23:3  Warning: 'Filter' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/live-classes/page.tsx
+62:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/payments/page.tsx
+15:3  Warning: 'TrendingDown' is defined but never used.  @typescript-eslint/no-unused-vars
+16:3  Warning: 'Calendar' is defined but never used.  @typescript-eslint/no-unused-vars
+21:3  Warning: 'FileText' is defined but never used.  @typescript-eslint/no-unused-vars
+23:3  Warning: 'BookOpen' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/settings/page.tsx
+26:11  Warning: 'AdminSettingsPageProps' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/admin/students/page.tsx
+3:20  Warning: 'useEffect' is defined but never used.  @typescript-eslint/no-unused-vars
+3:31  Warning: 'useMemo' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/student/courses/page.tsx
+36:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/student/materials/page.tsx
+7:66  Warning: 'ExternalLink' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/announcements/page.tsx
+38:10  Warning: 'error' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/assignments/page.tsx
+15:3  Warning: 'AlertCircle' is defined but never used.  @typescript-eslint/no-unused-vars
+18:3  Warning: 'Eye' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/attendance/page.tsx
+22:10  Warning: 'supabaseBrowser' is defined but never used.  @typescript-eslint/no-unused-vars
+53:11  Warning: 't' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+81:38  Warning: 'loading' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+81:47  Warning: 'refetch' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+157:33  Warning: 'studentId' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/courses/page.tsx
+16:8  Warning: 'Link' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/notes/page.tsx
+11:3  Warning: 'Filter' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/dashboard/teacher/schedule/page.tsx
+54:10  Warning: 'showModal' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/contexts/AuthContext.tsx
+48:34  Warning: '_password_hash' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+87:38  Warning: '_password_hash' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+130:36  Warning: '_password_hash' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+
+./src/hooks/use-realtime-data.ts
+40:31  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+125:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+194:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+296:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+305:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+422:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+431:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+440:33  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+492:31  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/lib/teacher-auth.ts
+61:12  Warning: '_error' is defined but never used.  @typescript-eslint/no-unused-vars
+82:12  Warning: '_error' is defined but never used.  @typescript-eslint/no-unused-vars
+
+info  - Need to disable some ESLint rules? Learn more here: 
+https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules

@@ -395,13 +395,14 @@ export function useStudentDashboard(studentId: string | null) {
     
     setLoading(true);
     try {
-      // Use client-side service instead of API
-      const data = await studentDataService.getDashboardData(studentId);
+      const res = await fetch(`/api/student/dashboard?studentId=${studentId}`, { credentials: 'include' });
+      if (!res.ok) throw new Error('Failed to fetch student dashboard');
+      const data = await res.json();
       
-      setEnrollments(data.enrollments);
-      setUpcomingSessions(data.upcomingSessions);
-      setCertificates(data.certificates);
-      setAttendanceRate(data.attendanceRate);
+      setEnrollments(data.enrollments || []);
+      setUpcomingSessions(data.upcomingSessions || []);
+      setCertificates(data.certificates || []);
+      setAttendanceRate(data.attendanceRate || 0);
     } catch (error) {
       console.error('Student dashboard error:', error);
     } finally {

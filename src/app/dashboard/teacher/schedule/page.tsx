@@ -51,7 +51,6 @@ function TeacherScheduleContent() {
   const [loading, setLoading] = useState(true);
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
-  const [showModal, setShowModal] = useState(false);
 
   const weekDays = [
     { id: 0, name: t("schedule.sunday") || "Sunday", short: "Sun" },
@@ -161,7 +160,6 @@ function TeacherScheduleContent() {
               </p>
             </div>
             <button
-              onClick={() => setShowModal(true)}
               className={`flex items-center gap-2 bg-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:bg-[var(--primary-dark)] transition-colors ${isRTL ? "flex-row-reverse" : ""}`}
             >
               <Plus className="w-5 h-5" />

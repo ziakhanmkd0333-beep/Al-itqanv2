@@ -20,7 +20,6 @@ import {
   ArrowRight,
   ArrowLeft,
   CheckCircle,
-  Filter,
   FileText,
   GraduationCap,
   Calendar,

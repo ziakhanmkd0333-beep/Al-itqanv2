@@ -80,6 +80,7 @@ export async function POST(request: Request) {
     }
 
     // Prepare response (omit sensitive data)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password_hash: _password_hash, ...safeUser } = newUser;
 
     return NextResponse.json({

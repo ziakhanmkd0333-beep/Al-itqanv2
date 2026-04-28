@@ -8,7 +8,6 @@ import {
   ClipboardList,
   Plus,
   Search,
-  Filter,
   Calendar,
   User,
   BookOpen,

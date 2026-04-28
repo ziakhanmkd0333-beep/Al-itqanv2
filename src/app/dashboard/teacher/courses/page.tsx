@@ -13,7 +13,6 @@ import {
   GraduationCap,
   Calendar
 } from "lucide-react";
-import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
 import { supabase } from "@/lib/supabase";
 import { toast } from "react-hot-toast";
