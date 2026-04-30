@@ -267,7 +267,7 @@ export async function GET(request: Request) {
     if (userType === 'all' || userType === 'student') {
       const { data: pendingStudents, error: studentsError } = await supabaseAdmin
         .from('students')
-        .select('id, full_name, email, phone, country, age, created_at, status')
+        .select('id, full_name, email, phone, country, city, full_address, age, academic_details, qualifications, created_at, status')
         .eq('status', 'pending')
         .order('created_at', { ascending: true });
 

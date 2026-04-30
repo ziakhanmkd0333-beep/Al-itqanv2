@@ -42,13 +42,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .from('users')
           .select('*')
           .eq('id', session.user.id)
-          .single();
+          .maybeSingle();
         
         if (!error && userData) {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { password_hash: _password_hash, ...safeUser } = userData;
           setUser(safeUser as User);
         } else {
+          console.warn('[AuthContext] User not found in users table:', error?.message);
           setUser(null);
         }
       } else {
@@ -82,13 +83,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         supabaseBrowser.from('users')
           .select('*')
           .eq('id', session.user.id)
-          .single()
+          .maybeSingle()
           .then(({ data, error }) => {
             if (!error && data) {
               // eslint-disable-next-line @typescript-eslint/no-unused-vars
               const { password_hash: _password_hash, ...safeUser } = data;
               setUser(safeUser as User);
               localStorage.setItem('user', JSON.stringify(safeUser));
+            } else {
+              console.warn('[AuthContext] User data fetch failed on sign in:', error?.message);
             }
           });
       } else if (event === 'SIGNED_OUT') {
@@ -118,7 +121,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .from('users')
           .select('*')
           .eq('id', authData.user.id)
-          .single();
+          .maybeSingle();
 
           if (!userError && userData) {
             // Check if user is approved

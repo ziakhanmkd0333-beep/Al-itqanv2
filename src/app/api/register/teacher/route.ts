@@ -20,8 +20,11 @@ export const dynamic = 'force-dynamic';
 // POST /api/register/teacher - Register a new teacher
 export async function POST(request: Request) {
   try {
+    console.log('[API /register/teacher] Received POST request');
+    
     const supabaseAdmin = getSupabaseAdmin();
     const formData = await request.formData();
+    console.log('[API /register/teacher] Form data received, email:', formData.get('email'));
 
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -36,8 +39,11 @@ export async function POST(request: Request) {
     const certificationFileUrl = formData.get('certificationFileUrl') as string | null;
 
     if (!email || !password || !fullName) {
+      console.log('[API /register/teacher] Validation failed: missing required fields');
       return NextResponse.json({ error: 'Email, password, and full name are required' }, { status: 400 });
     }
+    
+    console.log('[API /register/teacher] Validation passed, creating user...');
 
     // Create auth user
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({

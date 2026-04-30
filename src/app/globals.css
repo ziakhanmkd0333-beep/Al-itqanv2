@@ -1,4 +1,7 @@
+/* Google Fonts import - commented out to prevent timeout errors
+   Fonts will use system fallbacks. To re-enable, remove these comments.
 @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cinzel:wght@400;500;600;700&display=swap');
+*/
 
 /* Jameel Noori Nastaleeq Font - Urdu only */
 @font-face {

@@ -23,6 +23,7 @@ import {
   FileText,
   GraduationCap,
   Calendar,
+  AlertCircle,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 import { supabase } from "@/lib/supabase";
@@ -137,16 +138,24 @@ export default function CoursesManagementPage() {
 
   const fetchCourses = async () => {
     setLoading(true);
+    setError("");
     try {
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
-      setCourses(data || []);
-    } catch (error) {
-      console.error("Error fetching courses:", error);
+      console.log('[Courses] Fetching courses via API...');
+      const response = await fetch('/api/admin/courses?limit=100', {
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        const errData = await response.json();
+        throw new Error(errData.error || `HTTP ${response.status}`);
+      }
+      
+      const result = await response.json();
+      console.log('[Courses] Fetched', result.courses?.length || 0, 'courses');
+      setCourses(result.courses || []);
+    } catch (error: any) {
+      console.error("[Courses] Error fetching courses:", error);
+      setError(error?.message || 'Failed to load courses');
       setCourses([]);
     } finally {
       setLoading(false);
@@ -448,6 +457,27 @@ export default function CoursesManagementPage() {
             </div>
           </div>
         </motion.div>
+
+        {/* Error Banner */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl mb-6 flex items-center gap-3"
+          >
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="font-medium">Error loading courses</p>
+              <p className="text-sm">{error}</p>
+            </div>
+            <button 
+              onClick={fetchCourses}
+              className="px-3 py-1 bg-red-100 hover:bg-red-200 rounded-lg text-sm font-medium transition-colors"
+            >
+              Retry
+            </button>
+          </motion.div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">

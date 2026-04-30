@@ -18,7 +18,9 @@ import {
   Calendar,
   Eye,
   FileText,
-  X
+  X,
+  Globe,
+  Home
 } from "lucide-react";
 import { useTranslation } from "@/hooks/use-translation";
 
@@ -29,6 +31,9 @@ interface PendingUser {
   phone?: string;
   country?: string;
   age?: number;
+  city?: string;
+  full_address?: string;
+  academic_details?: string;
   specialization?: string;
   qualifications?: string;
   created_at: string;
@@ -401,12 +406,32 @@ function ApprovalsContent() {
                     </div>
                   )}
 
-                  {selectedUser.country && (
+                  {selectedUser.city && (
                     <div className="flex items-center gap-3 p-3 bg-[var(--muted)] rounded-lg">
                       <MapPin className="w-5 h-5 text-[var(--primary)]" />
                       <div>
+                        <p className="text-xs text-[var(--text-secondary)]">City</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.city}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedUser.country && (
+                    <div className="flex items-center gap-3 p-3 bg-[var(--muted)] rounded-lg">
+                      <Globe className="w-5 h-5 text-[var(--primary)]" />
+                      <div>
                         <p className="text-xs text-[var(--text-secondary)]">Country</p>
                         <p className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.country}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedUser.full_address && (
+                    <div className="flex items-center gap-3 p-3 bg-[var(--muted)] rounded-lg">
+                      <Home className="w-5 h-5 text-[var(--primary)]" />
+                      <div>
+                        <p className="text-xs text-[var(--text-secondary)]">Address</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.full_address}</p>
                       </div>
                     </div>
                   )}
@@ -437,6 +462,16 @@ function ApprovalsContent() {
                       <div>
                         <p className="text-xs text-[var(--text-secondary)]">Qualifications</p>
                         <p className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.qualifications}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedUser.academic_details && (
+                    <div className="flex items-center gap-3 p-3 bg-[var(--muted)] rounded-lg">
+                      <FileText className="w-5 h-5 text-[var(--primary)]" />
+                      <div>
+                        <p className="text-xs text-[var(--text-secondary)]">Academic Details</p>
+                        <p className="text-sm font-medium text-[var(--text-primary)]">{selectedUser.academic_details}</p>
                       </div>
                     </div>
                   )}

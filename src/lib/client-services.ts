@@ -21,7 +21,7 @@ export const clientAuth = {
         .from('users')
         .select('*')
         .eq('id', authData.user.id)
-        .single();
+        .maybeSingle();
 
       if (userError || !userData) {
         throw new Error('User not found in database');
@@ -60,7 +60,7 @@ export const clientAuth = {
         .from('users')
         .select('id')
         .eq('email', email)
-        .single();
+        .maybeSingle();
 
       if (existingUser) {
         throw new Error('User already exists');

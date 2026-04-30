@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
-import { createBrowserClient } from "@supabase/ssr";
+import { supabaseBrowser } from "@/lib/supabase-browser";
 import { courses } from "@/lib/courses-data";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -215,35 +215,27 @@ export default function AdmissionPage() {
     );
   };
 
-  // Supabase upload function for profile picture
+  // Upload function for profile picture using API route to bypass RLS
   const uploadProfilePicture = async (file: File): Promise<string | null> => {
     try {
-      const supabase = createBrowserClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-      const fileExt = file.name.split('.').pop();
-      const fileName = `profile-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `profiles/${fileName}`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'profiles');
 
-      const { error: uploadError } = await supabase.storage
-        .from('admission-files')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (uploadError) {
-        console.error('Profile upload error:', uploadError);
-        setError(`Failed to upload profile picture: ${uploadError.message}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Profile upload error:', errorData);
+        setError(`Failed to upload profile picture: ${errorData.error || 'Unknown error'}`);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('admission-files')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
+      const data = await response.json();
+      return data.publicUrl;
     } catch (err) {
       console.error('Profile upload exception:', err);
       setError('Failed to upload profile picture');
@@ -251,35 +243,27 @@ export default function AdmissionPage() {
     }
   };
 
-  // Supabase upload function for certificates
+  // Upload function for certificates using API route to bypass RLS
   const uploadCertificate = async (file: File): Promise<string | null> => {
     try {
-      const supabase = createBrowserClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-      const fileExt = file.name.split('.').pop();
-      const fileName = `cert-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `certificates/${fileName}`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', 'certificates');
 
-      const { error: uploadError } = await supabase.storage
-        .from('admission-files')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (uploadError) {
-        console.error('Certificate upload error:', uploadError);
-        setError(`Failed to upload certificate: ${uploadError.message}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Certificate upload error:', errorData);
+        setError(`Failed to upload certificate: ${errorData.error || 'Unknown error'}`);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('admission-files')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
+      const data = await response.json();
+      return data.publicUrl;
     } catch (err) {
       console.error('Certificate upload exception:', err);
       setError('Failed to upload certificate');
@@ -287,35 +271,27 @@ export default function AdmissionPage() {
     }
   };
 
-  // Generic file upload function for teacher documents
+  // Generic file upload function for teacher documents using API route
   const uploadTeacherFile = async (file: File, folder: string): Promise<string | null> => {
     try {
-      const supabase = createBrowserClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${folder}-${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-      const filePath = `${folder}s/${fileName}`;
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('folder', folder);
 
-      const { error: uploadError } = await supabase.storage
-        .from('admission-files')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
 
-      if (uploadError) {
-        console.error('File upload error:', uploadError);
-        setError(`Failed to upload ${folder}: ${uploadError.message}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('File upload error:', errorData);
+        setError(`Failed to upload ${folder}: ${errorData.error || 'Unknown error'}`);
         return null;
       }
 
-      const { data: { publicUrl } } = supabase.storage
-        .from('admission-files')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
+      const data = await response.json();
+      return data.publicUrl;
     } catch (err) {
       console.error('File upload exception:', err);
       setError(`Failed to upload ${folder}`);
@@ -457,27 +433,38 @@ export default function AdmissionPage() {
   const validateStep1 = (): boolean => {
     const newErrors: Record<string, string> = {};
     
+    console.log('[Admission] validateStep1 checking...');
+    
     if (!personalInfo.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!personalInfo.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(personalInfo.email)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(personalInfo.email)) {
       newErrors.email = "Please enter a valid email address";
     }
     if (!personalInfo.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}$/.test(personalInfo.phone)) {
+    } else if (!/^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/.test(personalInfo.phone)) {
       newErrors.phone = "Please enter a valid phone number";
     }
     if (!personalInfo.country) newErrors.country = "Country is required";
     if (!personalInfo.city.trim()) newErrors.city = "City is required";
-    if (!personalInfo.address.trim()) newErrors.address = "Full address is required";
+    if (!personalInfo.address.trim()) {
+      console.log('[Admission] ADDRESS VALIDATION FAILED: address is empty');
+      newErrors.address = "Full address is required";
+    }
     if (!personalInfo.age) {
+      console.log('[Admission] AGE VALIDATION FAILED: age is empty');
       newErrors.age = "Age is required";
     } else if (parseInt(personalInfo.age) < 5 || parseInt(personalInfo.age) > 100) {
+      console.log('[Admission] AGE VALIDATION FAILED: age out of range:', personalInfo.age);
       newErrors.age = "Age must be between 5 and 100";
     }
-    if (!profilePicture) newErrors.profilePicture = "Profile picture is required";
+    if (!profilePicture) {
+      console.log('[Admission] PROFILE PICTURE VALIDATION FAILED: no picture');
+      newErrors.profilePicture = "Profile picture is required";
+    }
     
+    console.log('[Admission] validateStep1 errors:', newErrors);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -517,19 +504,33 @@ export default function AdmissionPage() {
 
   // Submit student form (enhanced)
   const handleStudentSubmit = async (e: React.FormEvent) => {
+    console.log('[Admission] === FORM SUBMIT STARTED ===');
     e.preventDefault();
     setError("");
 
+    // Log current form state (minimal)
+    console.log('[Admission] Form data ready:', { email: personalInfo.email, hasPassword: !!passwordData.password, hasProfilePic: !!profilePicture });
+
     // Final validation
-    if (!validateStep1() || !validateStep4()) {
+    const step1Valid = validateStep1();
+    const step4Valid = validateStep4();
+    
+    if (!step1Valid || !step4Valid) {
+      console.log('[Admission] VALIDATION FAILED - step1Valid:', step1Valid, 'step4Valid:', step4Valid);
+      setError('Please fill in all required fields. Check highlighted fields above.');
+      // Scroll to top to show errors
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
     const passwordError = validatePassword(passwordData.password, passwordData.confirmPassword);
     if (passwordError) {
+      console.log('[Admission] PASSWORD VALIDATION FAILED:', passwordError);
       setError(passwordError);
       return;
     }
+    
+    console.log('[Admission] All validations passed, proceeding to submit...');
 
     setIsSubmitting(true);
 
@@ -571,15 +572,19 @@ export default function AdmissionPage() {
         formData.append('certificateUrls', JSON.stringify(certificateUrls));
       }
 
+      console.log('[Admission] Submitting student form...');
+      
       const response = await fetch('/api/register/enhanced', {
         method: 'POST',
         body: formData
       });
 
       const data = await response.json();
+      console.log('[Admission] Response:', response.status, data);
 
       if (!response.ok) {
-        throw new Error(data.error || 'Registration failed');
+        console.error('[Admission] Submission failed:', data);
+        throw new Error(data.error || data.errors ? JSON.stringify(data.errors) : 'Registration failed');
       }
 
       setIsSubmitted(true);
@@ -592,19 +597,34 @@ export default function AdmissionPage() {
 
   // Submit teacher form
   const handleTeacherSubmit = async (e: React.FormEvent) => {
+    console.log('[Admission] === TEACHER FORM SUBMIT STARTED ===');
     e.preventDefault();
     setError("");
 
+    console.log('[Admission] teacherForm:', { 
+      fullName: teacherForm.fullName, 
+      email: teacherForm.email,
+      hasPassword: !!teacherForm.password,
+      hasConfirmPassword: !!teacherForm.confirmPassword,
+      hasCvFile: !!teacherForm.cvFile,
+      hasCvFileUrl: !!cvFileUrl
+    });
+
     const passwordError = validatePassword(teacherForm.password, teacherForm.confirmPassword);
+    console.log('[Admission] Teacher validatePassword result:', passwordError);
     if (passwordError) {
+      console.log('[Admission] TEACHER PASSWORD VALIDATION FAILED:', passwordError);
       setError(passwordError);
       return;
     }
 
     if (!teacherForm.cvFile) {
+      console.log('[Admission] TEACHER CV FILE MISSING');
       setError("CV/Resume is required");
       return;
     }
+    
+    console.log('[Admission] Teacher validations passed, proceeding...');
 
     setIsSubmitting(true);
 
@@ -622,14 +642,18 @@ export default function AdmissionPage() {
       if (cvFileUrl) formData.append('cvFileUrl', cvFileUrl);
       if (certFileUrl) formData.append('certificationFileUrl', certFileUrl);
 
+      console.log('[Admission] Submitting teacher form...');
+      
       const response = await fetch('/api/register/teacher', {
         method: 'POST',
         body: formData
       });
 
       const data = await response.json();
+      console.log('[Admission] Teacher response:', response.status, data);
 
       if (!response.ok) {
+        console.error('[Admission] Teacher submission failed:', data);
         throw new Error(data.error || 'Registration failed');
       }
 
@@ -868,12 +892,12 @@ export default function AdmissionPage() {
 
       {/* Form */}
       <section className="py-12 bg-[var(--background)]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-card rounded-3xl p-6 md:p-10 shadow-xl border border-[var(--border)]"
+            className="bg-card rounded-3xl p-6 md:p-10 shadow-xl border border-[var(--border)] relative z-10"
           >
             {/* Error Message */}
             {error && (
@@ -925,6 +949,8 @@ export default function AdmissionPage() {
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.3 }}
                   onSubmit={handleStudentSubmit}
+                  className="relative z-20"
+                  style={{ pointerEvents: 'auto' }}
                 >
                   <div className="mb-8">
                     <h2 className={`text-[var(--text-primary)] text-xl font-bold mb-6 flex items-center gap-2 ${isRTL ? "arabic-text flex-row-reverse" : ""}`} suppressHydrationWarning>
@@ -1500,6 +1526,8 @@ export default function AdmissionPage() {
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.3 }}
                   onSubmit={handleTeacherSubmit}
+                  className="relative z-20"
+                  style={{ pointerEvents: 'auto' }}
                 >
                   {/* Personal Information */}
                   <div className="mb-8">

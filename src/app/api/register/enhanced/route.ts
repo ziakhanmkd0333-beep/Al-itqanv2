@@ -56,12 +56,12 @@ const checkFraudDetection = async (
   ipAddress: string
 ): Promise<{ isSuspicious: boolean; reason?: string }> => {
   try {
-    // Check for existing email in users table
+    // Check for existing email in students table
     const { data: existingEmail } = await supabase
       .from('students')
       .select('id')
       .eq('email', email)
-      .single();
+      .maybeSingle();
 
     if (existingEmail) {
       return { isSuspicious: true, reason: 'Email already registered' };
@@ -116,7 +116,7 @@ const updateFraudLog = async (
       .from('fraud_detection_logs')
       .select('*')
       .or(`email.eq.${email},phone.eq.${phone},ip_address.eq.${ipAddress}`)
-      .single();
+      .maybeSingle();
 
     if (existingLog) {
       await supabase
@@ -145,6 +145,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
+    console.log('[API /register/enhanced] Received POST request');
+    
     const supabaseAdmin = getSupabaseAdmin();
     
     // Get client IP address
@@ -154,6 +156,7 @@ export async function POST(request: Request) {
 
     // Parse form data
     const formData = await request.formData();
+    console.log('[API /register/enhanced] Form data received, email:', formData.get('email'));
 
     // Extract and sanitize fields
     const fullName = sanitizeInput(formData.get('fullName') as string);
@@ -161,23 +164,32 @@ export async function POST(request: Request) {
     const phone = sanitizeInput(formData.get('phone') as string);
     const country = sanitizeInput(formData.get('country') as string);
     const city = sanitizeInput(formData.get('city') as string);
-    const fullAddress = sanitizeInput(formData.get('fullAddress') as string);
+    const address = sanitizeInput(formData.get('address') as string);
+    const fullAddress = address; // Map address to fullAddress for compatibility
     const role = sanitizeInput(formData.get('role') as string);
     const password = formData.get('password') as string;
-    const confirmPassword = formData.get('confirmPassword') as string;
+    const confirmPassword = password; // Frontend validates password match
     const guardianName = sanitizeInput(formData.get('guardianName') as string);
     const guardianPhone = sanitizeInput(formData.get('guardianPhone') as string);
+    const age = sanitizeInput(formData.get('age') as string);
+    const language = sanitizeInput(formData.get('language') as string);
+    const courseId = sanitizeInput(formData.get('courseId') as string);
+    const preferredTiming = sanitizeInput(formData.get('preferredTiming') as string);
+    const startDate = sanitizeInput(formData.get('startDate') as string);
+    const message = sanitizeInput(formData.get('message') as string);
 
     // Parse JSON fields
-    const nazira = JSON.parse(formData.get('nazira') as string || '{}');
-    const hifz = JSON.parse(formData.get('hifz') as string || '{}');
-    const tarjama = JSON.parse(formData.get('tarjama') as string || '{}');
-    const tafseer = JSON.parse(formData.get('tafseer') as string || '{}');
     const previousEducation = JSON.parse(formData.get('previousEducation') as string || '[]');
 
     // Get Supabase URLs
     const profilePictureUrl = formData.get('profilePictureUrl') as string | null;
     const certificateUrls = JSON.parse(formData.get('certificateUrls') as string || '[]');
+    
+    // Mock Islamic qualifications (not collected in frontend)
+    const nazira = { enabled: false };
+    const hifz = { enabled: false };
+    const tarjama = { enabled: false };
+    const tafseer = { enabled: false };
 
     // ===== VALIDATION =====
     const errors: Record<string, string> = {};
@@ -196,12 +208,13 @@ export async function POST(request: Request) {
     }
     if (!country) errors.country = 'Country is required';
     if (!city) errors.city = 'City is required';
-    if (!fullAddress) errors.fullAddress = 'Full address is required';
+    if (!address) errors.address = 'Address is required';
+    if (!age) errors.age = 'Age is required';
     if (!profilePictureUrl) errors.profilePicture = 'Profile picture is required';
 
     // Role Validation
     if (!role) errors.role = 'Role is required';
-    if (!['student', 'teacher', 'imam', 'mudarris'].includes(role)) {
+    if (!['Student', 'Teacher'].includes(role)) {
       errors.role = 'Invalid role selected';
     }
 
@@ -214,31 +227,16 @@ export async function POST(request: Request) {
         errors.password = passwordCheck.message || 'Invalid password';
       }
     }
-    if (password !== confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-
-    // Islamic Qualifications Validation
-    const hasQualification = nazira.enabled || hifz.enabled || tarjama.enabled || tafseer.enabled;
-    if (!hasQualification) {
-      errors.qualifications = 'At least one Islamic education qualification is required';
-    }
-    if (nazira.enabled && !nazira.details?.trim()) {
-      errors.naziraDetails = 'Nazira details are required';
-    }
-    if (hifz.enabled && !hifz.details?.trim()) {
-      errors.hifzDetails = 'Hifz details are required';
-    }
-    if (tarjama.enabled && !tarjama.details?.trim()) {
-      errors.tarjamaDetails = 'Tarjama details are required';
-    }
-    if (tafseer.enabled && !tafseer.details?.trim()) {
-      errors.tafseerDetails = 'Tafseer details are required';
-    }
+    
+    // Course validation
+    if (!courseId) errors.courseId = 'Please select a course';
 
     if (Object.keys(errors).length > 0) {
+      console.log('[API /register/enhanced] Validation failed:', errors);
       return NextResponse.json({ error: 'Validation failed', errors }, { status: 400 });
     }
+    
+    console.log('[API /register/enhanced] Validation passed, proceeding with registration');
 
     // ===== FRAUD DETECTION =====
     const fraudCheck = await checkFraudDetection(supabaseAdmin, email, phone, ipAddress);
@@ -285,66 +283,24 @@ export async function POST(request: Request) {
       // ===== CREATE STUDENT/TEACHER RECORD =====
       let recordId: string;
 
-      if (role === 'student') {
+      if (role === 'Student') {
         const currentClassGrade = sanitizeInput(formData.get('currentClassGrade') as string);
-        const courseApplyingFor = sanitizeInput(formData.get('courseApplyingFor') as string);
+        const courseApplyingFor = courseId;
         const schoolInstituteName = sanitizeInput(formData.get('schoolInstituteName') as string);
-        const academicDetails = sanitizeInput(formData.get('academicDetails') as string);
+        const academicDetails = message;
 
-        const { data: student, error: studentError } = await supabaseAdmin
-          .from('students')
-          .insert({
-            user_id: userId,
-            full_name: fullName,
-            email,
-            phone,
-            country,
-            city,
-            full_address: fullAddress,
-            profile_picture_url: profilePictureUrl,
-            role,
-            status: fraudCheck.isSuspicious ? 'flagged' : 'pending',
-            is_approved: false,
-            is_flagged: fraudCheck.isSuspicious,
-            flag_reason: fraudCheck.reason,
-            submitted_from_ip: ipAddress,
-            guardian_name: guardianName || null,
-            guardian_phone: guardianPhone || null,
-            current_class_grade: currentClassGrade || null,
-            school_institute_name: schoolInstituteName || null,
-            academic_details: academicDetails || null,
-            created_at: new Date().toISOString(),
-          })
-          .select()
-          .single();
-
-        if (studentError) {
-          throw new Error(studentError.message || 'Failed to create student record');
-        }
-
-        recordId = student.id;
-
-        // Create admission record if course selected
-        if (courseApplyingFor) {
-          await supabaseAdmin.from('admissions').insert({
-            student_id: recordId,
-            course_id: courseApplyingFor,
-            status: 'pending',
-            applied_at: new Date().toISOString(),
-          });
-        }
-      } else {
-        // Teacher, Imam, or Mudarris
-        const teacherData: Record<string, unknown> = {
+        // Build insert data with only essential columns
+        const studentData: Record<string, unknown> = {
           user_id: userId,
           full_name: fullName,
           email,
           phone,
-          profile_picture_url: profilePictureUrl,
           country,
           city,
           full_address: fullAddress,
-          role,
+          profile_picture_url: profilePictureUrl,
+          academic_details: message || null,
+          role: 'student',
           status: fraudCheck.isSuspicious ? 'flagged' : 'pending',
           is_approved: false,
           is_flagged: fraudCheck.isSuspicious,
@@ -352,119 +308,114 @@ export async function POST(request: Request) {
           submitted_from_ip: ipAddress,
           created_at: new Date().toISOString(),
         };
-
-        // Add role-specific fields
-        if (role === 'teacher') {
-          teacherData.school_name = sanitizeInput(formData.get('teacherSchoolName') as string) || null;
-          teacherData.teaching_subject = sanitizeInput(formData.get('teachingSubject') as string) || null;
-          teacherData.years_of_experience = sanitizeInput(formData.get('teacherYearsOfExperience') as string) || null;
-          teacherData.school_city = sanitizeInput(formData.get('teacherSchoolCity') as string) || null;
-          teacherData.school_address = sanitizeInput(formData.get('teacherSchoolAddress') as string) || null;
-        } else if (role === 'imam') {
-          teacherData.mosque_name = sanitizeInput(formData.get('mosqueName') as string) || null;
-          teacherData.mosque_city = sanitizeInput(formData.get('mosqueCity') as string) || null;
-          teacherData.mosque_address = sanitizeInput(formData.get('mosqueAddress') as string) || null;
-          teacherData.years_serving = sanitizeInput(formData.get('yearsServingAsImam') as string) || null;
-        } else if (role === 'mudarris') {
-          teacherData.madrasa_name = sanitizeInput(formData.get('madrasaName') as string) || null;
-          teacherData.madrasa_city = sanitizeInput(formData.get('madrasaCity') as string) || null;
-          teacherData.madrasa_address = sanitizeInput(formData.get('madrasaAddress') as string) || null;
-          teacherData.mudarris_years_experience = sanitizeInput(formData.get('mudarrisYearsOfExperience') as string) || null;
-          const subjectsTeaching = JSON.parse(formData.get('subjectsTeaching') as string || '[]');
-          teacherData.subjects_teaching = subjectsTeaching;
-        }
-
-        const { data: teacher, error: teacherError } = await supabaseAdmin
-          .from('teachers')
-          .insert(teacherData)
+        
+        // Add optional fields only if provided
+        if (guardianName) studentData.guardian_name = guardianName;
+        if (guardianPhone) studentData.guardian_phone = guardianPhone;
+        if (age) studentData.age = parseInt(age);
+        if (language) studentData.language = language;
+        if (preferredTiming) studentData.preferred_timing = preferredTiming;
+        if (startDate) studentData.start_date = startDate;
+        if (currentClassGrade) studentData.current_class_grade = currentClassGrade;
+        if (schoolInstituteName) studentData.school_institute_name = schoolInstituteName;
+        
+        console.log('[API] Inserting student with data:', Object.keys(studentData));
+        
+        const { data: student, error: studentError } = await supabaseAdmin
+          .from('students')
+          .insert(studentData)
           .select()
           .single();
 
-        if (teacherError) {
-          throw new Error(teacherError.message || 'Failed to create teacher record');
+        if (studentError) {
+          console.error('[API] Student insert error:', studentError);
+          throw new Error(studentError.message || 'Failed to create student record');
         }
+        
+        console.log('[API] Student created successfully:', student.id);
 
-        recordId = teacher.id;
-      }
+        recordId = student.id;
 
-      // ===== CREATE ISLAMIC EDUCATION QUALIFICATIONS =====
-      await supabaseAdmin.from('islamic_education_qualifications').insert({
-        student_id: recordId,
-        nazira_enabled: nazira.enabled || false,
-        nazira_details: nazira.details || null,
-        nazira_institution: nazira.institution || null,
-        nazira_completion_year: nazira.completionYear ? parseInt(nazira.completionYear) : null,
-        hifz_enabled: hifz.enabled || false,
-        hifz_details: hifz.details || null,
-        hifz_institution: hifz.institution || null,
-        hifz_completion_year: hifz.completionYear ? parseInt(hifz.completionYear) : null,
-        hifz_juz_count: hifz.juzCount ? parseInt(hifz.juzCount) : null,
-        tarjama_enabled: tarjama.enabled || false,
-        tarjama_details: tarjama.details || null,
-        tarjama_institution: tarjama.institution || null,
-        tarjama_completion_year: tarjama.completionYear ? parseInt(tarjama.completionYear) : null,
-        tafseer_enabled: tafseer.enabled || false,
-        tafseer_details: tafseer.details || null,
-        tafseer_institution: tafseer.institution || null,
-        tafseer_completion_year: tafseer.completionYear ? parseInt(tafseer.completionYear) : null,
-      });
-
-      // ===== CREATE PREVIOUS EDUCATION RECORDS =====
-      if (previousEducation && previousEducation.length > 0) {
-        for (const edu of previousEducation) {
-          if (edu.institutionName) {
-            await supabaseAdmin.from('previous_education').insert({
+        // Create admission record if course selected
+        if (courseApplyingFor) {
+          try {
+            await supabaseAdmin.from('admissions').insert({
               student_id: recordId,
-              education_type: edu.educationType || 'general',
-              institution_name: sanitizeInput(edu.institutionName),
-              degree_title: sanitizeInput(edu.degreeTitle) || null,
-              completion_year: edu.completionYear ? parseInt(edu.completionYear) : null,
+              course_id: courseApplyingFor,
+              status: 'pending',
+              applied_at: new Date().toISOString(),
             });
+            console.log('[API] Admission record created');
+          } catch (err) {
+            console.log('[API] Admissions table not available, skipping');
           }
         }
+      } else {
+        throw new Error('Invalid role. Only Student applications are supported via this endpoint.');
       }
 
-      // ===== STORE CERTIFICATE URLS =====
-      if (certificateUrls && certificateUrls.length > 0) {
-        for (const url of certificateUrls) {
-          await supabaseAdmin.from('certificates').insert({
-            user_id: userId,
-            file_url: url,
-            uploaded_at: new Date().toISOString(),
-          });
+      // ===== CREATE ISLAMIC EDUCATION QUALIFICATIONS (optional) =====
+      try {
+        await supabaseAdmin.from('islamic_education_qualifications').insert({
+          student_id: recordId,
+          nazira_enabled: nazira.enabled || false,
+          nazira_details: nazira.details || null,
+          nazira_institution: nazira.institution || null,
+          nazira_completion_year: nazira.completionYear ? parseInt(nazira.completionYear) : null,
+          hifz_enabled: hifz.enabled || false,
+          hifz_details: hifz.details || null,
+          hifz_institution: hifz.institution || null,
+          hifz_completion_year: hifz.completionYear ? parseInt(hifz.completionYear) : null,
+          hifz_juz_count: hifz.juzCount ? parseInt(hifz.juzCount) : null,
+          tarjama_enabled: tarjama.enabled || false,
+          tarjama_details: tarjama.details || null,
+          tarjama_institution: tarjama.institution || null,
+          tarjama_completion_year: tarjama.completionYear ? parseInt(tarjama.completionYear) : null,
+          tafseer_enabled: tafseer.enabled || false,
+          tafseer_details: tafseer.details || null,
+          tafseer_institution: tafseer.institution || null,
+          tafseer_completion_year: tafseer.completionYear ? parseInt(tafseer.completionYear) : null,
+        });
+      } catch (err) {
+        console.log('[API] Islamic education qualifications table not available, skipping');
+      }
+
+      // ===== CREATE PREVIOUS EDUCATION RECORDS (optional) =====
+      if (previousEducation && previousEducation.length > 0) {
+        try {
+          for (const edu of previousEducation) {
+            if (edu.institutionName) {
+              await supabaseAdmin.from('previous_education').insert({
+                student_id: recordId,
+                education_type: edu.educationType || 'general',
+                institution_name: sanitizeInput(edu.institutionName),
+                degree_title: sanitizeInput(edu.degreeTitle) || null,
+                completion_year: edu.completionYear ? parseInt(edu.completionYear) : null,
+              });
+            }
+          }
+        } catch (err) {
+          console.log('[API] Previous education table not available, skipping');
         }
       }
 
-      // ===== CREATE ROLE-SPECIFIC INFO =====
-      const roleSpecificData: Record<string, unknown> = {
-        user_id: userId,
-        role,
-      };
-
-      if (role === 'student') {
-        roleSpecificData.current_class_grade = sanitizeInput(formData.get('currentClassGrade') as string) || null;
-        roleSpecificData.school_institute_name = sanitizeInput(formData.get('schoolInstituteName') as string) || null;
-      } else if (role === 'teacher') {
-        roleSpecificData.school_name = sanitizeInput(formData.get('teacherSchoolName') as string) || null;
-        roleSpecificData.teaching_subject = sanitizeInput(formData.get('teachingSubject') as string) || null;
-        roleSpecificData.years_of_experience = sanitizeInput(formData.get('teacherYearsOfExperience') as string) || null;
-        roleSpecificData.school_city = sanitizeInput(formData.get('teacherSchoolCity') as string) || null;
-        roleSpecificData.school_address = sanitizeInput(formData.get('teacherSchoolAddress') as string) || null;
-      } else if (role === 'imam') {
-        roleSpecificData.mosque_name = sanitizeInput(formData.get('mosqueName') as string) || null;
-        roleSpecificData.mosque_city = sanitizeInput(formData.get('mosqueCity') as string) || null;
-        roleSpecificData.mosque_address = sanitizeInput(formData.get('mosqueAddress') as string) || null;
-        roleSpecificData.years_serving = sanitizeInput(formData.get('yearsServingAsImam') as string) || null;
-      } else if (role === 'mudarris') {
-        roleSpecificData.madrasa_name = sanitizeInput(formData.get('madrasaName') as string) || null;
-        roleSpecificData.madrasa_city = sanitizeInput(formData.get('madrasaCity') as string) || null;
-        roleSpecificData.madrasa_address = sanitizeInput(formData.get('madrasaAddress') as string) || null;
-        const subjectsTeaching = JSON.parse(formData.get('subjectsTeaching') as string || '[]');
-        roleSpecificData.subjects_teaching = subjectsTeaching;
-        roleSpecificData.years_of_experience = sanitizeInput(formData.get('mudarrisYearsOfExperience') as string) || null;
+      // ===== STORE CERTIFICATE URLS (optional) =====
+      if (certificateUrls && certificateUrls.length > 0) {
+        try {
+          for (const url of certificateUrls) {
+            await supabaseAdmin.from('certificates').insert({
+              user_id: userId,
+              file_url: url,
+              uploaded_at: new Date().toISOString(),
+            });
+          }
+        } catch (err) {
+          console.log('[API] Certificates table not available, skipping');
+        }
       }
 
-      await supabaseAdmin.from('role_specific_info').insert(roleSpecificData);
+      // CREATE ROLE-SPECIFIC INFO =====
+      // Skipped for student applications - info stored in students table
 
       return NextResponse.json({
         success: true,
@@ -482,21 +433,33 @@ export async function POST(request: Request) {
       });
 
     } catch (error: unknown) {
-      // Rollback: Delete auth user if any step failed
-      await supabaseAdmin.auth.admin.deleteUser(userId);
-      await supabaseAdmin.from('users').delete().eq('id', userId);
+      // Rollback: Delete auth user if any step failed (but only if userId was created)
+      if (userId) {
+        try {
+          await supabaseAdmin.auth.admin.deleteUser(userId);
+          await supabaseAdmin.from('users').delete().eq('id', userId);
+        } catch (rollbackError) {
+          console.error('Rollback error:', rollbackError);
+        }
+      }
       const errorMessage = error instanceof Error ? error.message : 'Failed to create user record';
       return NextResponse.json(
-        { error: errorMessage },
+        { error: errorMessage, step: 'transaction_failed' },
         { status: 500 }
       );
     }
 
   } catch (error: unknown) {
-    console.error('Registration error:', error);
+    console.error('[API] Registration error:', error);
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+    const errorDetails = error instanceof Error ? { stack: error.stack, name: error.name } : null;
+    
     return NextResponse.json(
-      { error: errorMessage },
+      { 
+        error: errorMessage,
+        details: errorDetails,
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     );
   }
