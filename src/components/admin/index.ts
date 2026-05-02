@@ -1,0 +1,15 @@
+// Admin Components - Barrel export
+export { AdminCard } from './AdminCard';
+export { AdminTable } from './AdminTable';
+export { AdminModal } from './AdminModal';
+export { StatusBadge } from './StatusBadge';
+export { ActionButtons } from './ActionButtons';
+export { SearchInput } from './SearchInput';
+export { EmptyState } from './EmptyState';
+export { LoadingSkeleton } from './LoadingSkeleton';
+export { Pagination } from './Pagination';
+export { StatsCard } from './StatsCard';
+export { PageHeader } from './PageHeader';
+export { FilterSelect } from './FilterSelect';
+export { ConfirmDialog } from './ConfirmDialog';
+export { AdminLayout } from './AdminLayout';

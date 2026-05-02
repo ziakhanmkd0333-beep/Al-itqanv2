@@ -10,40 +10,29 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status') || '';
+    const search = searchParams.get('search') || '';
 
-    // Build base query
     let query = supabaseAdmin
       .from('students')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('created_at', { ascending: false })
       .range((page - 1) * limit, page * limit - 1);
 
-    if (status) {
-      query = query.eq('status', status);
+    if (status) query = query.eq('status', status);
+    if (search) {
+      query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%,phone.ilike.%${search}%`);
     }
 
-    const { data, error } = await query;
+    const { data, error, count } = await query;
 
-    if (error) {
-      console.error('Supabase query error:', error);
-      throw error;
-    }
-
-    // Get total count separately
-    const { count, error: countError } = await supabaseAdmin
-      .from('students')
-      .select('*', { count: 'exact', head: true });
-
-    if (countError) {
-      console.error('Count error:', countError);
-    }
+    if (error) throw error;
 
     return NextResponse.json({
       students: data || [],
-      total: count || data?.length || 0,
+      total: count || 0,
       page,
       limit,
-      totalPages: Math.ceil((count || data?.length || 0) / limit)
+      totalPages: Math.ceil((count || 0) / limit)
     });
 
   } catch (error: unknown) {
@@ -60,9 +49,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, full_name, age, phone, country, status } = body;
+    const { email, full_name, age, phone, country, city, full_address, academic_details, status } = body;
 
-    // Create student record
     const { data: student, error } = await supabaseAdmin
       .from('students')
       .insert([{
@@ -71,6 +59,9 @@ export async function POST(request: Request) {
         age,
         phone,
         country,
+        city,
+        full_address,
+        academic_details,
         status: status || 'pending'
       }])
       .select()

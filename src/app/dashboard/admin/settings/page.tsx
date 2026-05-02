@@ -1,30 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AdminRoute } from "@/components/auth/ProtectedRoute";
+import { AdminLayout } from "@/components/admin/AdminLayout";
+import { AdminCard, PageHeader } from "@/components/admin";
 import {
   Settings,
   User,
   Bell,
   Shield,
-  Mail,
-  Lock,
   Save,
   Eye,
   EyeOff,
-  Key,
-  Smartphone,
-  Clock,
-  CreditCard,
-  FileText,
-  Database,
-  Server,
 } from "lucide-react";
-import { useTranslation } from "@/hooks/use-translation";
-import { DashboardSidebar } from "@/components/dashboard/sidebar";
 
 export default function AdminSettingsPage() {
-  const { isRTL } = useTranslation();
+  return (
+    <AdminRoute>
+      <AdminLayout>
+        <SettingsContent />
+      </AdminLayout>
+    </AdminRoute>
+  );
+}
+
+function SettingsContent() {
   const [activeTab, setActiveTab] = useState("profile");
   const [showPassword, setShowPassword] = useState(false);
   const [showApiKey, setShowApiKey] = useState(false);
@@ -72,25 +72,11 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
-      <DashboardSidebar userType="admin" />
-      
-      <main className={`flex-1 p-6 ${isRTL ? "mr-64" : "ml-64"}`}>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-6xl mx-auto"
-        >
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
-              <Settings className="w-8 h-8" />
-              Settings
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Manage your admin account and system preferences
-            </p>
-          </div>
+    <>
+      <PageHeader
+        title="Settings"
+        description="Manage your admin account and system preferences"
+      />
 
           <div className="flex gap-6">
             {/* Tabs Sidebar */}
@@ -639,8 +625,6 @@ export default function AdminSettingsPage() {
               )}
             </div>
           </div>
-        </motion.div>
-      </main>
-    </div>
+    </>
   );
 }

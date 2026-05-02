@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LanguageProvider } from "@/context/language-context";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { ToastProvider } from "@/hooks/use-toast";
 import { Amiri, Noto_Naskh_Arabic, Cormorant_Garamond, Cinzel } from "next/font/google";
 
 export const metadata: Metadata = {
@@ -246,7 +247,9 @@ export default function RootLayout({
         >
           <LanguageProvider>
             <AuthProvider>
-              {children}
+              <ToastProvider>
+                {children}
+              </ToastProvider>
             </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>

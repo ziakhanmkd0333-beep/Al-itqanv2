@@ -10,6 +10,7 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
     const status = searchParams.get('status') || '';
+    const search = searchParams.get('search') || '';
 
     let query = supabaseAdmin
       .from('teachers')
@@ -18,6 +19,9 @@ export async function GET(request: Request) {
       .range((page - 1) * limit, page * limit - 1);
 
     if (status) query = query.eq('status', status);
+    if (search) {
+      query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%,specialization.ilike.%${search}%`);
+    }
 
     const { data, error, count } = await query;
 
