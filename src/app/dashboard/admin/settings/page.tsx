@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { AdminRoute } from "@/components/auth/ProtectedRoute";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { AdminCard, PageHeader } from "@/components/admin";
@@ -12,6 +13,15 @@ import {
   Save,
   Eye,
   EyeOff,
+  Mail,
+  FileText,
+  CreditCard,
+  Smartphone,
+  Lock,
+  Key,
+  Clock,
+  Server,
+  Database,
 } from "lucide-react";
 
 export default function AdminSettingsPage() {
