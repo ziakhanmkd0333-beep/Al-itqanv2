@@ -185,11 +185,20 @@ export async function POST(request: Request) {
     const profilePictureUrl = formData.get('profilePictureUrl') as string | null;
     const certificateUrls = JSON.parse(formData.get('certificateUrls') as string || '[]');
     
+    // Islamic qualifications type definition
+    interface IslamicQualification {
+      enabled: boolean;
+      details?: string | null;
+      institution?: string | null;
+      completionYear?: string | number | null;
+      juzCount?: string | number | null;
+    }
+
     // Mock Islamic qualifications (not collected in frontend)
-    const nazira = { enabled: false };
-    const hifz = { enabled: false };
-    const tarjama = { enabled: false };
-    const tafseer = { enabled: false };
+    const nazira: IslamicQualification = { enabled: false, details: null, institution: null, completionYear: null };
+    const hifz: IslamicQualification = { enabled: false, details: null, institution: null, completionYear: null, juzCount: null };
+    const tarjama: IslamicQualification = { enabled: false, details: null, institution: null, completionYear: null };
+    const tafseer: IslamicQualification = { enabled: false, details: null, institution: null, completionYear: null };
 
     // ===== VALIDATION =====
     const errors: Record<string, string> = {};
