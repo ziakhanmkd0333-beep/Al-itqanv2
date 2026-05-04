@@ -168,7 +168,7 @@ export async function POST(request: Request) {
     const fullAddress = address; // Map address to fullAddress for compatibility
     const role = sanitizeInput(formData.get('role') as string);
     const password = formData.get('password') as string;
-    const confirmPassword = password; // Frontend validates password match
+    // confirmPassword is validated on frontend before submission
     const guardianName = sanitizeInput(formData.get('guardianName') as string);
     const guardianPhone = sanitizeInput(formData.get('guardianPhone') as string);
     const age = sanitizeInput(formData.get('age') as string);
@@ -193,6 +193,14 @@ export async function POST(request: Request) {
       completionYear?: string | number | null;
       juzCount?: string | number | null;
     }
+
+    // Helper function to safely parse year values
+    const parseYear = (value: string | number | null | undefined): number | null => {
+      if (value === null || value === undefined) return null;
+      if (typeof value === 'number') return isNaN(value) ? null : value;
+      const parsed = parseInt(value, 10);
+      return isNaN(parsed) ? null : parsed;
+    };
 
     // Mock Islamic qualifications (not collected in frontend)
     const nazira: IslamicQualification = { enabled: false, details: null, institution: null, completionYear: null };
@@ -296,7 +304,7 @@ export async function POST(request: Request) {
         const currentClassGrade = sanitizeInput(formData.get('currentClassGrade') as string);
         const courseApplyingFor = courseId;
         const schoolInstituteName = sanitizeInput(formData.get('schoolInstituteName') as string);
-        const academicDetails = message;
+        // academicDetails is mapped to message field
 
         // Build insert data with only essential columns
         const studentData: Record<string, unknown> = {
@@ -370,22 +378,22 @@ export async function POST(request: Request) {
           nazira_enabled: nazira.enabled || false,
           nazira_details: nazira.details || null,
           nazira_institution: nazira.institution || null,
-          nazira_completion_year: nazira.completionYear ? parseInt(String(nazira.completionYear)) : null,
+          nazira_completion_year: parseYear(nazira.completionYear),
           hifz_enabled: hifz.enabled || false,
           hifz_details: hifz.details || null,
           hifz_institution: hifz.institution || null,
-          hifz_completion_year: hifz.completionYear ? parseInt(String(hifz.completionYear)) : null,
-          hifz_juz_count: hifz.juzCount ? parseInt(String(hifz.juzCount)) : null,
+          hifz_completion_year: parseYear(hifz.completionYear),
+          hifz_juz_count: parseYear(hifz.juzCount),
           tarjama_enabled: tarjama.enabled || false,
           tarjama_details: tarjama.details || null,
           tarjama_institution: tarjama.institution || null,
-          tarjama_completion_year: tarjama.completionYear ? parseInt(String(tarjama.completionYear)) : null,
+          tarjama_completion_year: parseYear(tarjama.completionYear),
           tafseer_enabled: tafseer.enabled || false,
           tafseer_details: tafseer.details || null,
           tafseer_institution: tafseer.institution || null,
-          tafseer_completion_year: tafseer.completionYear ? parseInt(String(tafseer.completionYear)) : null,
+          tafseer_completion_year: parseYear(tafseer.completionYear),
         });
-      } catch (err) {
+      } catch (_err) {
         console.log('[API] Islamic education qualifications table not available, skipping');
       }
 
@@ -403,7 +411,7 @@ export async function POST(request: Request) {
               });
             }
           }
-        } catch (err) {
+        } catch (_err) {
           console.log('[API] Previous education table not available, skipping');
         }
       }
@@ -418,7 +426,7 @@ export async function POST(request: Request) {
               uploaded_at: new Date().toISOString(),
             });
           }
-        } catch (err) {
+        } catch (_err) {
           console.log('[API] Certificates table not available, skipping');
         }
       }

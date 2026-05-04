@@ -27,8 +27,6 @@ import {
   Plus,
   Mail,
   Phone,
-  Award,
-  Users,
 } from "lucide-react";
 
 const statusOptions = [

@@ -40,7 +40,7 @@ export default function AdminDashboard() {
 }
 
 function AdminDashboardContent() {
-  const { t, isRTL } = useTranslation();
+  const { t } = useTranslation();
   const { stats, recentAdmissions, upcomingSessions, loading, refetch } = useAdminDashboard();
   const [isConnected, setIsConnected] = useState(true);
 

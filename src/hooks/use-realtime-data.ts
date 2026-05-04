@@ -589,13 +589,14 @@ interface RegistrationFilters {
   search?: string;
 }
 
-export function useAdminRegistrations(page = 1, limit = 20, filters: RegistrationFilters = {}) {
-  const [registrations, setRegistrations] = useState<Registration[]>([]);
+export function useAdminRegistrations(initialPage = 1, initialLimit = 10) {
+  const [data, setData] = useState<Registration[]>([]);
   const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(initialPage);
+  const [limit] = useState(initialLimit);
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  const { status, userType, search } = filters;
 
   const fetchRegistrations = useCallback(async () => {
     setLoading(true);
@@ -603,8 +604,6 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
       const params = new URLSearchParams({
         page: page.toString(),
         limit: limit.toString(),
-        ...(status && { status }),
-        ...(userType && { userType }),
         ...(search && { search })
       });
 
@@ -624,15 +623,15 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
 
       if (!res.ok) throw new Error(data.error);
 
-      setRegistrations((data.registrations || []) as Registration[]);
-      setTotal(data.pagination?.total || 0);
+      setData((data.registrations || []) as Registration[]);
+      setTotal(data.pagination?.total || data.registrations?.length || 0);
       setError(null);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
-  }, [page, limit, status, userType, search]);
+  }, [page, limit, search]);
 
   useEffect(() => {
     fetchRegistrations();
@@ -748,16 +747,24 @@ export function useAdminRegistrations(page = 1, limit = 20, filters: Registratio
     return data;
   };
 
+  const totalPages = Math.ceil(total / limit) || 1;
+
   return {
-    registrations,
+    data,
     total,
+    page,
+    limit,
+    search,
     loading,
-    error,
+    totalPages,
+    setPage,
+    setSearch,
     refetch: fetchRegistrations,
     createRegistration,
     updateRegistration,
     deleteRegistration,
     approveRegistration,
-    rejectRegistration
+    rejectRegistration,
+    error
   };
 }

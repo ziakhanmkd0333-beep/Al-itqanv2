@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "@/hooks/use-translation";
-import { supabaseBrowser } from "@/lib/supabase-browser";
 import { courses } from "@/lib/courses-data";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";

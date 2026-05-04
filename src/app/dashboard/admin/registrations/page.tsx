@@ -20,7 +20,6 @@ import { useAdminRegistrations } from "@/hooks";
 import {
   Users,
   GraduationCap,
-  Eye,
   CheckCircle,
   XCircle,
   Mail,
@@ -93,7 +92,7 @@ function RegistrationsContent() {
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
-  const filteredRegs = registrations.filter((r) => {
+  const filteredRegs = data.filter((r: Registration) => {
     const matchesType = typeFilter ? r.user_type === typeFilter : true;
     const matchesStatus = statusFilter ? r.status === statusFilter : true;
     return matchesType && matchesStatus;
@@ -172,7 +171,9 @@ function RegistrationsContent() {
       if (res.ok) {
         refetch();
       }
-    } catch (e) {}
+    } catch (_err) {
+      console.error('Failed to approve registration');
+    }
     setProcessing(null);
   };
 
@@ -183,7 +184,9 @@ function RegistrationsContent() {
       if (res.ok) {
         refetch();
       }
-    } catch (e) {}
+    } catch (_err) {
+      console.error('Failed to reject registration');
+    }
     setProcessing(null);
   };
 

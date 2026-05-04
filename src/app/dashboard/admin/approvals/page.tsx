@@ -62,7 +62,7 @@ export default function ApprovalsPage() {
 function ApprovalsContent() {
   const { toast } = useToast();
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
   const [viewUser, setViewUser] = useState<PendingUser | null>(null);
   const [processing, setProcessing] = useState<string | null>(null);
@@ -141,7 +141,7 @@ function ApprovalsContent() {
       } else {
         toast.error("Failed to approve application");
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to approve application");
     }
     setProcessing(null);
@@ -157,7 +157,7 @@ function ApprovalsContent() {
       } else {
         toast.error("Failed to reject application");
       }
-    } catch (error) {
+    } catch (_error) {
       toast.error("Failed to reject application");
     }
     setProcessing(null);

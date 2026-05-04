@@ -3,7 +3,6 @@
 import { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
-import { adminClasses } from '@/lib/admin-design-system';
 
 interface AdminModalProps {
   isOpen: boolean;
