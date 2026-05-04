@@ -24,7 +24,7 @@ import {
   Calendar,
   ClipboardList,
 } from "lucide-react";
-import { useToast } from "@/hooks";
+import { useToastHelpers } from "@/hooks/use-toast";
 
 interface PendingUser {
   id: string;
@@ -60,7 +60,7 @@ export default function ApprovalsPage() {
 }
 
 function ApprovalsContent() {
-  const toast = useToastHelpers();
+  const { success, error } = useToastHelpers();
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
@@ -136,13 +136,13 @@ function ApprovalsContent() {
     try {
       const response = await fetch(`/api/admin/registrations/${id}/approve`, { method: 'POST' });
       if (response.ok) {
-        toast.success("Application approved successfully");
+        success("Application approved successfully");
         setPendingUsers((prev) => prev.filter((u) => u.id !== id));
       } else {
-        toast.error("Failed to approve application");
+        error("Failed to approve application");
       }
     } catch (_error) {
-      toast.error("Failed to approve application");
+      error("Failed to approve application");
     }
     setProcessing(null);
   };
@@ -152,13 +152,13 @@ function ApprovalsContent() {
     try {
       const response = await fetch(`/api/admin/registrations/${id}/reject`, { method: 'POST' });
       if (response.ok) {
-        toast.success("Application rejected");
+        success("Application rejected");
         setPendingUsers((prev) => prev.filter((u) => u.id !== id));
       } else {
-        toast.error("Failed to reject application");
+        error("Failed to reject application");
       }
     } catch (_error) {
-      toast.error("Failed to reject application");
+      error("Failed to reject application");
     }
     setProcessing(null);
   };
