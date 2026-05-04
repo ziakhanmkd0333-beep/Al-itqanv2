@@ -60,7 +60,7 @@ export default function ApprovalsPage() {
 }
 
 function ApprovalsContent() {
-  const { toast } = useToast();
+  const toast = useToastHelpers();
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [loading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");

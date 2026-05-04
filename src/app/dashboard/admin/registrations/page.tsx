@@ -75,7 +75,7 @@ export default function RegistrationsPage() {
 
 function RegistrationsContent() {
   const {
-    data: registrations,
+    data,
     total,
     page,
     limit,
