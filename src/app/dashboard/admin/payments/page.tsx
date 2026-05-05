@@ -70,6 +70,14 @@ export default function PaymentsPage() {
   );
 }
 
+const fetchPayments = async (page: number, limit: number, search: string) => {
+  const params = new URLSearchParams({ page: page.toString(), limit: limit.toString(), ...(search && { search }) });
+  const res = await fetch(`/api/admin/payments?${params}`, { credentials: 'include' });
+  if (!res.ok) throw new Error('Failed to fetch payments');
+  const data = await res.json();
+  return { data: data.payments || [], total: data.pagination?.total || 0 };
+};
+
 function PaymentsContent() {
   const {
     data: payments,
@@ -81,7 +89,7 @@ function PaymentsContent() {
     totalPages,
     setPage,
     setSearch,
-  } = usePaginatedData<Payment>('payments', { pageSize: 10 });
+  } = usePaginatedData<Payment>('payments', fetchPayments, { initialLimit: 10 });
 
   const [viewPayment, setViewPayment] = useState<Payment | null>(null);
   const [statusFilter, setStatusFilter] = useState("");

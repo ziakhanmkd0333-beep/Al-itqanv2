@@ -154,7 +154,7 @@ function TeacherAttendanceContent() {
     }
   };
 
-  const handleUploadMaterial = () => {
+  const handleUploadMaterial = (_studentId: number) => {
     setShowMaterialModal(true);
   };
 

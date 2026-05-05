@@ -27,6 +27,7 @@ export interface Course {
   image_url?: string;
   status: 'published' | 'draft' | 'archived';
   display_order: number;
+  students_count?: number;
   created_at: string;
   updated_at: string;
 }

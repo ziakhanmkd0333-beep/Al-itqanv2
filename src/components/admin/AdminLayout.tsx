@@ -39,14 +39,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed left-0 top-0 h-full z-50 lg:hidden"
           >
-            <DashboardSidebar />
+            <DashboardSidebar userType="admin" />
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Desktop Sidebar */}
       <div className="hidden lg:block fixed left-0 top-0 h-full z-30">
-        <DashboardSidebar />
+        <DashboardSidebar userType="admin" />
       </div>
 
       {/* Main Content */}

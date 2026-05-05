@@ -9,7 +9,7 @@ export interface Teacher {
   full_name: string;
   email: string;
   phone?: string;
-  specialization?: string;
+  specialization?: string[];
   qualifications?: string;
   experience_years?: number;
   bio?: string;
